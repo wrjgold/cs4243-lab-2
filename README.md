@@ -26,7 +26,7 @@ The environment lives in the root `.venv/`, beside `code/` and `data/`. Each col
 
 ## 3. Prepare the data and FFmpeg
 
-Use the datasets supplied with the lab release. Keep `data/` beside `code/`; the common video should be at `data/common_clip/board_clip.mp4` and stress clips under `data/diagnostic/`.
+The supplied datasets are included in this repository. Keep `data/` beside `code/`; the common video is at `data/common_clip/board_clip.mp4` and stress clips are under `data/diagnostic/`.
 
 Install FFmpeg separately. On macOS with Homebrew:
 
