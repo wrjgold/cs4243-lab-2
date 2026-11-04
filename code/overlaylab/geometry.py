@@ -28,8 +28,22 @@ def bilinear_sample(image: np.ndarray, y: np.ndarray, x: np.ndarray) -> np.ndarr
     reproduces the corresponding pixel. ``y`` and ``x`` may be arrays of any
     matching shape so that a whole grid can be sampled at once.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Clamp sample coordinates to the image boundaries.
+    y = np.clip(np.asarray(y, dtype=float), 0, image.shape[0] - 1)
+    x = np.clip(np.asarray(x, dtype=float), 0, image.shape[1] - 1)
+    # Find the four neighbouring pixels for each sample.
+    y0, x0 = np.floor(y).astype(int), np.floor(x).astype(int)
+    y1 = np.minimum(y0 + 1, image.shape[0] - 1)
+    x1 = np.minimum(x0 + 1, image.shape[1] - 1)
+    # Compute interpolation weights and extend them across colour channels.
+    dy, dx = y - y0, x - x0
+    if image.ndim == 3:
+        dy, dx = dy[..., None], dx[..., None]
+
+    # Blend horizontally, then vertically.
+    top = (1 - dx) * image[y0, x0] + dx * image[y0, x1]
+    bottom = (1 - dx) * image[y1, x0] + dx * image[y1, x1]
+    return (1 - dy) * top + dy * bottom
 
 
 def rectangle_to_rectangle(src_size: Tuple[int, int], dst_size: Tuple[int, int]) -> np.ndarray:
@@ -53,8 +67,17 @@ def normalise_points(pts: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     points to zero centroid and scales them so that the mean distance from the
     origin is sqrt(2), and ``normalised`` are the transformed N x 2 points.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Find the centroid and mean distance from it.
+    pts = np.asarray(pts, dtype=np.float64)
+    centre = pts.mean(axis=0)
+    distance = np.linalg.norm(pts - centre, axis=1).mean()
+    # Choose the scale for mean distance sqrt(2), avoiding division by zero.
+    scale = np.sqrt(2) / distance if distance > np.finfo(float).eps else 1.0
+
+    # Return the translation-and-scale matrix and the transformed points.
+    T = np.array([[scale, 0, -scale * centre[0]],
+                  [0, scale, -scale * centre[1]], [0, 0, 1]])
+    return T, (pts - centre) * scale
 
 
 def dlt_homography(src: np.ndarray, dst: np.ndarray
@@ -72,20 +95,67 @@ def dlt_homography(src: np.ndarray, dst: np.ndarray
     numerically meaningless matrix. ``singular_values`` are those of A, so
     that conditioning can be inspected.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Check that there are at least four finite, matching point pairs.
+    src, dst = np.asarray(src, dtype=float), np.asarray(dst, dtype=float)
+    if src.shape != dst.shape or src.ndim != 2 or src.shape[1] != 2:
+        raise ValueError("Correspondences must have matching N x 2 shapes")
+    if len(src) < 4:
+        raise ValueError("At least four correspondences are required")
+    if not (np.isfinite(src).all() and np.isfinite(dst).all()):
+        return None, np.empty(0), False
+
+    # Normalise source and destination coordinates before constructing DLT.
+    T_src, a = normalise_points(src)
+    T_dst, b = normalise_points(dst)
+
+    # Build two DLT equations per correspondence in a 2N x 9 matrix.
+    x, y = a.T
+    u, v = b.T
+    zeros, ones = np.zeros(len(src)), np.ones(len(src))
+    A = np.empty((2 * len(src), 9))
+    A[0::2] = np.column_stack((-x, -y, -ones, zeros, zeros, zeros, u*x, u*y, u))
+    A[1::2] = np.column_stack((zeros, zeros, zeros, -x, -y, -ones, v*x, v*y, v))
+
+    # Four points need the full right-singular basis to expose the null vector.
+    _, singular_values, Vt = np.linalg.svd(A, full_matrices=len(src) == 4)
+    # Reject systems with too few independent equations for a unique homography.
+    tolerance = singular_values[0] * max(A.shape) * np.finfo(float).eps
+    if np.count_nonzero(singular_values > tolerance) < 8:
+        return None, singular_values, False
+
+    # Undo the coordinate normalisation and fix the matrix scale.
+    H = np.linalg.inv(T_dst) @ Vt[-1].reshape(3, 3) @ T_src
+    H /= H[2, 2] if abs(H[2, 2]) > 1e-12 else np.linalg.norm(H)
+    # Return failure if the resulting homography is non-finite or singular.
+    valid = bool(np.isfinite(H).all() and np.linalg.matrix_rank(H) == 3)
+    return (H if valid else None), singular_values, valid
 
 
 def transfer_points(H: np.ndarray, pts: np.ndarray) -> np.ndarray:
     """Apply a homography to N x 2 points and dehomogenise: pi(H x)."""
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Append homogeneous coordinates and apply the homography.
+    pts = np.asarray(pts, dtype=float)
+    projected = np.column_stack((pts, np.ones(len(pts)))) @ np.asarray(H).T
+    # Divide valid projections by their third coordinate; leave invalid ones as NaN.
+    result = np.full((len(pts), 2), np.nan)
+    valid = np.isfinite(projected).all(axis=1) & (projected[:, 2] != 0)
+    result[valid] = projected[valid, :2] / projected[valid, 2:3]
+    return result
 
 
 def symmetric_transfer_error(H: np.ndarray, src: np.ndarray, dst: np.ndarray) -> np.ndarray:
     """Per-correspondence e_i = |x' - pi(H x)|^2 + |x - pi(H^-1 x')|^2."""
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Measure squared transfer error in both directions.
+    try:
+        forward = transfer_points(H, src) - dst
+        backward = transfer_points(np.linalg.inv(H), dst) - src
+    except np.linalg.LinAlgError:
+        # A singular homography cannot transfer points backwards.
+        return np.full(len(src), np.inf)
+
+    # Sum squared coordinate errors and treat invalid projections as infinite error.
+    error = np.sum(forward**2 + backward**2, axis=1)
+    return np.where(np.isfinite(error), error, np.inf)
 
 
 def _three_collinear(p: np.ndarray, tol: float = 1e-6) -> bool:
@@ -115,8 +185,60 @@ def ransac_homography(src: np.ndarray, dst: np.ndarray, config: RansacConfig
     Returns (H, inlier_mask, residuals, iterations_used, status) where status
     is False when no model reached ``config.min_inliers`` (H may then be None).
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Initialise the best consensus, iteration budget, and seeded random generator.
+    src, dst = np.asarray(src, dtype=float), np.asarray(dst, dtype=float)
+    n = len(src)
+    best_mask = np.zeros(n, dtype=bool)
+    best_residuals = np.full(n, np.inf)
+    best_count, best_score = 0, np.inf
+    iterations, limit = 0, config.max_iterations
+    rng = config.rng()
+    # Stop early when there are too few points to sample a homography.
+    if n < 4:
+        return None, best_mask, best_residuals, iterations, False
+
+    # Draw minimal samples and keep the strongest consensus.
+    while iterations < limit:
+        iterations += 1
+        sample = rng.choice(n, 4, replace=False)
+
+        # Reject collinear samples and fit a candidate homography.
+        if _three_collinear(src[sample]) or _three_collinear(dst[sample]):
+            continue
+        H, _, valid = dlt_homography(src[sample], dst[sample])
+        if not valid:
+            continue
+        # Score every correspondence and select inliers below the threshold.
+        residuals = symmetric_transfer_error(H, src, dst)
+        mask = residuals < config.threshold
+        count, score = int(mask.sum()), float(residuals[mask].sum())
+        # Keep more inliers, breaking ties with the smaller total inlier error.
+        if count > best_count or (count == best_count and score < best_score):
+            best_mask, best_residuals = mask, residuals
+            best_count, best_score = count, score
+
+            # Reduce the iteration budget as the estimated inlier fraction improves.
+            all_inlier_probability = (count / n)**4
+            if all_inlier_probability == 1:
+                limit = iterations
+            elif all_inlier_probability > 0:
+                needed = np.ceil(np.log1p(-config.confidence) /
+                                 np.log1p(-all_inlier_probability))
+                limit = min(limit, max(1, int(needed)))
+
+    # Reject the run if no consensus reaches the required inlier count.
+    if best_count < max(4, config.min_inliers):
+        return None, best_mask, best_residuals, iterations, False
+
+    # Refit using the best consensus and recompute its inliers.
+    H, _, valid = dlt_homography(src[best_mask], dst[best_mask])
+    if not valid:
+        return None, best_mask, best_residuals, iterations, False
+    # Check the refitted model and return its final residuals, inliers, and status.
+    residuals = symmetric_transfer_error(H, src, dst)
+    mask = residuals < config.threshold
+    valid = bool(mask.sum() >= max(4, config.min_inliers))
+    return (H if valid else None), mask, residuals, iterations, valid
 
 
 def warp_artwork(artwork: np.ndarray, H: np.ndarray, frame_shape: Tuple[int, ...]
@@ -129,8 +251,22 @@ def warp_artwork(artwork: np.ndarray, H: np.ndarray, frame_shape: Tuple[int, ...
     coverage H x W bool); pixels that map outside the artwork receive no
     coverage and are zero in ``warped``.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Map destination pixel centres back into the artwork.
+    height, width = frame_shape[:2]
+    y, x = np.indices((height, width))
+    source = transfer_points(np.linalg.inv(H), np.column_stack((x.ravel(), y.ravel())))
+    sx, sy = source[:, 0].reshape(height, width), source[:, 1].reshape(height, width)
+    # Mark pixels whose inverse projections fall inside the artwork boundaries.
+    ah, aw = artwork.shape[:2]
+    tolerance = 1e-9
+    coverage = (np.isfinite(sx) & np.isfinite(sy) &
+                (sx >= -tolerance) & (sx <= aw - 1 + tolerance) &
+                (sy >= -tolerance) & (sy <= ah - 1 + tolerance))
+
+    # Sample covered pixels only; leave the background at zero.
+    warped = np.zeros((height, width) + artwork.shape[2:], dtype=np.float32)
+    warped[coverage] = bilinear_sample(artwork, sy[coverage], sx[coverage])
+    return warped, coverage
 
 
 __all__ = ["bilinear_sample", "rectangle_to_rectangle", "normalise_points", "dlt_homography", "transfer_points",
