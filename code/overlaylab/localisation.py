@@ -37,6 +37,7 @@ def localise_board(reference: np.ndarray, frame: np.ndarray, config: Localisatio
     When localisation fails, ``H`` is None, ``corners`` is NaN and ``status``
     is False.
     """
+    # YOUR CODE HERE
     # Convert the reference and frame to grayscale.
     ref_gray, frame_gray = to_gray(reference), to_gray(frame)
 
@@ -84,6 +85,7 @@ def artwork_to_frame(artwork: np.ndarray, H: np.ndarray, config: LocalisationCon
     own shape when unset) and then applying ``H``. Document in your report how
     the two transformations compose.
     """
+    # YOUR CODE HERE
     # Read the artwork and reference sizes, using artwork size as the fallback.
     ah, aw = artwork.shape[:2]
     rh, rw = config.warp.reference_shape if config.warp.reference_shape is not None else (ah, aw)
@@ -98,6 +100,7 @@ def overlay_frame(frame: np.ndarray, artwork: np.ndarray, H: np.ndarray,
     Warp the artwork with the composed homography (``artwork_to_frame``) and
     paint it where the coverage mask is set. Returns an RGB float32 frame.
     """
+    # YOUR CODE HERE
     # Compose the artwork-to-frame map and warp the artwork.
     warped, coverage = warp_artwork(artwork, artwork_to_frame(artwork, H, config), frame.shape)
     # Copy the frame and replace only pixels covered by the warped artwork.
@@ -115,6 +118,7 @@ def evaluate_audit_frames(reference: np.ndarray, frames: Dict[int, np.ndarray],
     n_inliers, inlier_ratio, median_residual, status, corners) and ``summary``
     from ``metrics.summarise_errors`` using ``config.success_threshold``.
     """
+    # YOUR CODE HERE
     # Evaluate annotated frames that have an image, retaining failed estimates.
     per_frame = {}
     for index in sorted(gt_corners.keys() & frames.keys()):

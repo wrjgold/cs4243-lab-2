@@ -29,6 +29,7 @@ def harris_response(gray: np.ndarray, config: DetectorConfig) -> np.ndarray:
     built from the supplied normalised Sobel gradients. Returns a float32 map
     with the same shape as ``gray``.
     """
+    # YOUR CODE HERE
     # Compute horizontal and vertical image gradients.
     gx, gy, _, _ = sobel_gradients(gray)
 
@@ -54,6 +55,7 @@ def detect_corners(gray: np.ndarray, config: DetectorConfig) -> Tuple[np.ndarray
     Returns (keypoints, responses): an N x 2 float array of (x, y) ordered by
     decreasing response (N <= config.max_corners) and the matching responses.
     """
+    # YOUR CODE HERE
     # Check that the configured NMS mode is supported.
     if config.nms_mode not in ("window", "radius"):
         raise ValueError("Unknown NMS mode: " + config.nms_mode)
@@ -126,6 +128,7 @@ def describe_keypoints(gray: np.ndarray, keypoints: np.ndarray,
     Keypoints whose (rotated) window leaves the image are dropped. Returns
     (descriptors N' x 128, kept_indices N') where kept_indices indexes the input.
     """
+    # YOUR CODE HERE
     # Compute image gradients for sampling around each keypoint.
     gx, gy, _, _ = sobel_gradients(gray)
     height, width = gray.shape
@@ -211,6 +214,7 @@ def match_descriptors(desc_a: np.ndarray, desc_b: np.ndarray,
     descriptor in A. Returns (pairs M x 2 of (index_a, index_b), distances M,
     ratios M).
     """
+    # YOUR CODE HERE
     # Convert descriptors to floats and require two neighbours for the ratio test.
     a, b = np.asarray(desc_a, dtype=float), np.asarray(desc_b, dtype=float)
     if len(a) == 0 or len(b) < 2:
