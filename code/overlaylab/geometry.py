@@ -28,6 +28,7 @@ def bilinear_sample(image: np.ndarray, y: np.ndarray, x: np.ndarray) -> np.ndarr
     reproduces the corresponding pixel. ``y`` and ``x`` may be arrays of any
     matching shape so that a whole grid can be sampled at once.
     """
+    # YOUR CODE HERE
     # Clamp sample coordinates to the image boundaries.
     y = np.clip(np.asarray(y, dtype=float), 0, image.shape[0] - 1)
     x = np.clip(np.asarray(x, dtype=float), 0, image.shape[1] - 1)
@@ -67,6 +68,7 @@ def normalise_points(pts: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     points to zero centroid and scales them so that the mean distance from the
     origin is sqrt(2), and ``normalised`` are the transformed N x 2 points.
     """
+    # YOUR CODE HERE
     # Find the centroid and mean distance from it.
     pts = np.asarray(pts, dtype=np.float64)
     centre = pts.mean(axis=0)
@@ -95,6 +97,7 @@ def dlt_homography(src: np.ndarray, dst: np.ndarray
     numerically meaningless matrix. ``singular_values`` are those of A, so
     that conditioning can be inspected.
     """
+    # YOUR CODE HERE
     # Check that there are at least four finite, matching point pairs.
     src, dst = np.asarray(src, dtype=float), np.asarray(dst, dtype=float)
     if src.shape != dst.shape or src.ndim != 2 or src.shape[1] != 2:
@@ -133,6 +136,7 @@ def dlt_homography(src: np.ndarray, dst: np.ndarray
 
 def transfer_points(H: np.ndarray, pts: np.ndarray) -> np.ndarray:
     """Apply a homography to N x 2 points and dehomogenise: pi(H x)."""
+    # YOUR CODE HERE
     # Append homogeneous coordinates and apply the homography.
     pts = np.asarray(pts, dtype=float)
     projected = np.column_stack((pts, np.ones(len(pts)))) @ np.asarray(H).T
@@ -145,6 +149,7 @@ def transfer_points(H: np.ndarray, pts: np.ndarray) -> np.ndarray:
 
 def symmetric_transfer_error(H: np.ndarray, src: np.ndarray, dst: np.ndarray) -> np.ndarray:
     """Per-correspondence e_i = |x' - pi(H x)|^2 + |x - pi(H^-1 x')|^2."""
+    # YOUR CODE HERE
     # Measure squared transfer error in both directions.
     try:
         forward = transfer_points(H, src) - dst
@@ -185,6 +190,7 @@ def ransac_homography(src: np.ndarray, dst: np.ndarray, config: RansacConfig
     Returns (H, inlier_mask, residuals, iterations_used, status) where status
     is False when no model reached ``config.min_inliers`` (H may then be None).
     """
+    # YOUR CODE HERE
     # Initialise the best consensus, iteration budget, and seeded random generator.
     src, dst = np.asarray(src, dtype=float), np.asarray(dst, dtype=float)
     n = len(src)
@@ -251,6 +257,7 @@ def warp_artwork(artwork: np.ndarray, H: np.ndarray, frame_shape: Tuple[int, ...
     coverage H x W bool); pixels that map outside the artwork receive no
     coverage and are zero in ``warped``.
     """
+    # YOUR CODE HERE
     # Map destination pixel centres back into the artwork.
     height, width = frame_shape[:2]
     y, x = np.indices((height, width))

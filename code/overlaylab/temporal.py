@@ -37,6 +37,7 @@ def lk_flow(prev_gray: np.ndarray, next_gray: np.ndarray, points: np.ndarray, co
     the image. Coarse-to-fine estimation over ``config.pyramid_levels`` is an
     optional extension.
     """
+    # YOUR CODE HERE
     # Prepare the points and initialise all tracks as invalid.
     points = np.asarray(points, dtype=np.float64).reshape(-1, 2)
     n = len(points)
@@ -189,6 +190,7 @@ def track_board(frames: Sequence[np.ndarray], init: TrackInit, config: TrackConf
     ``vectors`` (displacements N x 2), ``eigenvalues`` (N x 2), ``residuals``
     (N) and ``valid`` (N bool); frames that were (re)initialised store {}.
     """
+    # YOUR CODE HERE
     # Check that the tracking variant and propagation mode are supported.
     if config.variant not in ("independent", "flow_assisted"):
         raise ValueError(f"Unknown tracking variant: {config.variant}")
@@ -308,6 +310,7 @@ def failure_monitor(stats: Sequence[Dict], config: MonitorConfig) -> List[Tuple[
        with that statistic as trigger (NaN statistics never fire);
     4. otherwise OK with trigger "none"; an OK frame resets the run.
     """
+    # YOUR CODE HERE
     # Set up the weak-frame counter and the ordered statistic limits.
     decisions = []
     consecutive = 0
