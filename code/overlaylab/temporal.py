@@ -37,8 +37,86 @@ def lk_flow(prev_gray: np.ndarray, next_gray: np.ndarray, points: np.ndarray, co
     the image. Coarse-to-fine estimation over ``config.pyramid_levels`` is an
     optional extension.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    points = np.asarray(points, dtype=np.float64).reshape(-1, 2)
+    n = len(points)
+    displacement = np.zeros((n, 2), dtype=np.float64)
+    eigenvalues = np.zeros((n, 2), dtype=np.float64)
+    residuals = np.full(n, np.inf, dtype=np.float64)
+    valid = np.zeros(n, dtype=bool)
+    if n == 0:
+        return displacement, eigenvalues, residuals, valid
+
+    height, width = prev_gray.shape
+    radius = config.window
+    offsets = np.arange(-radius, radius + 1, dtype=np.float64)
+    oy, ox = np.meshgrid(offsets, offsets, indexing="ij")
+    x = points[:, 0, None, None] + ox
+    y = points[:, 1, None, None] + oy
+    inside = (np.isfinite(points).all(axis=1) &
+              (points[:, 0] - radius >= 0) & (points[:, 0] + radius < width) &
+              (points[:, 1] - radius >= 0) & (points[:, 1] + radius < height))
+    if not inside.any():
+        return displacement, eigenvalues, residuals, valid
+
+    gx, gy, _, _ = sobel_gradients(prev_gray)
+    ix = bilinear_sample(gx, y[inside], x[inside])
+    iy = bilinear_sample(gy, y[inside], x[inside])
+    template = bilinear_sample(prev_gray, y[inside], x[inside])
+    a = np.mean(ix * ix, axis=(1, 2))
+    b = np.mean(ix * iy, axis=(1, 2))
+    c = np.mean(iy * iy, axis=(1, 2))
+    spread = np.sqrt((a - c) ** 2 + 4 * b * b)
+    eigenvalues[inside, 0] = (a + c + spread) / 2
+    eigenvalues[inside, 1] = (a + c - spread) / 2
+    strong = eigenvalues[inside, 1] >= config.min_eigenvalue
+    indices = np.flatnonzero(inside)[strong]
+    if len(indices) == 0:
+        return displacement, eigenvalues, residuals, valid
+
+    ix, iy, template = ix[strong], iy[strong], template[strong]
+    a, b, c = a[strong], b[strong], c[strong]
+    determinant = a * c - b * b
+    converged = np.zeros(len(indices), dtype=bool)
+    active = np.ones(len(indices), dtype=bool)
+    for _ in range(config.iterations):
+        if not active.any():
+            break
+        local = np.flatnonzero(active)
+        ids = indices[local]
+        wx = x[ids] + displacement[ids, 0, None, None]
+        wy = y[ids] + displacement[ids, 1, None, None]
+        within = ((wx >= 0) & (wx < width) & (wy >= 0) & (wy < height)).all(axis=(1, 2))
+        active[local[~within]] = False
+        local = local[within]
+        if len(local) == 0:
+            continue
+        ids = indices[local]
+        diff = bilinear_sample(next_gray, wy[within], wx[within]) - template[local]
+        rhs_x = np.mean(ix[local] * diff, axis=(1, 2))
+        rhs_y = np.mean(iy[local] * diff, axis=(1, 2))
+        dx = -(c[local] * rhs_x - b[local] * rhs_y) / determinant[local]
+        dy = -(-b[local] * rhs_x + a[local] * rhs_y) / determinant[local]
+        step = np.column_stack((dx, dy))
+        finite = np.isfinite(step).all(axis=1)
+        active[local[~finite]] = False
+        local = local[finite]
+        ids = indices[local]
+        displacement[ids] += step[finite]
+        done = np.linalg.norm(step[finite], axis=1) < config.convergence
+        converged[local[done]] = True
+        active[local[done]] = False
+
+    if converged.any():
+        ids = indices[converged]
+        wx = x[ids] + displacement[ids, 0, None, None]
+        wy = y[ids] + displacement[ids, 1, None, None]
+        within = ((wx >= 0) & (wx < width) & (wy >= 0) & (wy < height)).all(axis=(1, 2))
+        good_ids = ids[within]
+        if len(good_ids):
+            final = bilinear_sample(next_gray, wy[within], wx[within]) - template[converged][within]
+            residuals[good_ids] = np.mean(np.abs(final), axis=(1, 2))
+            valid[good_ids] = residuals[good_ids] <= config.max_residual
+    return displacement, eigenvalues, residuals, valid
 
 
 @dataclass
@@ -102,8 +180,86 @@ def track_board(frames: Sequence[np.ndarray], init: TrackInit, config: TrackConf
     ``vectors`` (displacements N x 2), ``eigenvalues`` (N x 2), ``residuals``
     (N) and ``valid`` (N bool); frames that were (re)initialised store {}.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    if config.variant not in ("independent", "flow_assisted"):
+        raise ValueError(f"Unknown tracking variant: {config.variant}")
+    if config.propagate not in ("inliers", "corners"):
+        raise ValueError(f"Unknown propagation mode: {config.propagate}")
+
+    result = TrackResult([], [], [], [])
+    ref_corners = rect_corners(init.reference.shape[1], init.reference.shape[0])
+    ref_points = np.empty((0, 2), dtype=np.float64)
+    frame_points = np.empty((0, 2), dtype=np.float64)
+    previous_gray = previous_corners = None
+    reinit_next = False
+
+    def relocalise(frame, index, gray):
+        nonlocal ref_points, frame_points
+        H, corners, matches, inliers, diag = localise_board(init.reference, frame, init.localisation)
+        result.reinit_frames.append(index)
+        if H is not None:
+            if config.propagate == "corners":
+                ref_points, frame_points = ref_corners.copy(), corners.copy()
+            else:
+                pairs = matches[inliers]
+                ref_points = diag["keypoints_ref"][pairs[:, 0]].copy()
+                frame_points = diag["keypoints_frame"][pairs[:, 1]].copy()
+        else:
+            ref_points = np.empty((0, 2), dtype=np.float64)
+            frame_points = np.empty((0, 2), dtype=np.float64)
+        status = "ok" if H is not None else "lost"
+        stats = _frame_stats(previous_corners, corners, previous_gray, gray,
+                             diag["n_inliers"], diag["inlier_ratio"],
+                             diag["median_residual"], float("nan"),
+                             diag["n_inliers"], status, diag["n_matches"])
+        return H, corners, status, stats
+
+    for index, frame in enumerate(frames):
+        gray = to_gray(frame)
+        flow_record = {}
+        needs_reinit = (config.variant == "independent" or index == 0 or
+                        previous_gray is None or len(frame_points) < config.reinit_min_points or
+                        (config.reinit_every > 0 and index % config.reinit_every == 0) or
+                        reinit_next)
+        if needs_reinit:
+            H, corners, status, stats = relocalise(frame, index, gray)
+        else:
+            vectors, eigenvalues, residuals, valid = lk_flow(previous_gray, gray, frame_points, config.flow)
+            tracked = frame_points + vectors
+            flow_record = {"points": tracked.copy(), "vectors": vectors, "eigenvalues": eigenvalues,
+                           "residuals": residuals, "valid": valid}
+            source, destination = ref_points[valid], tracked[valid]
+            if len(source) < max(4, config.reinit_min_points):
+                H, corners, status, stats = relocalise(frame, index, gray)
+                flow_record = {}
+            else:
+                H, inliers, errors, _, ok = ransac_homography(source, destination, init.localisation.ransac)
+                if not ok:
+                    H, corners, status, stats = relocalise(frame, index, gray)
+                    flow_record = {}
+                else:
+                    corners = transfer_points(H, ref_corners)
+                    if not np.isfinite(corners).all():
+                        H, corners, status, stats = relocalise(frame, index, gray)
+                        flow_record = {}
+                    else:
+                        status = "ok"
+                        ref_points, frame_points = source[inliers].copy(), destination[inliers].copy()
+                        count = int(inliers.sum())
+                        stats = _frame_stats(previous_corners, corners, previous_gray, gray,
+                                             count, count / len(source),
+                                             float(np.median(np.sqrt(errors[inliers] / 2))),
+                                             float(np.mean(np.linalg.norm(vectors[valid], axis=1))),
+                                             len(source), status)
+
+        result.homographies.append(H)
+        result.corners.append(corners)
+        result.status.append(status)
+        result.stats.append(stats)
+        result.flow.append(flow_record)
+        recent = result.stats[-max(1, config.monitor.hide_after_consecutive):]
+        reinit_next = failure_monitor(recent, config.monitor)[-1][0] != OK
+        previous_gray, previous_corners = gray, corners
+    return result
 
 
 def failure_monitor(stats: Sequence[Dict], config: MonitorConfig) -> List[Tuple[str, str]]:
@@ -128,8 +284,34 @@ def failure_monitor(stats: Sequence[Dict], config: MonitorConfig) -> List[Tuple[
        with that statistic as trigger (NaN statistics never fire);
     4. otherwise OK with trigger "none"; an OK frame resets the run.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    decisions = []
+    consecutive = 0
+    maxima = (("median_residual", config.max_median_residual),
+              ("corner_displacement", config.max_corner_displacement),
+              ("mean_flow", config.max_mean_flow),
+              ("brightness_change", config.max_brightness_change))
+    for frame in stats:
+        if frame["status"] != "ok":
+            consecutive += 1
+            decisions.append((HIDE, "no_model"))
+            continue
+        trigger = None
+        if frame["inlier_count"] < config.min_inlier_count:
+            trigger = "inlier_count"
+        elif frame["inlier_ratio"] < config.min_inlier_ratio:
+            trigger = "inlier_ratio"
+        if trigger:
+            consecutive += 1
+            decisions.append((HIDE if consecutive >= config.hide_after_consecutive else REINIT, trigger))
+            continue
+        consecutive = 0
+        for name, maximum in maxima:
+            value = frame[name]
+            if np.isfinite(value) and value > maximum:
+                trigger = name
+                break
+        decisions.append((REINIT, trigger) if trigger else (OK, "none"))
+    return decisions
 
 
 __all__ = ["OK", "REINIT", "HIDE", "lk_flow", "TrackInit", "TrackResult", "track_board", "failure_monitor"]
