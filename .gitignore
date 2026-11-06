@@ -1,4 +1,6 @@
 .venv/
+.uv-python/
+data/common_clip/frames/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/

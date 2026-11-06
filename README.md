@@ -24,6 +24,8 @@ uv downloads Python if needed. Use Python **3.11**, the version specified by Lab
 
 The environment lives in the root `.venv/`, beside `code/` and `data/`. Each collaborator creates their own environment. Do not commit or submit `.venv/`.
 
+The lab requirements pin `opencv-python==4.8.1.78` and NumPy 1.x. The course forum confirms the lab was tested with OpenCV 4.x: OpenCV 5 rejects the float32 image passed to `cv2.putText` by `overlaylab.visualize.label`. Check the selected interpreter with `python -c "import cv2, numpy; print(cv2.__version__, numpy.__version__)"`; it should show OpenCV 4.8.1 and NumPy 1.x. The system Python may have a different OpenCV version.
+
 ## 3. Prepare the data and FFmpeg
 
 The supplied datasets are included in this repository. Keep `data/` beside `code/`; the common video is at `data/common_clip/board_clip.mp4` and stress clips are under `data/diagnostic/`.
