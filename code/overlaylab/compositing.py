@@ -29,6 +29,7 @@ def hysteresis(strong: np.ndarray, weak: np.ndarray, connectivity: int = 8) -> n
     strong pixel, through chains of weak pixels, and return the Boolean mask
     of reached pixels. Validate shapes and the connectivity value.
     """
+    # YOUR CODE HERE
     strong, weak = np.asarray(strong, dtype=bool), np.asarray(weak, dtype=bool)
     if strong.shape != weak.shape or strong.ndim != 2:
         raise ValueError("strong and weak must be same-shape 2-D masks")
@@ -63,6 +64,7 @@ def compensated_difference(frame: np.ndarray, warped_reference: np.ndarray, cove
     (the ball over the blue board differs by only ~0.13 in grayscale but ~0.3
     in mean channel difference), and the default thresholds assume colour.
     """
+    # YOUR CODE HERE
     frame = to_float(frame)
     warped_reference = to_float(warped_reference)
     coverage = np.asarray(coverage, dtype=bool)
@@ -123,6 +125,7 @@ def occlusion_mask(frame: np.ndarray, H: np.ndarray, reference: np.ndarray, conf
     [label, x, y, width, height, area]. With ``config.mode == "colour"`` an
     appearance model may be used instead (optional ablation).
     """
+    # YOUR CODE HERE
     if config.mode != "difference":
         raise ValueError(f"Unsupported occlusion mode: {config.mode}")
     warped_reference, coverage = warp_artwork(reference, H, frame.shape)
@@ -148,6 +151,7 @@ def select_difference_thresholds(frames: Sequence[Tuple[np.ndarray, np.ndarray, 
     so that the frozen value sits inside the plateau rather than on its edge,
     and state the rule in the report.
     """
+    # YOUR CODE HERE
     if len(frames) != len(masks) or not frames:
         raise ValueError("frames and masks must be equally sized and nonempty")
     prepared = []
@@ -198,6 +202,7 @@ def composite(frame: np.ndarray, warped: np.ndarray, coverage: np.ndarray, occlu
     artwork to the board is controlled by ``config.match_gain``.
     Returns (composited RGB float32 frame, alpha map float32 in [0, 1]).
     """
+    # YOUR CODE HERE
     original = to_float(frame)
     artwork = to_float(warped)
     visible = np.asarray(coverage, dtype=bool) & ~np.asarray(occlusion, dtype=bool)
