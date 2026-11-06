@@ -98,16 +98,40 @@ This compact report records how every `YOUR CODE HERE` section is exercised. Ela
   - In the independent variant, calls `localise_board` on every frame using the reference image. Each frame receives its own homography, projected corners, status, and monitor statistics.
   - In the flow-assisted variant, localises the first frame and propagates its inlier reference-to-frame correspondences with `lk_flow`. It drops invalid tracks, fits a new homography with RANSAC, and retains the new inlier correspondences for the next frame. The optional corners mode instead propagates four projected corners and requires compatible minimum-point and inlier settings.
   - Re-localises when too few valid points remain, at the configured interval, after a failed homography estimate, or following a monitor warning. Each localiser call is recorded in `reinit_frames`; flow vectors, eigenvalues, residuals, and validity flags are exposed on frames tracked by flow. Frames with no usable model have `lost` status and NaN corners.
-  - Builds per-frame statistics with the supplied helper. For flow frames, the inlier ratio is the RANSAC inlier count divided by the number of valid propagated points, and the median residual is the inlier median of the one-way RMS transfer error in pixels.
+  - Builds per-frame statistics with the supplied helper. For flow frames, the inlier ratio is the RANSAC inlier count divided by the number of valid propagated points. The median residual is `median(sqrt(symmetric_transfer_error / 2))` over inliers, combining the forward and backward transfer errors in pixels.
 
 - `failure_monitor`:
-  - Assigns `HIDE` with trigger `no_model` when tracking has no usable model. Otherwise, too few inliers or a low inlier ratio requests `REINIT`, escalating to `HIDE` after the configured number of consecutive weak frames.
-  - If inlier checks pass, examines median residual, projected-corner displacement, mean flow, and brightness change in that order. The first finite statistic above its configured maximum triggers `REINIT`; otherwise the frame is `OK`. NaN statistics do not trigger a warning, and an `OK` frame resets the consecutive weak-frame count.
+  - Assigns `HIDE` with trigger `no_model` when tracking has no usable model. Otherwise, too few inliers or a low inlier ratio requests `REINIT`, escalating to `HIDE` after the configured number of consecutive weak frames. Frames with no usable model also count towards this run.
+  - If inlier checks pass, resets the consecutive weak-frame count and examines median residual, projected-corner displacement, mean flow, and brightness change in that order. The first finite statistic above its configured maximum triggers `REINIT`; otherwise the frame is `OK`. NaN statistics do not trigger a warning.
 
 ### Stress table (Stage 2)
 ### Question 3 — Tracking
 
 ## Stage 3 — Composite
+### Code Explanation
+
+#### `compositing.py`
+
+- `hysteresis`:
+  - Validates that the strong and weak masks are two-dimensional and have the same shape, and that connectivity is four or eight.
+  - Starts a queue at every strong pixel and visits neighbouring weak pixels until no reachable pixels remain. It returns the reached Boolean mask, leaving disconnected weak responses out.
+
+- `compensated_difference`:
+  - Within the warped reference's coverage, ranks pixels by their raw mean absolute colour difference and selects the configured best-agreeing fraction for a shared gain-and-offset fit across RGB channels.
+  - Computes the mean absolute colour difference between each covered frame pixel and its gain-and-offset-compensated reference value. It returns a zero-valued map outside coverage, the fitted gain and offset, and an identity fit if coverage is empty.
+
+- `occlusion_mask`:
+  - Warps the rectified board reference into the frame with the reference-to-frame homography, then obtains the compensated colour difference inside its coverage.
+  - Applies the configured strong and weak thresholds with `hysteresis`, opens the candidate mask with a disc-shaped kernel, and retains connected components meeting `min_area`. The returned mask remains inside board coverage; the difference map and each kept component's label, bounds, and area are returned for diagnosis.
+
+- `select_difference_thresholds`:
+  - Precomputes the compensated difference for each supplied frame and searches strong and weak thresholds and minimum component areas. It scores each setting by the mean mask IoU against the supplied validation masks and returns the selected configuration and a log of the candidate scores.
+  - Treats scores within an absolute tolerance of `1e-12` of the best score as tied, with zero relative tolerance. Selects the strong threshold nearest the midpoint between the smallest and largest tied strong values, so repeated weak/area combinations do not bias that midpoint. Then favours weak and area values nearest the input configuration, with the smaller strong value as a final tie-breaker.
+
+- `composite`:
+  - Forms a visible-board mask from artwork coverage minus occlusion. With feathering enabled, a distance transform reduces alpha near visible-region boundaries; with feathering disabled, alpha is exactly one on visible board pixels and zero elsewhere.
+  - Optionally fits a shared gain and offset to the visible artwork and frame pixels, then blends the artwork and original frame with the alpha map. It returns an RGB float32 frame and an alpha map bounded by zero and one.
+
 ### Stress table (Stage 3)
 ### Question 4 — Occlusion
 
