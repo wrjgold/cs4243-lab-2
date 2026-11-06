@@ -6,7 +6,7 @@
       "response_fraction": 0.005,
       "nms_mode": "radius",
       "nms_radius": 5,
-      "max_corners": 600,
+      "max_corners": 800,
       "border": 12
     },
     "descriptor": {
@@ -18,8 +18,8 @@
       "clamp": 0.2
     },
     "matcher": {
-      "ratio": 0.8,
-      "mutual": false
+      "ratio": 0.9,
+      "mutual": true
     },
     "ransac": {
       "threshold": 9.0,
