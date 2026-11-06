@@ -85,6 +85,25 @@ This compact report records how every `YOUR CODE HERE` section is exercised. Ela
 ### Question 2 — Geometry
 
 ## Stage 2 — Track
+### Code Explanation
+
+#### `temporal.py`
+
+- `lk_flow`:
+  - Builds a square window around each input point and samples the previous frame and its supplied Sobel gradients at the window coordinates. The mean gradient products form a normalised structure tensor; its two eigenvalues measure whether motion is observable in both image directions.
+  - Iteratively samples the next frame at the displaced window, solves the two-dimensional Lucas–Kanade update, and stops when the update falls below the configured convergence limit or the iteration limit is reached. It returns a displacement and a mean absolute brightness residual for each point.
+  - Marks points invalid when their window leaves either image, the smaller eigenvalue is below the configured minimum, the update does not converge, or the final residual exceeds its limit. The assessed implementation uses the required single-level flow; a pyramid is optional.
+
+- `track_board`:
+  - In the independent variant, calls `localise_board` on every frame using the reference image. Each frame receives its own homography, projected corners, status, and monitor statistics.
+  - In the flow-assisted variant, localises the first frame and propagates its inlier reference-to-frame correspondences with `lk_flow`. It drops invalid tracks, fits a new homography with RANSAC, and retains the new inlier correspondences for the next frame. The optional corners mode instead propagates four projected corners and requires compatible minimum-point and inlier settings.
+  - Re-localises when too few valid points remain, at the configured interval, after a failed homography estimate, or following a monitor warning. Each localiser call is recorded in `reinit_frames`; flow vectors, eigenvalues, residuals, and validity flags are exposed on frames tracked by flow. Frames with no usable model have `lost` status and NaN corners.
+  - Builds per-frame statistics with the supplied helper. For flow frames, the inlier ratio is the RANSAC inlier count divided by the number of valid propagated points, and the median residual is the inlier median of the one-way RMS transfer error in pixels.
+
+- `failure_monitor`:
+  - Assigns `HIDE` with trigger `no_model` when tracking has no usable model. Otherwise, too few inliers or a low inlier ratio requests `REINIT`, escalating to `HIDE` after the configured number of consecutive weak frames.
+  - If inlier checks pass, examines median residual, projected-corner displacement, mean flow, and brightness change in that order. The first finite statistic above its configured maximum triggers `REINIT`; otherwise the frame is `OK`. NaN statistics do not trigger a warning, and an `OK` frame resets the consecutive weak-frame count.
+
 ### Stress table (Stage 2)
 ### Question 3 — Tracking
 
