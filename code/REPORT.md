@@ -108,6 +108,30 @@ This compact report records how every `YOUR CODE HERE` section is exercised. Ela
 ### Question 3 — Tracking
 
 ## Stage 3 — Composite
+### Code Explanation
+
+#### `compositing.py`
+
+- `hysteresis`:
+  - Validates that the strong and weak masks are two-dimensional and have the same shape, and that connectivity is four or eight.
+  - Starts a queue at every strong pixel and visits neighbouring weak pixels until no reachable pixels remain. It returns the reached Boolean mask, leaving disconnected weak responses out.
+
+- `compensated_difference`:
+  - Within the warped reference's coverage, ranks pixels by their raw mean absolute colour difference and selects the configured best-agreeing fraction for a shared gain-and-offset fit across RGB channels.
+  - Computes the mean absolute colour difference between each covered frame pixel and its gain-and-offset-compensated reference value. It returns a zero-valued map outside coverage, the fitted gain and offset, and an identity fit if coverage is empty.
+
+- `occlusion_mask`:
+  - Warps the rectified board reference into the frame with the reference-to-frame homography, then obtains the compensated colour difference inside its coverage.
+  - Applies the configured strong and weak thresholds with `hysteresis`, opens the candidate mask with a disc-shaped kernel, and retains connected components meeting `min_area`. The returned mask remains inside board coverage; the difference map and each kept component's label, bounds, and area are returned for diagnosis.
+
+- `select_difference_thresholds`:
+  - Precomputes the compensated difference for each supplied frame and searches strong and weak thresholds and minimum component areas. It scores each setting by the mean mask IoU against the supplied validation masks and returns the selected configuration and a log of the candidate scores.
+  - When settings tie for the best score, selects a strong threshold nearest the middle of the tied strong-threshold range, then favours weak and area values nearest the input configuration. This keeps the chosen strong threshold inside a validation-score plateau rather than at an extreme.
+
+- `composite`:
+  - Forms a visible-board mask from artwork coverage minus occlusion. With feathering enabled, a distance transform reduces alpha near visible-region boundaries; with feathering disabled, alpha is exactly one on visible board pixels and zero elsewhere.
+  - Optionally fits a shared gain and offset to the visible artwork and frame pixels, then blends the artwork and original frame with the alpha map. It returns an RGB float32 frame and an alpha map bounded by zero and one.
+
 ### Stress table (Stage 3)
 ### Question 4 — Occlusion
 
