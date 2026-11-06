@@ -9,6 +9,7 @@ and your Lab 1 ``hysteresis``.
 from __future__ import annotations
 
 from dataclasses import replace
+from collections import deque
 from typing import Dict, List, Sequence, Tuple
 
 import cv2
@@ -28,8 +29,25 @@ def hysteresis(strong: np.ndarray, weak: np.ndarray, connectivity: int = 8) -> n
     strong pixel, through chains of weak pixels, and return the Boolean mask
     of reached pixels. Validate shapes and the connectivity value.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    strong, weak = np.asarray(strong, dtype=bool), np.asarray(weak, dtype=bool)
+    if strong.shape != weak.shape or strong.ndim != 2:
+        raise ValueError("strong and weak must be same-shape 2-D masks")
+    if connectivity not in (4, 8):
+        raise ValueError("connectivity must be 4 or 8")
+    reached = strong.copy()
+    queue = deque(map(tuple, np.argwhere(strong)))
+    neighbours = ((-1, 0), (1, 0), (0, -1), (0, 1))
+    if connectivity == 8:
+        neighbours += ((-1, -1), (-1, 1), (1, -1), (1, 1))
+    height, width = strong.shape
+    while queue:
+        y, x = queue.popleft()
+        for dy, dx in neighbours:
+            ny, nx = y + dy, x + dx
+            if 0 <= ny < height and 0 <= nx < width and weak[ny, nx] and not reached[ny, nx]:
+                reached[ny, nx] = True
+                queue.append((ny, nx))
+    return reached
 
 
 def compensated_difference(frame: np.ndarray, warped_reference: np.ndarray, coverage: np.ndarray,
@@ -45,8 +63,46 @@ def compensated_difference(frame: np.ndarray, warped_reference: np.ndarray, cove
     (the ball over the blue board differs by only ~0.13 in grayscale but ~0.3
     in mean channel difference), and the default thresholds assume colour.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    frame = to_float(frame)
+    warped_reference = to_float(warped_reference)
+    coverage = np.asarray(coverage, dtype=bool)
+    difference = np.zeros(coverage.shape, dtype=np.float32)
+    if not coverage.any():
+        return difference, (1.0, 0.0)
+
+    # Select the best-agreeing covered pixels before fitting one gain and offset
+    # shared by all colour channels.
+    raw = np.mean(np.abs(frame[coverage] - warped_reference[coverage]), axis=-1)
+    n_fit = max(1, int(np.ceil(np.clip(config.gain_quantile, 0, 1) * len(raw))))
+    selected = np.argpartition(raw, n_fit - 1)[:n_fit]
+    x = warped_reference[coverage][selected].astype(np.float64).ravel()
+    y = frame[coverage][selected].astype(np.float64).ravel()
+    x_mean, y_mean = x.mean(), y.mean()
+    variance = np.mean((x - x_mean) ** 2)
+    gain = float(np.mean((x - x_mean) * (y - y_mean)) / variance) if variance > 1e-12 else 1.0
+    offset = float(y_mean - gain * x_mean)
+    difference[coverage] = np.mean(
+        np.abs(frame[coverage] - (gain * warped_reference[coverage] + offset)), axis=-1)
+    return difference, (gain, offset)
+
+
+def _mask_from_difference(difference: np.ndarray, coverage: np.ndarray,
+                          config: OcclusionConfig) -> Tuple[np.ndarray, np.ndarray]:
+    """Apply hysteresis, opening and component filtering to a cached difference map."""
+    seeds = (difference >= config.strong) & coverage
+    weak = (difference >= config.weak) & coverage
+    mask = hysteresis(seeds, weak, config.connectivity)
+    if config.open_radius > 0:
+        radius = config.open_radius
+        yy, xx = np.mgrid[-radius:radius + 1, -radius:radius + 1]
+        disc = (xx * xx + yy * yy <= radius * radius).astype(np.uint8)
+        mask = cv2.morphologyEx(mask.astype(np.uint8), cv2.MORPH_OPEN, disc).astype(bool)
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(
+        mask.astype(np.uint8), connectivity=config.connectivity)
+    kept = [i for i in range(1, count) if stats[i, cv2.CC_STAT_AREA] >= config.min_area]
+    selected = np.isin(labels, kept) & coverage if kept else np.zeros_like(coverage)
+    rows = np.array([[i, *stats[i].tolist()] for i in kept], dtype=np.int32).reshape(-1, 6)
+    return selected, rows
 
 
 def occlusion_mask(frame: np.ndarray, H: np.ndarray, reference: np.ndarray, config: OcclusionConfig
@@ -67,8 +123,12 @@ def occlusion_mask(frame: np.ndarray, H: np.ndarray, reference: np.ndarray, conf
     [label, x, y, width, height, area]. With ``config.mode == "colour"`` an
     appearance model may be used instead (optional ablation).
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    if config.mode != "difference":
+        raise ValueError(f"Unsupported occlusion mode: {config.mode}")
+    warped_reference, coverage = warp_artwork(reference, H, frame.shape)
+    difference, _ = compensated_difference(frame, warped_reference, coverage, config)
+    mask, stats = _mask_from_difference(difference, coverage, config)
+    return mask, difference, stats
 
 
 def select_difference_thresholds(frames: Sequence[Tuple[np.ndarray, np.ndarray, np.ndarray]],
@@ -88,8 +148,43 @@ def select_difference_thresholds(frames: Sequence[Tuple[np.ndarray, np.ndarray, 
     so that the frozen value sits inside the plateau rather than on its edge,
     and state the rule in the report.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    if len(frames) != len(masks) or not frames:
+        raise ValueError("frames and masks must be equally sized and nonempty")
+    prepared = []
+    for (frame, H, reference), target in zip(frames, masks):
+        warped, coverage = warp_artwork(reference, H, frame.shape)
+        difference, _ = compensated_difference(frame, warped, coverage, config)
+        target = np.asarray(target, dtype=bool)
+        if target.shape != coverage.shape:
+            raise ValueError("ground-truth mask shape differs from frame")
+        prepared.append((difference, coverage, target))
+
+    strong_values = sorted(set(np.round(np.r_[np.linspace(0.10, 0.45, 8), config.strong], 4)))
+    weak_values = sorted(set(np.round(np.r_[np.linspace(0.04, 0.22, 7), config.weak], 4)))
+    area_values = sorted({max(1, int(round(config.min_area * factor))) for factor in (0.5, 1, 2, 4)})
+    log = []
+    for strong in strong_values:
+        for weak in weak_values:
+            if weak >= strong:
+                continue
+            for area in area_values:
+                candidate = replace(config, strong=float(strong), weak=float(weak), min_area=area)
+                scores = []
+                for difference, coverage, target in prepared:
+                    predicted, _ = _mask_from_difference(difference, coverage, candidate)
+                    score = metrics.mask_iou(predicted, target)
+                    if np.isfinite(score):
+                        scores.append(score)
+                log.append({"strong": float(strong), "weak": float(weak), "min_area": area,
+                            "mean_iou": float(np.mean(scores)) if scores else 0.0})
+
+    best_score = max(row["mean_iou"] for row in log)
+    tied = [row for row in log if np.isclose(row["mean_iou"], best_score, atol=1e-12)]
+    middle_strong = float(np.median([row["strong"] for row in tied]))
+    best = min(tied, key=lambda row: (abs(row["strong"] - middle_strong),
+                                      abs(row["weak"] - config.weak),
+                                      abs(row["min_area"] - config.min_area)))
+    return replace(config, strong=best["strong"], weak=best["weak"], min_area=best["min_area"]), log
 
 
 def composite(frame: np.ndarray, warped: np.ndarray, coverage: np.ndarray, occlusion: np.ndarray,
@@ -103,8 +198,22 @@ def composite(frame: np.ndarray, warped: np.ndarray, coverage: np.ndarray, occlu
     artwork to the board is controlled by ``config.match_gain``.
     Returns (composited RGB float32 frame, alpha map float32 in [0, 1]).
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    original = to_float(frame)
+    artwork = to_float(warped)
+    visible = np.asarray(coverage, dtype=bool) & ~np.asarray(occlusion, dtype=bool)
+    alpha = visible.astype(np.float32)
+    if config.feather > 0 and visible.any():
+        distance = cv2.distanceTransform(visible.astype(np.uint8), cv2.DIST_L2, 5)
+        alpha *= np.minimum(distance / (config.feather + 1), 1.0)
+    if config.match_gain and visible.any():
+        source = artwork[visible].astype(np.float64)
+        target = original[visible].astype(np.float64)
+        x_mean, y_mean = source.mean(), target.mean()
+        variance = np.mean((source - x_mean) ** 2)
+        gain = np.mean((source - x_mean) * (target - y_mean)) / variance if variance > 1e-12 else 1.0
+        artwork = np.clip(gain * artwork + (y_mean - gain * x_mean), 0, 1).astype(np.float32)
+    output = alpha[..., None] * artwork + (1 - alpha[..., None]) * original
+    return output.astype(np.float32), alpha
 
 
 __all__ = ["hysteresis", "compensated_difference", "occlusion_mask", "select_difference_thresholds", "composite"]
