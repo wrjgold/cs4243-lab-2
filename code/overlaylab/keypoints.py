@@ -29,8 +29,16 @@ def harris_response(gray: np.ndarray, config: DetectorConfig) -> np.ndarray:
     built from the supplied normalised Sobel gradients. Returns a float32 map
     with the same shape as ``gray``.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Compute horizontal and vertical image gradients.
+    gx, gy, _, _ = sobel_gradients(gray)
+
+    # Smooth the gradient products to form the second-moment matrix.
+    xx = gaussian_smooth(gx * gx, config.sigma_w)
+    yy = gaussian_smooth(gy * gy, config.sigma_w)
+    xy = gaussian_smooth(gx * gy, config.sigma_w)
+
+    # Compute the Harris score from the determinant and trace of the matrix.
+    return (xx * yy - xy * xy - config.kappa * (xx + yy)**2).astype(np.float32)
 
 
 def detect_corners(gray: np.ndarray, config: DetectorConfig) -> Tuple[np.ndarray, np.ndarray]:
@@ -46,8 +54,60 @@ def detect_corners(gray: np.ndarray, config: DetectorConfig) -> Tuple[np.ndarray
     Returns (keypoints, responses): an N x 2 float array of (x, y) ordered by
     decreasing response (N <= config.max_corners) and the matching responses.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Check that the configured NMS mode is supported.
+    if config.nms_mode not in ("window", "radius"):
+        raise ValueError("Unknown NMS mode: " + config.nms_mode)
+
+    # Compute Harris scores and discard non-positive or below-threshold scores.
+    R = harris_response(gray, config)
+    radius = config.nms_radius
+    candidates = (R > 0) & (R >= config.response_fraction * R.max())
+
+    # Remove candidates too close to the image border.
+    border = config.border
+    if border > 0:
+        candidates[:border] = candidates[-border:] = False
+        candidates[:, :border] = candidates[:, -border:] = False
+    # Extract candidate coordinates and sort them from strongest to weakest.
+    y, x = np.nonzero(candidates)
+    order = np.argsort(-R[y, x], kind="stable")
+    # Window mode: compute the maximum score in each square neighbourhood.
+    if config.nms_mode == "window":
+        padded = np.pad(R, radius, constant_values=-np.inf)
+        maximum = np.full_like(R, -np.inf)
+        for dy in range(2 * radius + 1):
+            for dx in range(2 * radius + 1):
+                np.maximum(maximum, padded[dy:dy + R.shape[0], dx:dx + R.shape[1]],
+                           out=maximum)
+
+        # Keep local maxima in score order, including ties, up to the corner limit.
+        local_maxima = R[y, x] == maximum[y, x]
+        order = order[local_maxima[order]][:config.max_corners]
+
+    # Radius mode: accept strong points and block nearby candidates.
+    else:
+        blocked = np.zeros_like(candidates)
+        accepted = []
+
+        # Build the circular neighbourhood used to suppress nearby points.
+        offsets = np.arange(-radius, radius + 1)
+        oy, ox = np.meshgrid(offsets, offsets, indexing="ij")
+        disk = ox**2 + oy**2 <= radius**2
+        # Accept unblocked candidates until the maximum corner count is reached.
+        for index in order:
+            if len(accepted) >= config.max_corners:
+                break
+            cy, cx = y[index], x[index]
+            if blocked[cy, cx]:
+                continue
+            accepted.append(index)
+            # Suppress the circular neighbourhood of each accepted point.
+            yy, xx = cy + oy[disk], cx + ox[disk]
+            inside = (yy >= 0) & (yy < R.shape[0]) & (xx >= 0) & (xx < R.shape[1])
+            blocked[yy[inside], xx[inside]] = True
+        order = np.asarray(accepted, dtype=int)
+    # Return (x, y) coordinates and their matching Harris scores.
+    return np.column_stack((x[order], y[order])).astype(np.float32), R[y[order], x[order]]
 
 
 def describe_keypoints(gray: np.ndarray, keypoints: np.ndarray,
@@ -66,8 +126,79 @@ def describe_keypoints(gray: np.ndarray, keypoints: np.ndarray,
     Keypoints whose (rotated) window leaves the image are dropped. Returns
     (descriptors N' x 128, kept_indices N') where kept_indices indexes the input.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Compute image gradients for sampling around each keypoint.
+    gx, gy, _, _ = sobel_gradients(gray)
+    height, width = gray.shape
+
+    # Build a centred 16 x 16 sampling grid at the configured patch scale.
+    size = 16
+    grid = (np.arange(size) - (size - 1) / 2) * config.patch_scale
+    oy, ox = np.meshgrid(grid, grid, indexing="ij")
+    # Optionally give samples near the patch centre more weight.
+    weights = np.ones((size, size))
+    if config.gaussian_weighting:
+        weights = np.exp(-(ox**2 + oy**2) / (2 * (size * config.patch_scale / 2)**2))
+    descriptors, kept = [], []
+    dimension = config.cells**2 * config.cell_bins
+
+    # Check whether every sample in a patch lies inside the image.
+    def inside(x, y):
+        return x.min() >= 0 and x.max() <= width - 1 and y.min() >= 0 and y.max() <= height - 1
+
+    # Assign each grid sample to one of the spatial histogram cells.
+    cell_y, cell_x = np.indices((size, size))
+    cell_y = cell_y * config.cells // size
+    cell_x = cell_x * config.cells // size
+    # Process each keypoint, skipping patches that cross the image boundary.
+    for index, (x, y) in enumerate(keypoints):
+        if not inside(x + ox, y + oy):
+            continue
+
+        # Assign the dominant gradient orientation around the keypoint.
+        px = bilinear_sample(gx, y + oy, x + ox)
+        py = bilinear_sample(gy, y + oy, x + ox)
+        magnitude = np.hypot(px, py) * weights
+        angle = np.mod(np.arctan2(py, px), 2 * np.pi)
+        bins = np.floor(angle * config.orientation_bins / (2 * np.pi)).astype(int)
+        histogram = np.bincount((bins % config.orientation_bins).ravel(),
+                                weights=magnitude.ravel(), minlength=config.orientation_bins)
+        dominant = (np.argmax(histogram) + 0.5) * 2 * np.pi / config.orientation_bins
+
+        # Rotate the sampling grid and express gradients relative to that orientation.
+        c, s = np.cos(dominant), np.sin(dominant)
+        rx, ry = x + c * ox - s * oy, y + s * ox + c * oy
+        if not inside(rx, ry):
+            continue
+
+        # Sample rotated gradients and subtract the dominant orientation.
+        px, py = bilinear_sample(gx, ry, rx), bilinear_sample(gy, ry, rx)
+        magnitude = np.hypot(px, py) * weights
+        angle = np.mod(np.arctan2(py, px) - dominant, 2 * np.pi)
+
+        # Accumulate cell histograms, blending neighbouring orientation bins.
+        orientation = angle * config.cell_bins / (2 * np.pi)
+        lower = np.floor(orientation).astype(int)
+        fraction = orientation - lower
+        base = (cell_y * config.cells + cell_x) * config.cell_bins
+        descriptor = np.bincount((base + lower % config.cell_bins).ravel(),
+                                 weights=(magnitude * (1 - fraction)).ravel(), minlength=dimension)
+        descriptor += np.bincount((base + (lower + 1) % config.cell_bins).ravel(),
+                                  weights=(magnitude * fraction).ravel(), minlength=dimension)
+
+        # Normalise, clamp strong bins, then normalise again.
+        norm = np.linalg.norm(descriptor)
+        if norm == 0:
+            continue
+        descriptor /= norm
+        descriptor = np.minimum(descriptor, config.clamp)
+        descriptor /= np.linalg.norm(descriptor)
+        # Save the descriptor and its original keypoint index.
+        descriptors.append(descriptor)
+        kept.append(index)
+
+    # Return descriptors and retained indices, including correctly shaped empty arrays.
+    return (np.asarray(descriptors, dtype=np.float32).reshape(-1, dimension),
+            np.asarray(kept, dtype=int))
 
 
 def match_descriptors(desc_a: np.ndarray, desc_b: np.ndarray,
@@ -80,8 +211,29 @@ def match_descriptors(desc_a: np.ndarray, desc_b: np.ndarray,
     descriptor in A. Returns (pairs M x 2 of (index_a, index_b), distances M,
     ratios M).
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Convert descriptors to floats and require two neighbours for the ratio test.
+    a, b = np.asarray(desc_a, dtype=float), np.asarray(desc_b, dtype=float)
+    if len(a) == 0 or len(b) < 2:
+        return np.empty((0, 2), dtype=int), np.empty(0), np.empty(0)
+
+    # Compute pairwise distances without an N x M x 128 temporary array.
+    squared = np.maximum(np.sum(a*a, axis=1)[:, None] + np.sum(b*b, axis=1)[None, :]
+                         - 2 * (a @ b.T), 0)
+    # Find the nearest two neighbours and convert squared distances to distances.
+    neighbours = np.argsort(squared, axis=1, kind="stable")[:, :2]
+    rows = np.arange(len(a))
+    d1 = np.sqrt(squared[rows, neighbours[:, 0]])
+    d2 = np.sqrt(squared[rows, neighbours[:, 1]])
+
+    # Reject ambiguous matches; two identical nearest neighbours are ambiguous too.
+    ratios = np.divide(d1, d2, out=np.ones_like(d1), where=d2 > 0)
+    accepted = (d2 > 0) & (ratios < config.ratio)
+    # Optionally require each match to be the nearest neighbour in both directions.
+    if config.mutual:
+        accepted &= np.argmin(squared, axis=0)[neighbours[:, 0]] == rows
+    # Return accepted index pairs with their distances and ratios.
+    pairs = np.column_stack((rows[accepted], neighbours[accepted, 0]))
+    return pairs, d1[accepted], ratios[accepted]
 
 
 __all__ = ["harris_response", "detect_corners", "describe_keypoints", "match_descriptors"]

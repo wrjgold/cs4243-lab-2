@@ -37,8 +37,43 @@ def localise_board(reference: np.ndarray, frame: np.ndarray, config: Localisatio
     When localisation fails, ``H`` is None, ``corners`` is NaN and ``status``
     is False.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Convert the reference and frame to grayscale.
+    ref_gray, frame_gray = to_gray(reference), to_gray(frame)
+
+    # Detect candidate keypoints in both images.
+    ref_points, _ = detect_corners(ref_gray, config.detector)
+    frame_points, _ = detect_corners(frame_gray, config.detector)
+    # Describe keypoints and retain only points with valid descriptors.
+    ref_desc, ref_keep = describe_keypoints(ref_gray, ref_points, config.descriptor)
+    frame_desc, frame_keep = describe_keypoints(frame_gray, frame_points, config.descriptor)
+    ref_points, frame_points = ref_points[ref_keep], frame_points[frame_keep]
+
+    # Match reference descriptors to frame descriptors using the ratio test.
+    matches, _, _ = match_descriptors(ref_desc, frame_desc, config.matcher)
+
+    # Estimate the reference-to-frame homography with RANSAC.
+    H, inliers, residuals, iterations, status = ransac_homography(
+        ref_points[matches[:, 0]], frame_points[matches[:, 1]], config.ransac)
+    # Project the four reference corners when estimation succeeds.
+    corners = np.full((4, 2), np.nan)
+    if status:
+        corners = transfer_points(H, rect_corners(reference.shape[1], reference.shape[0]))
+        status = bool(np.isfinite(corners).all())
+    # Return no homography and NaN corners when localisation fails.
+    if not status:
+        H, corners = None, np.full((4, 2), np.nan)
+
+    # Expose counts and residuals for evaluation and visualisation.
+    count = int(inliers.sum())
+    diagnostics = {
+        "n_keypoints_ref": len(ref_points), "n_keypoints_frame": len(frame_points),
+        "n_matches": len(matches), "n_inliers": count,
+        "inlier_ratio": count / len(matches) if len(matches) else 0.0,
+        "median_residual": float(np.median(np.sqrt(residuals[inliers] / 2))) if count else float("inf"),
+        "iterations": iterations, "status": status, "residuals": residuals,
+        "keypoints_ref": ref_points, "keypoints_frame": frame_points,
+    }
+    return H, corners, matches, inliers, diagnostics
 
 
 def artwork_to_frame(artwork: np.ndarray, H: np.ndarray, config: LocalisationConfig) -> np.ndarray:
@@ -49,8 +84,11 @@ def artwork_to_frame(artwork: np.ndarray, H: np.ndarray, config: LocalisationCon
     own shape when unset) and then applying ``H``. Document in your report how
     the two transformations compose.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Read the artwork and reference sizes, using artwork size as the fallback.
+    ah, aw = artwork.shape[:2]
+    rh, rw = config.warp.reference_shape if config.warp.reference_shape is not None else (ah, aw)
+    # Scale artwork coordinates to the reference, then apply the board homography.
+    return H @ rectangle_to_rectangle((aw, ah), (rw, rh))
 
 
 def overlay_frame(frame: np.ndarray, artwork: np.ndarray, H: np.ndarray,
@@ -60,8 +98,12 @@ def overlay_frame(frame: np.ndarray, artwork: np.ndarray, H: np.ndarray,
     Warp the artwork with the composed homography (``artwork_to_frame``) and
     paint it where the coverage mask is set. Returns an RGB float32 frame.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Compose the artwork-to-frame map and warp the artwork.
+    warped, coverage = warp_artwork(artwork, artwork_to_frame(artwork, H, config), frame.shape)
+    # Copy the frame and replace only pixels covered by the warped artwork.
+    result = np.array(frame, dtype=np.float32, copy=True)
+    result[coverage] = warped[coverage]
+    return result
 
 
 def evaluate_audit_frames(reference: np.ndarray, frames: Dict[int, np.ndarray],
@@ -73,8 +115,23 @@ def evaluate_audit_frames(reference: np.ndarray, frames: Dict[int, np.ndarray],
     n_inliers, inlier_ratio, median_residual, status, corners) and ``summary``
     from ``metrics.summarise_errors`` using ``config.success_threshold``.
     """
-    # YOUR CODE HERE
-    raise NotImplementedError("YOUR CODE HERE")
+    # Evaluate annotated frames that have an image, retaining failed estimates.
+    per_frame = {}
+    for index in sorted(gt_corners.keys() & frames.keys()):
+        # Localise the board and measure its corner error against the annotations.
+        _, corners, _, _, diag = localise_board(reference, frames[index], config)
+
+        # Save the frame's error, feature statistics, status, and predicted corners.
+        per_frame[index] = {
+            "error": metrics.corner_error(corners, gt_corners[index]),
+            "n_matches": diag["n_matches"], "n_inliers": diag["n_inliers"],
+            "inlier_ratio": diag["inlier_ratio"], "median_residual": diag["median_residual"],
+            "status": diag["status"], "corners": corners,
+        }
+
+    # Use the supplied metric definitions for the summary.
+    summary = metrics.summarise_errors((r["error"] for r in per_frame.values()), config.success_threshold)
+    return {"per_frame": per_frame, "summary": summary}
 
 
 __all__ = ["localise_board", "artwork_to_frame", "overlay_frame", "evaluate_audit_frames"]
