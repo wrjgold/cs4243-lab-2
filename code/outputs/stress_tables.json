@@ -1,0 +1,610 @@
+{
+  "artwork": "ad",
+  "thresholds": "outputs/thresholds.json",
+  "width": null,
+  "success_threshold": 0.02,
+  "tables": {
+    "1": [
+      {
+        "label": "common \u00b7 validation",
+        "clip_id": "common_clip",
+        "n": 13,
+        "median_error": 0.005212635824877563,
+        "p90_error": 0.006547154971973033,
+        "success": 1.0,
+        "failed": 0,
+        "median_inliers": 136.0,
+        "median_inlier_ratio": 0.6367713004484304,
+        "affine_median_error": 0.00923096404934208,
+        "affine_success": 0.9230769230769231,
+        "per_frame": {
+          "0": {
+            "error": 0.0029492670639759944,
+            "affine_error": 0.007124498641406376,
+            "inliers": 144,
+            "inlier_ratio": 0.6371681415929203
+          },
+          "32": {
+            "error": 0.0029741647152792075,
+            "affine_error": 0.007310871305760581,
+            "inliers": 73,
+            "inlier_ratio": 0.5
+          },
+          "80": {
+            "error": 0.006580937449529215,
+            "affine_error": 0.011563497621205341,
+            "inliers": 29,
+            "inlier_ratio": 0.3670886075949367
+          },
+          "112": {
+            "error": 0.003105056629895493,
+            "affine_error": 0.005654264487699438,
+            "inliers": 161,
+            "inlier_ratio": 0.6652892561983471
+          },
+          "144": {
+            "error": 0.006412025061748303,
+            "affine_error": 0.028454424678602052,
+            "inliers": 129,
+            "inlier_ratio": 0.548936170212766
+          },
+          "176": {
+            "error": 0.005955808321540752,
+            "affine_error": 0.013549913855045882,
+            "inliers": 136,
+            "inlier_ratio": 0.6699507389162561
+          },
+          "208": {
+            "error": 0.005902897890188835,
+            "affine_error": 0.00923096404934208,
+            "inliers": 142,
+            "inlier_ratio": 0.6367713004484304
+          },
+          "240": {
+            "error": 0.006382476425746424,
+            "affine_error": 0.006728274422683185,
+            "inliers": 27,
+            "inlier_ratio": 0.28125
+          },
+          "272": {
+            "error": 0.005212635824877563,
+            "affine_error": 0.01437717222008382,
+            "inliers": 192,
+            "inlier_ratio": 0.6906474820143885
+          },
+          "320": {
+            "error": 0.003502607201987662,
+            "affine_error": 0.011255703986639894,
+            "inliers": 83,
+            "inlier_ratio": 0.5
+          },
+          "384": {
+            "error": 0.003962340044937611,
+            "affine_error": 0.006334551581481104,
+            "inliers": 258,
+            "inlier_ratio": 0.7818181818181819
+          },
+          "416": {
+            "error": 0.0037617784769017706,
+            "affine_error": 0.006477423837682593,
+            "inliers": 223,
+            "inlier_ratio": 0.7101910828025477
+          },
+          "448": {
+            "error": 0.01067761661856986,
+            "affine_error": 0.013447316418963807,
+            "inliers": 18,
+            "inlier_ratio": 0.21176470588235294
+          }
+        }
+      },
+      {
+        "label": "common \u00b7 test",
+        "clip_id": "common_clip",
+        "n": 13,
+        "median_error": 0.003988569904307334,
+        "p90_error": 0.00485157573997899,
+        "success": 0.9230769230769231,
+        "failed": 1,
+        "median_inliers": 151.0,
+        "median_inlier_ratio": 0.6543778801843319,
+        "affine_median_error": 0.008401645645464183,
+        "affine_success": 0.8461538461538461,
+        "per_frame": {
+          "16": {
+            "error": 0.004451007435030351,
+            "affine_error": 0.007709269728145073,
+            "inliers": 127,
+            "inlier_ratio": 0.6105769230769231
+          },
+          "48": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 9,
+            "inlier_ratio": 0.14754098360655737
+          },
+          "96": {
+            "error": 0.005499559365202129,
+            "affine_error": 0.01621871665391878,
+            "inliers": 223,
+            "inlier_ratio": 0.745819397993311
+          },
+          "128": {
+            "error": 0.0024589080047941647,
+            "affine_error": 0.022206560315936742,
+            "inliers": 168,
+            "inlier_ratio": 0.6436781609195402
+          },
+          "160": {
+            "error": 0.002973640840233681,
+            "affine_error": 0.004565359023277018,
+            "inliers": 142,
+            "inlier_ratio": 0.6543778801843319
+          },
+          "192": {
+            "error": 0.004854969526823317,
+            "affine_error": 0.011101485516802597,
+            "inliers": 272,
+            "inlier_ratio": 0.8071216617210683
+          },
+          "224": {
+            "error": 0.004322141682407651,
+            "affine_error": 0.009187454580888358,
+            "inliers": 231,
+            "inlier_ratio": 0.7427652733118971
+          },
+          "256": {
+            "error": 0.004343290856641831,
+            "affine_error": 0.011895340525492518,
+            "inliers": 207,
+            "inlier_ratio": 0.7419354838709677
+          },
+          "288": {
+            "error": 0.0028941363719894742,
+            "affine_error": 0.009094021562783293,
+            "inliers": 151,
+            "inlier_ratio": 0.6565217391304348
+          },
+          "368": {
+            "error": 0.004821031658380045,
+            "affine_error": 0.006666665974789842,
+            "inliers": 71,
+            "inlier_ratio": 0.46405228758169936
+          },
+          "400": {
+            "error": 0.003654998126207017,
+            "affine_error": 0.003925804651416221,
+            "inliers": 286,
+            "inlier_ratio": 0.7771739130434783
+          },
+          "432": {
+            "error": 0.0023121253395924197,
+            "affine_error": 0.003637461302205032,
+            "inliers": 114,
+            "inlier_ratio": 0.5846153846153846
+          },
+          "464": {
+            "error": 0.0027447810340986054,
+            "affine_error": 0.004330337023529333,
+            "inliers": 61,
+            "inlier_ratio": 0.4178082191780822
+          }
+        }
+      },
+      {
+        "label": "viewpoint (coke_perspective)",
+        "clip_id": "coke_perspective",
+        "n": 32,
+        "median_error": 0.004426614060677682,
+        "p90_error": 0.01019145850473421,
+        "success": 0.65625,
+        "failed": 11,
+        "median_inliers": 41.0,
+        "median_inlier_ratio": 0.3120226656812023,
+        "affine_median_error": 0.03303804281747482,
+        "affine_success": 0.1875,
+        "per_frame": {
+          "0": {
+            "error": 0.0025546011927023065,
+            "affine_error": 0.007928344829335125,
+            "inliers": 117,
+            "inlier_ratio": 0.5735294117647058
+          },
+          "16": {
+            "error": 0.0022093066135057643,
+            "affine_error": 0.007828144275401601,
+            "inliers": 85,
+            "inlier_ratio": 0.5448717948717948
+          },
+          "32": {
+            "error": 0.0040306627216673795,
+            "affine_error": 0.013549531845914524,
+            "inliers": 77,
+            "inlier_ratio": 0.4476744186046512
+          },
+          "48": {
+            "error": 0.0031447505232596886,
+            "affine_error": 0.019959955064760157,
+            "inliers": 101,
+            "inlier_ratio": 0.554945054945055
+          },
+          "64": {
+            "error": 0.0029498062154793224,
+            "affine_error": 0.03303804281747482,
+            "inliers": 100,
+            "inlier_ratio": 0.5405405405405406
+          },
+          "80": {
+            "error": 0.004401696514554707,
+            "affine_error": 0.03560089033062557,
+            "inliers": 114,
+            "inlier_ratio": 0.5588235294117647
+          },
+          "96": {
+            "error": 0.004426614060677682,
+            "affine_error": 0.027336900411598756,
+            "inliers": 107,
+            "inlier_ratio": 0.5297029702970297
+          },
+          "112": {
+            "error": 0.0018273400244788085,
+            "affine_error": 0.01140522401462629,
+            "inliers": 105,
+            "inlier_ratio": 0.5357142857142857
+          },
+          "128": {
+            "error": 0.003113033624784683,
+            "affine_error": 0.020764262223677464,
+            "inliers": 164,
+            "inlier_ratio": 0.6431372549019608
+          },
+          "144": {
+            "error": 0.0037603251394672356,
+            "affine_error": 0.03005480367144944,
+            "inliers": 60,
+            "inlier_ratio": 0.3973509933774834
+          },
+          "160": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 10,
+            "inlier_ratio": 0.13513513513513514
+          },
+          "176": {
+            "error": 0.005508937697090787,
+            "affine_error": 0.05798853857596415,
+            "inliers": 94,
+            "inlier_ratio": 0.47959183673469385
+          },
+          "192": {
+            "error": 0.006086267120171832,
+            "affine_error": 0.07153684339049012,
+            "inliers": 120,
+            "inlier_ratio": 0.5240174672489083
+          },
+          "208": {
+            "error": 0.010129903539034896,
+            "affine_error": 0.09130373996523518,
+            "inliers": 37,
+            "inlier_ratio": 0.3008130081300813
+          },
+          "224": {
+            "error": 0.01019145850473421,
+            "affine_error": 0.09520630174441919,
+            "inliers": 40,
+            "inlier_ratio": 0.2564102564102564
+          },
+          "240": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 6,
+            "inlier_ratio": 0.06315789473684211
+          },
+          "256": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.08064516129032258
+          },
+          "272": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 6,
+            "inlier_ratio": 0.06593406593406594
+          },
+          "288": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.078125
+          },
+          "304": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 6,
+            "inlier_ratio": 0.06976744186046512
+          },
+          "320": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.07246376811594203
+          },
+          "336": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 9,
+            "inlier_ratio": 0.08108108108108109
+          },
+          "352": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.08333333333333333
+          },
+          "368": {
+            "error": 0.01706731180109743,
+            "affine_error": 0.08246158205383072,
+            "inliers": 39,
+            "inlier_ratio": 0.291044776119403
+          },
+          "384": {
+            "error": 0.004647160285525003,
+            "affine_error": 0.06449031648706814,
+            "inliers": 42,
+            "inlier_ratio": 0.3
+          },
+          "400": {
+            "error": 0.008508110369745985,
+            "affine_error": 0.06246392837680602,
+            "inliers": 115,
+            "inlier_ratio": 0.515695067264574
+          },
+          "416": {
+            "error": 0.010504436280331948,
+            "affine_error": 0.04349669469261934,
+            "inliers": 32,
+            "inlier_ratio": 0.32323232323232326
+          },
+          "432": {
+            "error": 0.003180913203592341,
+            "affine_error": 0.026678694335741816,
+            "inliers": 163,
+            "inlier_ratio": 0.6221374045801527
+          },
+          "448": {
+            "error": 0.004689277966807299,
+            "affine_error": 0.014224950830052575,
+            "inliers": 82,
+            "inlier_ratio": 0.5359477124183006
+          },
+          "464": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.08064516129032258
+          },
+          "480": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 9,
+            "inlier_ratio": 0.13043478260869565
+          },
+          "496": {
+            "error": 0.005901974087518439,
+            "affine_error": 0.03389688597115649,
+            "inliers": 16,
+            "inlier_ratio": 0.20512820512820512
+          }
+        }
+      },
+      {
+        "label": "scale (coke_scale)",
+        "clip_id": "coke_scale",
+        "n": 32,
+        "median_error": 0.0037781979922839235,
+        "p90_error": 0.005745273812907485,
+        "success": 0.28125,
+        "failed": 23,
+        "median_inliers": 5.0,
+        "median_inlier_ratio": 0.07874503968253968,
+        "affine_median_error": 0.006672309311729843,
+        "affine_success": 0.28125,
+        "per_frame": {
+          "0": {
+            "error": 0.0034726852040073324,
+            "affine_error": 0.009895597391874037,
+            "inliers": 84,
+            "inlier_ratio": 0.4540540540540541
+          },
+          "16": {
+            "error": 0.002685118607494951,
+            "affine_error": 0.009745720152302993,
+            "inliers": 80,
+            "inlier_ratio": 0.49079754601226994
+          },
+          "32": {
+            "error": 0.005726321737516611,
+            "affine_error": 0.008248315748222547,
+            "inliers": 31,
+            "inlier_ratio": 0.3229166666666667
+          },
+          "48": {
+            "error": 0.003962831791670946,
+            "affine_error": 0.005990836599767975,
+            "inliers": 80,
+            "inlier_ratio": 0.49382716049382713
+          },
+          "64": {
+            "error": 0.0037781979922839235,
+            "affine_error": 0.007458051079790673,
+            "inliers": 46,
+            "inlier_ratio": 0.32857142857142857
+          },
+          "80": {
+            "error": 0.0016240598334406112,
+            "affine_error": 0.00460442355449347,
+            "inliers": 187,
+            "inlier_ratio": 0.7333333333333333
+          },
+          "96": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 9,
+            "inlier_ratio": 0.14285714285714285
+          },
+          "112": {
+            "error": 0.0025458019496543863,
+            "affine_error": 0.005628527024240002,
+            "inliers": 191,
+            "inlier_ratio": 0.7403100775193798
+          },
+          "128": {
+            "error": 0.0039485660561253645,
+            "affine_error": 0.006672309311729843,
+            "inliers": 126,
+            "inlier_ratio": 0.5915492957746479
+          },
+          "144": {
+            "error": 0.005821082114470981,
+            "affine_error": 0.0033916506715248092,
+            "inliers": 35,
+            "inlier_ratio": 0.2845528455284553
+          },
+          "160": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 6,
+            "inlier_ratio": 0.09230769230769231
+          },
+          "176": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 6,
+            "inlier_ratio": 0.06741573033707865
+          },
+          "192": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.05747126436781609
+          },
+          "208": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 8,
+            "inlier_ratio": 0.0851063829787234
+          },
+          "224": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.078125
+          },
+          "240": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.0641025641025641
+          },
+          "256": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.06172839506172839
+          },
+          "272": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.07352941176470588
+          },
+          "288": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.08064516129032258
+          },
+          "304": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.07246376811594203
+          },
+          "320": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.058823529411764705
+          },
+          "336": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.06329113924050633
+          },
+          "352": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.0641025641025641
+          },
+          "368": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.08333333333333333
+          },
+          "384": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.07936507936507936
+          },
+          "400": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.06329113924050633
+          },
+          "416": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.0684931506849315
+          },
+          "432": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.11363636363636363
+          },
+          "448": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.06756756756756757
+          },
+          "464": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.07575757575757576
+          },
+          "480": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.06493506493506493
+          },
+          "496": {
+            "error": Infinity,
+            "affine_error": Infinity,
+            "inliers": 5,
+            "inlier_ratio": 0.06097560975609756
+          }
+        }
+      }
+    ]
+  }
+}

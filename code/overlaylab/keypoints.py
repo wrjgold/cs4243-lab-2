@@ -65,11 +65,6 @@ def detect_corners(gray: np.ndarray, config: DetectorConfig) -> Tuple[np.ndarray
     radius = config.nms_radius
     candidates = (R > 0) & (R >= config.response_fraction * R.max())
 
-    # Remove candidates too close to the image border.
-    border = config.border
-    if border > 0:
-        candidates[:border] = candidates[-border:] = False
-        candidates[:, :border] = candidates[:, -border:] = False
     # Extract candidate coordinates and sort them from strongest to weakest.
     y, x = np.nonzero(candidates)
     order = np.argsort(-R[y, x], kind="stable")
@@ -108,6 +103,12 @@ def detect_corners(gray: np.ndarray, config: DetectorConfig) -> Tuple[np.ndarray
             inside = (yy >= 0) & (yy < R.shape[0]) & (xx >= 0) & (xx < R.shape[1])
             blocked[yy[inside], xx[inside]] = True
         order = np.asarray(accepted, dtype=int)
+    # Remove candidates too close to the image border.
+    border = config.border
+    if border > 0:
+        candidates[:border] = candidates[-border:] = False
+        candidates[:, :border] = candidates[:, -border:] = False
+    order = order[candidates[y[order], x[order]]]
     # Return (x, y) coordinates and their matching Harris scores.
     return np.column_stack((x[order], y[order])).astype(np.float32), R[y[order], x[order]]
 
