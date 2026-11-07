@@ -25,3 +25,21 @@ signatures, required file names and layouts, allowed-library restrictions,
 and validation/test boundaries. Keep changes within the assignment's
 requirements and the user's request; do not add optional features, extra
 test files, or other deliverables unless the user explicitly requests them.
+
+Focus testing on the documented requirements, the intended notebook execution
+order, and the behaviour affected by the change. Do not add or run unnecessary
+edge-case tests for hypothetical misuse. Test an edge case only when required
+by the assignment or function specification, relevant to a known failure, or
+explicitly requested by the user. Continue to run the required checks and
+appropriate verification of the intended end-to-end flow.
+
+Always place our added notebook code, including its comments and exploration
+code, in separate code cells preceded by a descriptive Markdown heading whose
+title starts with `(Our Code)`. Keep the original starter cells and headers
+intact; do not interleave starter-code fragments with our additions. When a
+change is needed inside a starter block, retain the complete original cell
+and put the complete modified copy in a separate `(Our Code)` cell immediately
+below it. Make clear that the modified copy includes retained starter code.
+If this separation or duplication would change execution behaviour, including
+outputs, saved files, or validation checks, stop and explain the change to the
+user before applying it.
