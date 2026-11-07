@@ -1,7 +1,7 @@
 # CS4243 Lab 2 report
 ### Wang Ruijie (A0272335H), Sean Tham (A0282350L)
 
-This compact report records how every `YOUR CODE HERE` section is exercised. Elaborate on your implementation and the results you observed; add figures, plots and grounded reasoning that show your understanding. Every reported number must name its clip (common / viewpoint / scale / blur / exit / combined / your clip), frame subset (validation / test / audit) and method variant, and must come from `overlaylab.metrics` or `overlaylab.evaluate`. Thresholds are frozen on the common clip's validation frames; each Stage's **stress table** (`python -m overlaylab.report`, `outputs/stress_tables.md`) reports the common clip (validation and test) and the Stage's two stress clips with that frozen configuration. Paste the generated table into the Stage's section unchanged and explain the row the Stage's question points at; the other rows need no interpretation.
+The pipeline uses feature matching and planar geometry to localise a board for perspective-aware advertisement placement. Parameters are selected on the common clip's validation frames and fixed for evaluation on its test frames and the supplied stress clips. Quantitative results use `overlaylab.metrics` and `overlaylab.evaluate`, with the clip, frame subset, processing resolution and method identified for each experiment.
 
 ## Stage 1 — Localise
 ### Code Explanation
@@ -16,7 +16,7 @@ This compact report records how every `YOUR CODE HERE` section is exercised. Ela
   - Removes non-positive Harris responses and responses below the configured fraction of the maximum.
   - In window NMS mode, retains responses equal to the maximum in their square neighbourhood, including ties. In radius NMS mode, greedily accepts candidates in descending response order and suppresses candidates within a circular radius.
   - After NMS, removes candidates within the configured image border. Border candidates participate in suppression before being discarded.
-  - Returns at most `max_corners` keypoints as `(x, y)` coordinates, ordered by decreasing response, together with their response values.
+  - Applies the `max_corners` limit before border removal, without replenishing discarded candidates. Returns the surviving keypoints as `(x, y)` coordinates, ordered by decreasing response, together with their response values. The limit is an upper bound on the number of usable descriptors.
 
 - `describe_keypoints`:
   - Samples gradients on a centred 16 x 16 grid at the configured patch scale. A gradient-magnitude-weighted orientation histogram determines the dominant orientation; optional Gaussian weighting gives central samples more influence.
@@ -83,30 +83,33 @@ This compact report records how every `YOUR CODE HERE` section is exercised. Ela
 
 ### Validation choices and coordinate conventions
 
-All final Stage 1 settings were selected on the 13 common-clip **validation corner frames at 1280 × 720**, with RANSAC seed **0**, before inspecting common-test or stress predictions. The notebook's initial two-frame, 640-pixel detector sweep is exploratory; the native-resolution selection in Notebook 1 §3.1 supersedes it.
+Stage 1 parameters are selected exclusively on common-clip validation data. Notebook 1 §3 selects NMS mode, `sigma_w` and `kappa` on validation frames 0 and 32 at **640 px**, using maximum repeatability within 3 px and board-corner count to break exact ties. The selected **radius NMS, `sigma_w=2.0`, `kappa=0.06`** gives repeatability **0.881** with **345** board corners in frame 0. These numerical settings are retained in §3.1, which selects NMS radius, corner count and matching settings on all **13 validation frames at 1280 × 720**, with RANSAC seed **0**. Configurations are ranked by descending success rate, then ascending number of unavailable models, finite p90 error and finite median error. Test and stress predictions do not influence selection.
 
 | Common validation, 1280 px; independent localisation | Success at 2% | No model | Finite median error | Finite p90 error |
 |---|---:|---:|---:|---:|
-| baseline: 600 corners, r=5 | 10/13 | 3 | 0.399% | 0.552% |
-| features: 800 corners, r=5 | 10/13 | 3 | 0.368% | 0.522% |
-| matches: ratio=0.85, mutual=False | 12/13 | 0 | 0.426% | 0.622% |
-| matches: ratio=0.9, mutual=False | 13/13 | 0 | 0.519% | 1.087% |
-| matches: ratio=0.9, mutual=True | 13/13 | 0 | 0.580% | 1.005% |
-| interaction: 1000 corners, r=3; ratio=.90, no mutual | 13/13 | 0 | 0.466% | 1.160% |
+| baseline: 600 corners, r=5 | 10/13 | 3 | 0.379% | 0.668% |
+| features: 800 corners, r=5 | 11/13 | 2 | 0.392% | 0.680% |
+| features: 1000 corners, r=5 | 12/13 | 1 | 0.364% | 0.621% |
+| matches: ratio=0.85, mutual=False | 13/13 | 0 | 0.486% | 0.739% |
+| matches: ratio=0.85, mutual=True | 13/13 | 0 | 0.440% | 0.718% |
+| matches: ratio=0.9, mutual=False | 13/13 | 0 | 0.521% | 0.655% |
+| matches: ratio=0.9, mutual=True | 13/13 | 0 | 0.312% | 0.731% |
 
-The baseline fails on frames 80, 240 and 448. It retains 600 reference and 600 frame descriptors on each, but only 11/17/18 matches and 9/7/10 candidate inliers, below the required 12. GT-scored match checks (evaluation only, <4 px) identify only 9/10/7 correct accepted matches. Increasing corner counts or changing NMS spacing alone does not recover these frames. With the winning feature configuration, relaxing the ratio threshold to 0.85 recovers models but leaves one frame above 2%; 0.90 with the mutual check passes all 13 and has the better finite p90 among the fully successful matcher candidates. The feature/matcher interaction check confirms that the alternative 1000-corner, radius-3 configuration does not improve this ranking. The complete 21-trial settings, per-frame results and summaries are saved in Notebook 1's outputs.
+The baseline returns no model on validation frames 80, 240, 448. Across these frames, its accepted-match counts are 11/20/10 and candidate-inlier counts are 9/9/5, below the required 12 inliers. The nine detector trials combine radii 3/5/7 with corner limits 600/800/1000 to vary feature density and spacing. Eight matcher trials combine ratios 0.75/0.80/0.85/0.90 with both mutual policies, using the highest-ranked detector configuration. Four interaction checks combine the two best detector configurations with the two best matching policies. This staged search limits computation while checking detector–matcher interactions; it does not exhaustively evaluate the joint search space. The selected configuration achieves 13/13 validation successes, with finite median error 0.521% and p90 0.655%. The complete 21-trial settings, per-frame results and summaries are recorded in Notebook 1.
 
-The selected configuration is: Harris `sigma_w=1.5`, `kappa=0.04`, response fraction `0.005`, **radius NMS with radius 5**, **800 corners**, border 12; descriptor patch scale 1, 36 dominant-orientation bins, 4 × 4 × 8 histograms, Gaussian weighting and clamp 0.2; **ratio 0.90 with mutual matching**. RANSAC remains at **9 px²**, confidence 0.995, cap 2000, minimum 12 inliers and seed 0. No descriptor-scale, geometric-threshold or iteration-cap sweep was needed after the feature/matcher changes recovered validation. No assessed algorithm implementation was changed.
+The selected configuration is: Harris `sigma_w=2.0`, `kappa=0.06`, response fraction `0.005`, **radius NMS with radius 5**, **1000 corners**, border 12; descriptor patch scale 1, 36 dominant-orientation bins, 4 × 4 × 8 histograms, Gaussian weighting and clamp 0.2; **ratio 0.90, mutual=False**. RANSAC uses a **9 px²** symmetric-transfer-error threshold, confidence 0.995, cap 2000, minimum 12 inliers and seed 0. Sigma, kappa, NMS mode, descriptor and RANSAC settings are held fixed throughout the §3.1 search.
 
-On the recovered validation frames 80/240/448, the selected configuration gives 57/57/58 matches, 17/19/16 inliers and corner errors of 0.638%/0.580%/1.480%. These small consensus ratios (0.298/0.333/0.276) are a limitation for downstream tracking/monitoring, whose settings remain unvalidated here. Better localisation coverage does not imply that the later monitor will paint every frame.
+On validation frames 80/240/448, the selected configuration gives 79/96/85 matches, 29/27/18 inliers and corner errors of 0.658%/0.638%/1.068%. Consensus ratios are 0.367/0.281/0.212. Correspondence support and geometric placement are separate measures; successful localisation alone does not establish that a downstream failure monitor permits rendering. The selected settings are stored in `outputs/stage1_settings.json` and `outputs/thresholds.json` and held fixed for subsequent evaluation.
 
-We retain **success ≤ 2% of the longer GT board diagonal** as a fixed geometric tolerance, rather than fitting a percentile or increasing it after failures. This corresponds to approximately **8.42–11.29 px mean corner displacement** across the native validation boards, above the approximately one-pixel annotation noise described in Notebook 1. Every selected validation estimate passes. The baseline's smaller finite median/p90 exclude its three hardest failures; they are not evidence that it is better overall. The success-first selection deliberately trades some finite-estimate accuracy for coverage. These 13 frames are a small validation set, not proof of generalisation.
+With ratio 0.90, both mutual policies achieve 13/13 validation successes. The selected mutual=False configuration has p90 0.655% versus 0.731% for the opposite policy; p90 precedes median in the ranking.
+
+Success is defined as **mean corner error ≤ 2% of the longer GT board diagonal**. This fixed tolerance corresponds to approximately **8.42–11.29 px mean corner displacement** across the native validation boards, above the approximately one-pixel annotation noise described in Notebook 1. Finite median and p90 errors exclude unavailable models and must be interpreted alongside coverage. The selection criterion prioritises coverage over finite-estimate accuracy. Selecting sigma and kappa on a two-frame repeatability proxy does not guarantee optimal localisation across all frames; the small validation set limits conclusions about generalisation.
 
 Coordinates are `(x, y)`: **x indexes columns and y indexes rows**. The pixel at row `r`, column `c` is centred at `(c, r)`. Pixel centres are integers; image corner centres range from `(0, 0)` to `(w−1, h−1)`, without a half-pixel offset. Artwork placement composes `H_artwork→frame = H_reference→frame @ S_artwork→reference`, with diagonal scale factors `(W_ref−1)/(W_art−1)` and `(H_ref−1)/(H_art−1)`. The inverse of this composed map supplies source coordinates for bilinear sampling.
 
 ![Synthetic checkerboard: known homography and integer pixel-centre convention.](student_files/stage1/warp_convention.png)
 
-The synthetic checkerboard coverage spans x=60–300 and y=40–150, the target quadrilateral's bounds. Notebook 1 §8 also compares the student sampler with OpenCV inside coverage; interpolation differences at projective edges are not a coordinate-convention change. The permitted OpenCV baseline does not replace `warp_artwork`.
+The synthetic checkerboard coverage spans x=60–300 and y=40–150, the target quadrilateral's bounds. Notebook 1 §8 compares the bilinear sampler with OpenCV inside coverage. Both use the same pixel-centre convention; interpolation differences occur at projective edges.
 
 Utilities used are the supplied `sobel_gradients`, `gaussian_smooth`, `to_gray`, `rect_corners`, image/video loaders and plotting helpers; `rectangle_to_rectangle` supplies the pixel-centre rectangle scaling. Linear algebra uses NumPy SVD/inversion. Synthetic/GT transforms in the notebooks score correspondences only. The labelled SIFT and whole-frame-warp cells are comparisons, not assessed pipeline calls.
 
@@ -114,21 +117,23 @@ Utilities used are the supplied `sobel_gradients`, `gaussian_smooth`, `to_gray`,
 
 | row | frames | median err | p90 err | success | inliers (median) | inlier ratio | affine median err | affine success |
 |---|---|---|---|---|---|---|---|---|
-| common · validation | 13 | 0.58% | 1.00% | 100% | 115 | 0.720 | 0.89% | 92% |
-| common · test | 13 | 0.27% | 0.53% | 92% | 132 | 0.791 | 0.86% | 85% |
-| viewpoint (coke_perspective) | 32 | 0.56% | 0.84% | 69% | 43 | 0.458 | 3.22% | 22% |
-| scale (coke_scale) | 32 | 0.26% | 0.45% | 28% | 5 | 0.138 | 0.65% | 28% |
+| common · validation | 13 | 0.52% | 0.65% | 100% | 136 | 0.637 | 0.92% | 92% |
+| common · test | 13 | 0.40% | 0.49% | 92% | 151 | 0.654 | 0.84% | 85% |
+| viewpoint (coke_perspective) | 32 | 0.44% | 1.02% | 66% | 41 | 0.312 | 3.30% | 19% |
+| scale (coke_scale) | 32 | 0.38% | 0.57% | 28% | 5 | 0.079 | 0.67% | 28% |
 
 `localise_board` on every annotated frame with the frozen configuration; *affine* = 6-parameter least-squares fit to the same RANSAC inliers.
 
-The generated table above is pasted unchanged from `outputs/stress_tables.md` (`--stages 1`, explicit frozen thresholds, full resolution). It measures independent `localise_board` predictions, not a flow-assisted video. Both success columns include all eligible annotated frames. Median/p90 errors describe finite estimates only. The following counts distinguish an unavailable model from an estimate outside the tolerance:
+The table is generated by `overlaylab.report` using the frozen thresholds at full resolution and saved in `outputs/stress_tables.md`. It measures independent `localise_board` predictions. Both success columns include all eligible annotated frames. Median/p90 errors describe finite estimates only. The following counts distinguish an unavailable model from an estimate outside the tolerance:
 
 | Frozen independent localisation, 1280 px | Eligible frames | No model | Total failures at 2% |
 |---|---:|---:|---:|
 | common · validation | 13 | 0 | 0 |
 | common · test | 13 | 1 | 1 |
-| viewpoint (coke_perspective) | 32 | 10 | 10 |
+| viewpoint (coke_perspective) | 32 | 11 | 11 |
 | scale (coke_scale) | 32 | 23 | 23 |
+
+All 21 finite viewpoint estimates satisfy the 2% tolerance. The 11 unavailable models account for all viewpoint localisation failures.
 
 ![Common validation and test, native resolution, frozen independent localisation: inlier counts and ratios.](student_files/stage1/native_inliers.png)
 
@@ -136,64 +141,69 @@ Dashed curves show the ratio of RANSAC inliers to accepted ratio-test matches. A
 
 #### Held-out estimator comparison and worst cases
 
-On the 13 common **test** frames at 1280 px, RANSAC has finite median error 0.269%, p90 0.530%, and success 12/13. DLT on all of the **same ratio-test matches** has median 128.875%, p90 483.992%, and success 0/13. Outliers receive full influence in the all-match algebraic fit; the comparison changes only the estimator. This DLT baseline is the normalised homogeneous least-squares fit, not a nonlinear reprojection-error optimiser.
+On the 13 common **test** frames at 1280 px, RANSAC has finite median error 0.399%, p90 0.485%, and success 12/13. DLT on all of the **same ratio-test matches** has median 101.745%, p90 336.153%, and success 0/13. Outliers receive full influence in the all-match algebraic fit; the comparison changes only the estimator. This DLT baseline is the normalised homogeneous least-squares fit, not a nonlinear reprojection-error optimiser.
 
 ![Common test, 1280 px, same correspondences: RANSAC against all-match DLT.](student_files/stage1/native_ransac_vs_all.png)
 
 ![The two worst native common-test frames: matches, all finite residuals and GT/predicted quadrilaterals.](student_files/stage1/native_worst_cases.png)
 
-- Frame **48**: error unavailable (no model); fails 2%; 9/40 inliers, ratio 0.225, median RMS one-way residual 0.322 px, 2000 RANSAC iterations; model status False.
-- Frame **16**: error 0.595%; passes 2%; 117/148 inliers, ratio 0.791, median RMS one-way residual 0.926 px, 29 RANSAC iterations; model status True.
+- Frame **48**: error unavailable (no model); fails 2%; 9/61 inliers, ratio 0.148, median RMS one-way residual 0.698 px, 2000 RANSAC iterations; model status False.
+- Frame **96**: error 0.550%; passes 2%; 223/299 inliers, ratio 0.746, median RMS one-way residual 0.799 px, 28 RANSAC iterations; model status True.
 
-Exactly **one common-test frame fails at 2%**; the other worst case passes. These are the two worst cases, selected after freezing; no method was damaged to create failures. Residual histograms use `log10(1 + e)` to show the full range, with `e` the symmetric transfer error in px² and the frozen 9 px² cutoff marked. The 2% decision is a separate, board-normalised corner measure.
+**Common-test failures at 2%: 1/13. Of the two worst cases, 1/2 pass.** The two cases have the largest corner errors among the held-out common-test frames under the frozen configuration. Residual histograms use `log10(1 + e)` to show the full range, with `e` the symmetric transfer error in px² and the frozen 9 px² cutoff marked. The 2% decision is a separate, board-normalised corner measure.
 
-Frame 48 shows substantial image blur and many inconsistent matches: the best candidate has only 9/40 inliers after the 2000-iteration cap, below the required 12. Its small 0.322 px inlier residual describes only that tiny consensus and cannot validate a board-wide homography; returning no model is appropriate. Frame 16 contains a large card occlusion, but 117/148 consistent matches remain on the visible texture. Its residual and corner error are nonzero, yet the estimate passes the frozen tolerance. These are different limitations: insufficient trustworthy correspondences versus imperfect but usable placement under partial occlusion.
+Frame 48 is visibly blurred and has only 9 candidate inliers from 61 accepted matches, below the required 12, so no model is returned. Its candidate-consensus residual does not establish a reliable board-wide homography. Frame 96 contains a card occluding the lower part of the board, but 223 inliers remain from 299 accepted matches on the visible texture. Its 0.550% corner error passes the placement tolerance. Small residuals measure agreement within the selected consensus, while annotated board corners test placement across the whole target.
 
 ### Question 1 — Matching
 
-Notebook 1 §5 applies frozen settings to the viewpoint and scale clips at **640 px**. Rate means accepted matches divided by the method's own number of reference descriptors. It is not geometric precision, and these preview rates must not be confused with native-resolution success in the stress table.
+Notebook 1 §5 applies frozen settings to the viewpoint and scale clips at **640 px**. Rate means accepted matches divided by the method's own number of reference descriptors. It measures descriptor acceptance rather than geometric precision or native-resolution localisation success. Both methods use ratio **0.90** with one-way matching (`mutual=False`).
 
 ![Viewpoint test, 640 px: best and worst reference/frame matching examples, frozen Harris descriptor.](student_files/stage1/matching_coke_perspective.png)
 
 ![Scale test, 640 px: best and worst reference/frame matching examples, frozen Harris descriptor.](student_files/stage1/matching_coke_scale.png)
 
-| Test clip, 640 px | Case/frame | Top-edge angle | Apparent scale | Keystone proxy | Harris reference/frame descriptors | Harris matches/rate | SIFT reference/frame descriptors | SIFT matches/rate |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| coke_perspective | best / 400 | 3.0° | 1.280 | 1.286 | 280/624 | 141 / 0.504 | 470/1886 | 272 / 0.579 |
-| coke_perspective | worst / 320 | 22.0° | 0.809 | 1.485 | 280/355 | 22 / 0.079 | 470/820 | 43 / 0.091 |
-| coke_scale | best / 80 | 1.5° | 1.060 | 1.015 | 280/772 | 184 / 0.657 | 470/1485 | 296 / 0.630 |
-| coke_scale | worst / 336 | -2.1° | 0.439 | 1.024 | 280/781 | 13 / 0.046 | 470/1645 | 87 / 0.185 |
+| Test clip, 640 px | Case/frame | Top-edge angle | Apparent scale | Keystone proxy | Harris reference/frame descriptors | Harris matches/rate |
+|---|---|---:|---:|---:|---:|---:|
+| coke_perspective | best / 448 | -6.3° | 1.311 | 1.066 | 324/847 | 159 / 0.491 |
+| coke_perspective | worst / 256 | 24.9° | 0.956 | 1.566 | 324/900 | 34 / 0.105 |
+| coke_scale | best / 80 | 1.5° | 1.060 | 1.015 | 324/816 | 205 / 0.633 |
+| coke_scale | worst / 272 | -1.6° | 0.500 | 1.024 | 324/789 | 20 / 0.062 |
 
-![Viewpoint/scale test pairs, 640 px: fixed-scale Harris descriptor versus full SIFT at the same ratio threshold and mutual policy.](student_files/stage1/sift_comparison.png)
-
-For the viewpoint pair, Harris matching falls from **141/280 (50.4%) on frame 400** to **22/280 (7.86%) on frame 320**, while the keystone proxy increases from 1.286 to 1.485. For the scale pair, it falls from **184/280 (65.7%) on frame 80** to **13/280 (4.64%) on frame 336**. Apparent scale falls from 1.060 to 0.439 while the top-edge angle stays close to horizontal (1.5° versus −2.1°), isolating size change more clearly than rotation. On the small-board frame, SIFT retains **87/470 (18.5%)**, compared with Harris **13/280 (4.64%)**. On the strongest matching-collapse viewpoint example, SIFT is also weak (**43/470, 9.15%**): scale selection does not undo general viewpoint deformation.
+For the viewpoint pair, Harris matching falls from **159/324 (49.1%) on frame 448** to **34/324 (10.49%) on frame 256**. The keystone proxy increases from 1.066 to 1.566, while top-edge angle changes from -6.3° to 24.9° and apparent scale from 1.311 to 0.956. For the scale pair, Harris matching falls from **205/324 (63.3%) on frame 80** to **20/324 (6.17%) on frame 272**. Apparent scale falls from 1.060 to 0.500, while top-edge angle remains close to horizontal (1.5° versus -1.6°). The observed drops are consistent with scale and viewpoint sensitivity, although detector repeatability and blur also affect matching.
 
 The descriptor rotates its sampling grid and subtracts the dominant orientation, absorbing approximate **in-plane rotation**. It does not adapt its 16 × 16 support to image scale or undo spatially varying perspective deformation. Under scale change, the same physical texture occupies different histogram cells and the fixed patch covers different structures; under viewpoint change, foreshortening, shear and keystone alter both cell occupancy and gradient orientations beyond one global rotation. Detector repeatability, blur and quantised orientation assignment also prevent perfect invariance.
 
-Apparent scale is the square root of projected board area divided by reference area; it includes foreshortening and does not isolate camera distance. Keystone is the maximum opposite-edge length ratio, a perspective-asymmetry proxy rather than a complete projective-distortion measure. Full SIFT selects feature scale as well as orientation, so it can tolerate size changes that the fixed-support descriptor cannot. It is not fully perspective invariant. The baseline changes detector and descriptor together, and the rate denominators differ; it does not isolate descriptor scale normalisation alone. Both methods use ratio 0.90 and mutual matching in this comparison.
+Apparent scale is the square root of projected board area divided by reference area; it includes foreshortening and does not isolate camera distance. Keystone is the maximum opposite-edge length ratio, a perspective-asymmetry proxy rather than a complete projective-distortion measure.
 
-The native scale row tests this limitation with a **fixed reference size and unchanged settings**: moving the board away does not cause the implementation to resize the reference to each observed board. Only **9/32 scale frames (28%)** localise successfully, with **23 unavailable models**. The finite median of 0.26% describes only the nine recovered frames. These failures are transfer limitations; we do not repair them with scale-specific settings chosen on this test clip.
+The labelled SIFT comparison evaluates the **same difficult reference/frame pair** selected for each clip:
+
+| Test clip, 640 px | Difficult frame | Harris acceptance rate | SIFT acceptance rate |
+|---|---:|---:|---:|
+| coke_perspective | 256 | 10.49% | 16.17% |
+| coke_scale | 272 | 6.17% | 29.79% |
+
+On scale frame 272, SIFT accepts **29.79%** of its reference descriptors, compared with **6.17%** for Harris. SIFT selects feature scale as well as orientation, allowing its descriptor support to adapt to image size. On viewpoint frame 256, SIFT accepts **16.17%**, compared with Harris **10.49%**; scale selection does not compensate for general perspective deformation. These results compare complete feature pipelines: SIFT changes both detection and description, and each method has its own reference-descriptor denominator. Acceptance rate alone does not establish geometric correctness or isolate descriptor scale normalisation.
+
+The native scale row tests this limitation with a **fixed reference size and fixed settings**: the reference is not resized to match the board's observed size. Only **9/32 scale frames (28%)** localise successfully, with **23 unavailable models**. The finite median of 0.38% describes the recovered frames. Low coverage demonstrates limited transfer across scale under the fixed-support descriptor. No clip-specific parameter adaptation is applied.
 
 ![Common validation frame 176, 640 px: ratio-test rejection examples under the frozen descriptor.](student_files/stage1/ratio_rejections.png)
 
-- Incorrect match correctly rejected on common validation frame 176 (640 px): descriptor indices [237, 80], ratio 0.901, GT-scored transfer distance 225.45 px.
-- Correct match rejected on common validation frame 176 (640 px): descriptor indices [53, 52], ratio 0.909, GT-scored transfer distance 0.63 px.
+- Incorrect match correctly rejected on common validation frame 176 (640 px): descriptor indices [58, 364], ratio 0.905, GT-scored transfer distance 20.03 px.
+- Correct match rejected on common validation frame 176 (640 px): descriptor indices [104, 431], ratio 0.900, GT-scored transfer distance 3.39 px.
 
-These labels use <4 px one-way transfer only to analyse nearest neighbours. The ratio test measures descriptor distinctiveness, not geometry: near-duplicate letters/edges can make the best and second-best descriptors similarly close, including when the nearest neighbour is geometrically correct. Mutual matching separately rejects inconsistent reverse assignments. Ground truth labels these examples; it never chooses pipeline matches.
+These labels use <4 px one-way transfer only to analyse nearest neighbours. The ratio test measures descriptor distinctiveness, not geometry: near-duplicate letters/edges can make the best and second-best descriptors similarly close, including when the nearest neighbour is geometrically correct. Ground truth labels these examples; it never chooses pipeline matches.
 
 ### Question 2 — Geometry
 
-An affine map has six parameters and a constant 2 × 2 linear part: it maps a rectangle to a parallelogram and preserves parallel opposite edges. As the camera translates and rotates around the poster, distance varies across the board and opposite edges converge. A homography's eight degrees of freedom and position-dependent homogeneous denominator represent that keystone. The native viewpoint table compares both models on the **same RANSAC inlier correspondences**; it does not give the homography more favourable matches. The native viewpoint row gives homography median error **0.56%** versus affine **3.22%**, with success **22/32** versus **7/32**, respectively. The homography therefore models the orbit more accurately when correspondences remain available, but it does not cure the ten viewpoint localisation failures.
+An affine map has six parameters and a constant 2 × 2 linear part: it maps a rectangle to a parallelogram and preserves parallel opposite edges. As the camera translates and rotates around the poster, distance varies across the board and opposite edges converge. A homography's eight degrees of freedom and position-dependent homogeneous denominator represent that keystone. The native viewpoint table compares both models on the **same RANSAC inlier correspondences**. Homography median error is **0.44%** versus affine **3.30%**, with success **21/32** versus **6/32**, respectively. The homography models the orbit more accurately when correspondences support a reliable fit, but insufficient correspondence support leaves 11 viewpoint frames without a model.
 
 ![Viewpoint test, 1280 px: frozen homography/affine corner errors over frames and against keystone.](student_files/stage1/native_affine_vs_homography.png)
 
-The representative native viewpoint frame **224** has homography error **0.850%** versus affine error **9.504%**, using identical inliers. Failed localisation frames count as failures for both models; the scatter contains finite estimates only. Keystone explains a trend, but local feature coverage and fit noise also affect corner error, so the relationship need not be monotonic.
-
+The representative native viewpoint frame **224** has homography error **1.019%** versus affine error **9.521%**, using identical inliers. Unavailable models count as failures for both methods; the scatter contains finite estimates only. Keystone explains a trend, but local feature coverage and fit noise also affect corner error, so the relationship need not be monotonic.
 
 ![Viewpoint test, 1280 px: GT/homography/affine quadrilaterals and the student's single-frame artwork overlay.](student_files/stage1/native_viewpoint_overlay.png)
 
-For the **640-pixel viewpoint test demonstration**, frame **0** is warped toward frame **224** by `H_b @ inverse(H_a)`, using estimated reference-to-frame homographies, not ground-truth initialisation.
-
+For the **640-pixel viewpoint test demonstration**, frame **0** is warped toward frame **240** by `H_b @ inverse(H_a)`, using estimated reference-to-frame homographies, not ground-truth initialisation.
 
 ![Viewpoint test, 640 px: target, whole-frame board-plane warp and absolute difference; frozen estimated homographies.](student_files/stage1/viewpoint_parallax.png)
 
@@ -261,7 +271,7 @@ This does not harm the overlay because `warp_artwork` samples the artwork only i
 ## Evidence table
 | Student file | Function | Report section | Notebook figure / table / video |
 |---|---|---|---|
-| keypoints.py | harris_response, detect_corners, describe_keypoints, match_descriptors | Stage 1 — Code Explanation; Validation choices; Question 1 | Notebook 1 §§3–5 and SIFT cell; ratio_rejections.png; matching_coke_*.png; sift_comparison.png |
+| keypoints.py | harris_response, detect_corners, describe_keypoints, match_descriptors | Stage 1 — Code Explanation; Validation choices; Question 1 | Notebook 1 §§3–5 and SIFT cell; ratio_rejections.png; matching_coke_*.png |
 | geometry.py | bilinear_sample, normalise_points, dlt_homography, symmetric_transfer_error, ransac_homography, transfer_points, warp_artwork | Stage 1 — Code Explanation; Coordinate conventions; Estimator comparison; Question 2 | Notebook 1 §§6–8 (executed sanity checks); Notebook 2 §§4–6.1; warp_convention.png; native_worst_cases.png; native_ransac_vs_all.png |
 | localisation.py | localise_board, artwork_to_frame, overlay_frame, evaluate_audit_frames | Stage 1 — Code Explanation; Validation choices; Stress table; Questions 1–2 | Notebook 2 §§2–6.1; native_inliers.png; native_viewpoint_overlay.png; outputs/stress_tables.md |
 | temporal.py | lk_flow, track_board, failure_monitor | | |
