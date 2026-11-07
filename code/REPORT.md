@@ -13,8 +13,9 @@ This compact report records how every `YOUR CODE HERE` section is exercised. Ela
   - Calculates the Harris response as `det(M) - kappa * trace(M)^2`, producing a float32 response map with the same height and width as the grayscale image.
 
 - `detect_corners`:
-  - Removes non-positive Harris responses, responses below the configured fraction of the maximum, and candidates within the configured image border.
+  - Removes non-positive Harris responses and responses below the configured fraction of the maximum.
   - In window NMS mode, retains responses equal to the maximum in their square neighbourhood, including ties. In radius NMS mode, greedily accepts candidates in descending response order and suppresses candidates within a circular radius.
+  - After NMS, removes candidates within the configured image border. Border candidates participate in suppression before being discarded.
   - Returns at most `max_corners` keypoints as `(x, y)` coordinates, ordered by decreasing response, together with their response values.
 
 - `describe_keypoints`:
