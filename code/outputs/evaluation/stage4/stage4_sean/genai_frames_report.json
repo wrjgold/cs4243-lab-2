@@ -1,11 +1,11 @@
 {
   "mode": "frames",
-  "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt",
+  "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt",
   "frames": {
-    "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000226.png",
-    "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000227.png",
-    "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000270.png",
-    "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000376.png"
+    "226": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000226.png",
+    "227": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000227.png",
+    "270": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000270.png",
+    "376": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000376.png"
   },
   "interval": [
     226,

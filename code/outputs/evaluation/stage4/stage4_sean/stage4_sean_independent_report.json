@@ -1,6 +1,6 @@
 {
   "mode": "video",
-  "video": "outputs/videos/stage4/stage4_sean/stage4_sean_independent.mp4",
+  "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/videos/stage4/stage4_sean/stage4_sean_independent.mp4",
   "interval": [
     0,
     449
@@ -47,7 +47,7 @@
     "psnr_outside": 36.59140570470616,
     "ssim_outside": 0.9926589621342379,
     "mad_outside": 0.010663539450615645,
-    "background_drift_px": 7.734991355666092
+    "background_drift_px": 7.734992513699191
   },
   "preservation_per_frame": [
     {
@@ -55,7 +55,7 @@
       "psnr_outside": 32.89430154579189,
       "ssim_outside": 0.9897216579321508,
       "mad_outside": 0.012168584391474724,
-      "background_drift_px": 2.0726215839385986
+      "background_drift_px": 2.072629690170288
     },
     {
       "frame": 60,

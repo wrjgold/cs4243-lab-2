@@ -1,11 +1,11 @@
 {
   "mode": "frames",
-  "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt",
+  "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt",
   "frames": {
-    "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000210.png",
-    "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000211.png",
-    "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000255.png",
-    "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000360.png"
+    "210": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000210.png",
+    "211": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000211.png",
+    "255": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000255.png",
+    "360": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000360.png"
   },
   "interval": [
     210,
@@ -71,7 +71,7 @@
     "psnr_outside": 32.461260939776025,
     "ssim_outside": 0.9443919361381568,
     "mad_outside": 0.020187587787707646,
-    "background_drift_px": 0.5615585347016653
+    "background_drift_px": 0.5615585446357727
   },
   "preservation_per_frame": [
     {
@@ -93,7 +93,7 @@
       "psnr_outside": 32.56383862194477,
       "ssim_outside": 0.9314351068322083,
       "mad_outside": 0.01946316473186016,
-      "background_drift_px": 0.4940989315509796
+      "background_drift_px": 0.494098961353302
     }
   ],
   "temporal": {

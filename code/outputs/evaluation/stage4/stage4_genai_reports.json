@@ -81,12 +81,12 @@
     "reports": {
       "generative_original": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt",
         "frames": {
-          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000226.png",
-          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000227.png",
-          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000270.png",
-          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000376.png"
+          "226": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000226.png",
+          "227": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000227.png",
+          "270": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000270.png",
+          "376": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000376.png"
         },
         "interval": [
           226,
@@ -240,12 +240,12 @@
       },
       "generative": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt",
         "frames": {
-          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000226.png",
-          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000227.png",
-          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000270.png",
-          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000376.png"
+          "226": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000226.png",
+          "227": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000227.png",
+          "270": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000270.png",
+          "376": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000376.png"
         },
         "interval": [
           226,
@@ -399,12 +399,12 @@
       },
       "classical_independent": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent",
         "frames": {
-          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000226.png",
-          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000227.png",
-          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000270.png",
-          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000376.png"
+          "226": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000226.png",
+          "227": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000227.png",
+          "270": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000270.png",
+          "376": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000376.png"
         },
         "interval": [
           226,
@@ -557,12 +557,12 @@
       },
       "classical_flow_assisted": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted",
         "frames": {
-          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000226.png",
-          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000227.png",
-          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000270.png",
-          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000376.png"
+          "226": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000226.png",
+          "227": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000227.png",
+          "270": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000270.png",
+          "376": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000376.png"
         },
         "interval": [
           226,
@@ -715,12 +715,12 @@
       },
       "source_reencoded": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_sean",
         "frames": {
-          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000226.png",
-          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000227.png",
-          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000270.png",
-          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000376.png"
+          "226": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000226.png",
+          "227": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000227.png",
+          "270": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000270.png",
+          "376": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000376.png"
         },
         "interval": [
           226,
@@ -1002,12 +1002,12 @@
     "reports": {
       "generative_original": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt",
         "frames": {
-          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000210.png",
-          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000211.png",
-          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000255.png",
-          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000360.png"
+          "210": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000210.png",
+          "211": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000211.png",
+          "255": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000255.png",
+          "360": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000360.png"
         },
         "interval": [
           210,
@@ -1073,7 +1073,7 @@
           "psnr_outside": 32.461260939776025,
           "ssim_outside": 0.9443919361381568,
           "mad_outside": 0.020187587787707646,
-          "background_drift_px": 0.5615585347016653
+          "background_drift_px": 0.5615585446357727
         },
         "preservation_per_frame": [
           {
@@ -1095,7 +1095,7 @@
             "psnr_outside": 32.56383862194477,
             "ssim_outside": 0.9314351068322083,
             "mad_outside": 0.01946316473186016,
-            "background_drift_px": 0.4940989315509796
+            "background_drift_px": 0.494098961353302
           }
         ],
         "temporal": {
@@ -1161,12 +1161,12 @@
       },
       "generative": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt",
         "frames": {
-          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000210.png",
-          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000211.png",
-          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000255.png",
-          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000360.png"
+          "210": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000210.png",
+          "211": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000211.png",
+          "255": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000255.png",
+          "360": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000360.png"
         },
         "interval": [
           210,
@@ -1320,12 +1320,12 @@
       },
       "classical_independent": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent",
         "frames": {
-          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000210.png",
-          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000211.png",
-          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000255.png",
-          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000360.png"
+          "210": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000210.png",
+          "211": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000211.png",
+          "255": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000255.png",
+          "360": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000360.png"
         },
         "interval": [
           210,
@@ -1479,12 +1479,12 @@
       },
       "classical_flow_assisted": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted",
         "frames": {
-          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000210.png",
-          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000211.png",
-          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000255.png",
-          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000360.png"
+          "210": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000210.png",
+          "211": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000211.png",
+          "255": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000255.png",
+          "360": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000360.png"
         },
         "interval": [
           210,
@@ -1638,12 +1638,12 @@
       },
       "source_reencoded": {
         "mode": "frames",
-        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie",
+        "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie",
         "frames": {
-          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000210.png",
-          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000211.png",
-          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000255.png",
-          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000360.png"
+          "210": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000210.png",
+          "211": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000211.png",
+          "255": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000255.png",
+          "360": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000360.png"
         },
         "interval": [
           210,
