@@ -1,11 +1,11 @@
 {
   "mode": "frames",
-  "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_sean",
+  "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage_4/source_baseline/stage4_sean",
   "frames": {
-    "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_sean/frame_000226.png",
-    "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_sean/frame_000227.png",
-    "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_sean/frame_000270.png",
-    "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_sean/frame_000376.png"
+    "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage_4/source_baseline/stage4_sean/frame_000226.png",
+    "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage_4/source_baseline/stage4_sean/frame_000227.png",
+    "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage_4/source_baseline/stage4_sean/frame_000270.png",
+    "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage_4/source_baseline/stage4_sean/frame_000376.png"
   },
   "interval": [
     226,
