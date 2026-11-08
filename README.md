@@ -60,8 +60,8 @@ See `code/README.md` for the full assignment commands and submission rules. Subm
 
 ## 5. Completed submission
 
-The group has two required personal clips, one for Sean and one for Ruijie. Both original VACE runs and both staff-permitted descriptive-prompt corrections are preserved and logged. The report uses the corrected result for each person. See `code/student_files/stage4_shared/README.md` for the data layout and reproduction commands.
+The group has two required personal clips, one for Sean and one for Ruijie. Both original and corrected VACE runs are preserved and logged, and the report uses the corrected result for each person. Restart Notebook 4 and run it from top to bottom to reproduce the Scorecards, comparison tables and figures from the saved outputs. The model inputs are retained in `code/outputs/genai/<clip_id>/inputs/`, and invocation records are under `code/student_files/stage_4/run_records/`.
 
-`CS4243_Lab_2_submission.zip` contains only `code/` and the created personal data and artwork under `data/`. Supplied datasets, environments, caches, editor files and `.local_backups/` are excluded. The local backups retain raw recordings and optional development previews. To reproduce supplied-clip results from the submitted folders, place them beside the supplied release data.
+`CS4243_Lab_2_submission.zip` contains only `code/` and the created personal data and artwork under `data/`. Supplied datasets, environments, caches, editor files and `.local_backups/` are excluded. To reproduce supplied-clip results from the submitted folders, place them beside the supplied release data.
 
 Setup guide prepared with AI assistance. [AI-LANGUAGE]
