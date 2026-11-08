@@ -1,6 +1,6 @@
 {
   "mode": "video",
-  "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/videos/stage4/stage4_sean/stage4_sean_flow_assisted.mp4",
+  "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/videos/stage4_sean_independent.mp4",
   "interval": [
     0,
     449
@@ -18,7 +18,7 @@
   "missing_frames": [],
   "placement": {
     "n": 10,
-    "median": 0.006306312311507462,
+    "median": 0.00634610115191021,
     "p90": 0.006744175172291411,
     "success": 0.4,
     "failed": 6,
@@ -29,7 +29,7 @@
       "60": 0.0050878521004469645,
       "120": null,
       "180": null,
-      "226": 0.006061065374712512,
+      "226": 0.00614064305551801,
       "255": null,
       "270": null,
       "300": 0.006551559248302411,
@@ -38,16 +38,16 @@
     }
   },
   "fidelity": {
-    "ncc": 0.29690751305443175,
-    "ssim": 0.42141227611850274,
-    "mae": 0.2743049919605255,
-    "structure": 0.21258533312319483
+    "ncc": 0.2967846305856674,
+    "ssim": 0.42037548881431797,
+    "mae": 0.27436796873807906,
+    "structure": 0.2096822287348615
   },
   "preservation": {
-    "psnr_outside": 36.60451894914092,
-    "ssim_outside": 0.9926123292187568,
-    "mad_outside": 0.010661720298230648,
-    "background_drift_px": 7.934244437941483
+    "psnr_outside": 36.59140570470616,
+    "ssim_outside": 0.9926589621342379,
+    "mad_outside": 0.010663539450615645,
+    "background_drift_px": 7.734992513699191
   },
   "preservation_per_frame": [
     {
@@ -80,10 +80,10 @@
     },
     {
       "frame": 226,
-      "psnr_outside": 33.24190726630545,
-      "ssim_outside": 0.9909339927599516,
-      "mad_outside": 0.0107012540102005,
-      "background_drift_px": 6.933821678161621
+      "psnr_outside": 33.110774821957854,
+      "ssim_outside": 0.9914003219147638,
+      "mad_outside": 0.010719445534050465,
+      "background_drift_px": 5.539058208465576
     },
     {
       "frame": 255,
@@ -123,9 +123,9 @@
   ],
   "temporal": {
     "stride": 1,
-    "flicker": 0.0718489445745945,
-    "warping_error": 0.05082124089822173,
-    "recovered_corner_jitter_px": 2.1195974206029,
+    "flicker": 0.0741019818931818,
+    "warping_error": 0.05177988270297647,
+    "recovered_corner_jitter_px": 2.656068912411957,
     "pairs": 10,
     "pair_frames": [
       [
@@ -173,8 +173,8 @@
   "occlusion": {
     "leakage": 0.20797600141168168,
     "psnr_foreground": 28.184454504598122,
-    "coverage_visible": 0.9470059006616198,
-    "false_occlusion": 0.014707292718564413,
+    "coverage_visible": 0.9475305566734443,
+    "false_occlusion": 0.013657980694915306,
     "mask_frames": 5,
     "empty_mask_frames": 2,
     "n_coverage_frames": 2,
@@ -192,8 +192,8 @@
         "mask_empty": true,
         "foreground_pixels": 0,
         "overlay_absent": false,
-        "coverage_visible": 0.9852927072814356,
-        "false_occlusion": 0.014707292718564413
+        "coverage_visible": 0.9863420193050847,
+        "false_occlusion": 0.013657980694915306
       },
       {
         "frame": 255,

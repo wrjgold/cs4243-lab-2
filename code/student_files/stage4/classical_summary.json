@@ -74,7 +74,7 @@
         },
         "rendered": {
           "mode": "video",
-          "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/videos/stage4/stage4_sean/stage4_sean_independent.mp4",
+          "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/videos/stage4_sean_independent.mp4",
           "interval": [
             0,
             449
@@ -648,7 +648,7 @@
         },
         "rendered": {
           "mode": "video",
-          "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/videos/stage4/stage4_sean/stage4_sean_flow_assisted.mp4",
+          "video": "/Users/wrjgold/Documents/NUS/CS4243/CS4243 Lab 2/code/outputs/videos/stage4_sean_flow_assisted.mp4",
           "interval": [
             0,
             449
@@ -1290,7 +1290,7 @@
         },
         "rendered": {
           "mode": "video",
-          "video": "outputs/videos/stage4/stage4_ruijie/stage4_ruijie_independent.mp4",
+          "video": "outputs/videos/stage4_ruijie_independent.mp4",
           "interval": [
             0,
             449
@@ -1884,7 +1884,7 @@
         },
         "rendered": {
           "mode": "video",
-          "video": "outputs/videos/stage4/stage4_ruijie/stage4_ruijie_flow_assisted.mp4",
+          "video": "outputs/videos/stage4_ruijie_flow_assisted.mp4",
           "interval": [
             0,
             449

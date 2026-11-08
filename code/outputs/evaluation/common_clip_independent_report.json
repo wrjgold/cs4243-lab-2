@@ -1,6 +1,6 @@
 {
   "mode": "video",
-  "video": "outputs/videos/common_clip/common_clip_independent.mp4",
+  "video": "outputs/videos/common_clip_independent.mp4",
   "interval": [
     0,
     499

@@ -530,11 +530,11 @@ def main(argv=None):
         rep = evaluate_video(args.video, original, artwork, gt_corners=gt_c, gt_masks=gt_m,
                              interval=tuple(args.interval) if args.interval else None, offset=args.offset,
                              success_threshold=threshold, temporal_stride=args.stride, extra_corners=extra)
-        default_out = data.OUTPUT_DIR / "evaluation" / data.output_group(args.clip) / (Path(args.video).stem + "_report.json")
+        default_out = data.OUTPUT_DIR / "evaluation" / (Path(args.video).stem + "_report.json")
     else:
         rep = evaluate_frames(args.frames, original, artwork, gt_corners=gt_c, gt_masks=gt_m,
                               success_threshold=threshold, temporal_stride=args.stride, extra_corners=extra)
-        default_out = data.OUTPUT_DIR / "evaluation" / data.output_group(args.clip) / (Path(args.frames[0]).resolve().parent.name + "_frames_report.json")
+        default_out = data.OUTPUT_DIR / "evaluation" / (Path(args.frames[0]).resolve().parent.name + "_frames_report.json")
     out = Path(args.out) if args.out else default_out
     sp.write_json(out, rep)
     print("report written to", out)

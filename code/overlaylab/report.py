@@ -185,7 +185,7 @@ def stage1_table(config: PipelineConfig, verbose: bool = True) -> List[Dict]:
 
 def stats_path(clip_id: str, variant: str, occlusion: bool = True) -> Path:
     suffix = variant + ("" if occlusion else "_no_occlusion")
-    return data.OUTPUT_DIR / "videos" / data.output_group(clip_id) / f"{clip_id}_{suffix}_stats.json"
+    return data.OUTPUT_DIR / "videos" / f"{clip_id}_{suffix}_stats.json"
 
 
 def summarise_tracking(stats: Dict, gt: Dict[int, np.ndarray], threshold: float, full_width: int,
@@ -273,8 +273,8 @@ def evaluation_report(clip_id: str, variant: str, artwork_name: str, occlusion: 
     """Evaluate the current video and write a fresh report, avoiding stale cached scores."""
     from . import evaluate as E
     suffix = variant + ("" if occlusion else "_no_occlusion")
-    video = data.OUTPUT_DIR / "videos" / data.output_group(clip_id) / f"{clip_id}_{suffix}.mp4"
-    out = data.OUTPUT_DIR / "evaluation" / data.output_group(clip_id) / f"{video.stem}_report.json"
+    video = data.OUTPUT_DIR / "videos" / f"{clip_id}_{suffix}.mp4"
+    out = data.OUTPUT_DIR / "evaluation" / f"{video.stem}_report.json"
     # Recompute from the current video: a cached report can predate a rerun.
 
     if not video.exists():
