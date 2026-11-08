@@ -60,7 +60,7 @@
   },
   "occlusion": {
     "mode": "difference",
-    "strong": 0.25,
+    "strong": 0.3,
     "weak": 0.12,
     "min_area": 150,
     "open_radius": 2,

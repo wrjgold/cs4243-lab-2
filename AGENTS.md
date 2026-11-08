@@ -97,3 +97,47 @@ user before applying it.
   are saved in a notebook when its code only generates or prints them, or claim
   execution or verification without supporting evidence. Remove stale references
   when removing an added figure or experiment.
+
+### Report format and evidence references
+
+- When revising report formatting or discussion, preserve the existing Code
+  Explanation sections unless the user explicitly asks to edit them.
+- When writing or explicitly revising a Code Explanation section, follow the
+  report's current format: use a `### Code Explanation` heading, a `####` heading
+  for each source filename in backticks, a top-level bullet for each function
+  name in backticks, and nested bullets containing complete explanatory
+  sentences. Describe the algorithm, important design choices and relevant
+  return or failure behaviour. Keep this structured format rather than
+  converting Code Explanation sections into prose paragraphs. The guidance on
+  connected prose applies to the report's other explanatory sections.
+- Number figures and tables by Stage, using separate sequential counters such
+  as Figure 1.1 and Table 1.1 for Stage 1, and Figure 2.1 and Table 2.1 for
+  Stage 2. Give every report figure and table a visible italicised caption.
+  Place figure captions below their images and table captions above their
+  tables. Image alt text alone is not a visible caption.
+- Refer to numbered figures and tables explicitly when discussing their values
+  or observations. Name the relevant panel for a multi-panel figure, such as
+  "Figure 2.1 (upper left)", and identify the relevant stress-table row when
+  needed. Refer to the notebook section or saved experiment log for precise
+  values that are not displayed in the cited figure or table.
+- Keep generated stress tables and their supplied explanatory notes unchanged.
+  Put added captions and interpretation outside the generated content. Label
+  added summary tables distinctly so that readers can tell them apart from
+  generated output.
+- Follow Stage 1's validation format: explain the observed baseline failures
+  and why they motivate the chosen parameter groups, state the selection
+  criterion, give a compact trial table, list the final settings and seeds,
+  and explain the success tolerance and metric denominators. Identify which
+  defaults changed and which parameter groups remained fixed.
+- Make the purpose of each evidence subsection clear. Distinguish the PDF's
+  separate evidence requirements, such as a stabilisation or failure sequence,
+  from the subparts of a numbered question, such as point-level eigenvalue
+  analysis. State the result first, then connect its evidence to the mechanism
+  and practical implication without repeating the same explanation elsewhere.
+- Clearly distinguish whole-clip results from short illustrative intervals,
+  preview results from native-resolution results, and actual pipeline tracks
+  from separate diagnostic probes. Keep the limitations of local examples
+  explicit when they differ from the overall result.
+- After adding, moving or removing figures and tables, check that numbering is
+  sequential within each Stage, every prose reference matches its caption and
+  evidence, image paths resolve, and evidence-table references remain accurate.
