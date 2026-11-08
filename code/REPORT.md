@@ -1,7 +1,7 @@
 # CS4243 Lab 2 report
 ### Wang Ruijie (A0272335H), Sean Tham (A0282350L)
 
-The pipeline uses feature matching and planar geometry to localise a board for perspective-aware advertisement placement. Parameters are selected on the common clip's validation frames and fixed for evaluation on its test frames and the supplied stress clips. Quantitative results use `overlaylab.metrics` and `overlaylab.evaluate`, with the clip, frame subset, processing resolution and method identified for each experiment.
+We built a pipeline that uses feature matching and planar geometry to localise a board for perspective-aware advertisement placement. We selected parameters on the common clip's validation frames and fixed them for evaluation on its test frames and the supplied stress clips. We report quantitative results from `overlaylab.metrics` and `overlaylab.evaluate`, identifying the clip, frame subset, processing resolution and method for each experiment.
 
 ## Stage 1 — Localise
 ### Code Explanation
@@ -83,9 +83,9 @@ The pipeline uses feature matching and planar geometry to localise a board for p
 
 ### Validation choices and frozen settings
 
-Initial testing used the notebook defaults with radius NMS, `sigma_w=2.0` and `kappa=0.06` retained from Notebook 1's validation repeatability sweep. At **1280 × 720**, this baseline succeeded on **10/13 common validation frames**. Investigation of the three missed frames (80, 240 and 448) found only **9, 9 and 5 candidate inliers**, below the required **12**. We therefore targeted feature availability and matching: NMS radius and corner count, followed by ratio threshold and mutual checking, with interaction checks on the leading configurations. Searching all parameters jointly would take too long. Other parameters such as descriptor and RANSAC settings, sigma, kappa and NMS mode were held fixed.
+We began testing with the notebook defaults, using radius NMS, `sigma_w=2.0` and `kappa=0.06` retained from Notebook 1's validation repeatability sweep. At **1280 × 720**, this baseline succeeded on **10/13 common validation frames**. When we investigated the three missed frames (80, 240 and 448), we found only **9, 9 and 5 candidate inliers**, below the required **12**. We therefore targeted feature availability and matching: NMS radius and corner count, followed by ratio threshold and mutual checking, with interaction checks on the leading configurations. Searching all parameters jointly would take too long. We held the other parameters fixed, including descriptor and RANSAC settings, sigma, kappa and NMS mode.
 
-All tuning used common-clip validation data. Configurations were ranked by **highest success rate**, then **fewest unavailable models**, **lowest finite p90 error**, and **lowest finite median error**, using RANSAC seed **0**. Table 1.1 summarises representative trials from Notebook 1 §3.1.
+We used only common-clip validation data for tuning and ranked configurations by **highest success rate**, then **fewest unavailable models**, **lowest finite p90 error**, and **lowest finite median error**, using RANSAC seed **0**. Table 1.1 summarises representative trials from Notebook 1 §3.1.
 
 *Table 1.1. Stage 1 parameter selection on common-clip validation annotations at 1280 × 720, using independent localisation.*
 
@@ -99,7 +99,7 @@ All tuning used common-clip validation data. Configurations were ranked by **hig
 | matches: ratio=0.9, mutual=False (selected) | 13/13 | 0 | 0.521% | 0.655% |
 | matches: ratio=0.9, mutual=True | 13/13 | 0 | 0.312% | 0.731% |
 
-For the selected configuration in Table 1.1, the Harris detector uses `sigma_w=2.0`, `kappa=0.06`, a response fraction of `0.005`, radius NMS with **radius 5**, a limit of **1000 corners** and a border of 12 pixels. The descriptor uses patch scale 1, 36 dominant-orientation bins, 4 × 4 × 8 histograms, Gaussian weighting and a clamp of 0.2. Matching uses **ratio 0.90** with **mutual=False**. RANSAC uses a threshold of **9 px²**, confidence 0.995, a cap of 2000 iterations, a minimum of 12 inliers and seed 0. These settings are saved in `outputs/stage1_settings.json` and `outputs/thresholds.json` before test/stress reporting.
+For the selected configuration in Table 1.1, the Harris detector uses `sigma_w=2.0`, `kappa=0.06`, a response fraction of `0.005`, radius NMS with **radius 5**, a limit of **1000 corners** and a border of 12 pixels. The descriptor uses patch scale 1, 36 dominant-orientation bins, 4 × 4 × 8 histograms, Gaussian weighting and a clamp of 0.2. Matching uses **ratio 0.90** with **mutual=False**. RANSAC uses a threshold of **9 px²**, confidence 0.995, a cap of 2000 iterations, a minimum of 12 inliers and seed 0. We saved these settings in `outputs/stage1_settings.json` and `outputs/thresholds.json` before test/stress reporting.
 
 Success means **mean corner error ≤ 2% of the longer GT board diagonal**, approximately **8.42–11.29 px** on the native validation boards. This fixed tolerance allows modest placement error above the approximately one-pixel annotation noise. Unavailable models count as failures. The median and p90 errors describe finite estimates only.
 
@@ -109,7 +109,7 @@ Coordinates are `(x, y)`, where **x indexes columns and y indexes rows**. Pixel 
 
 ### Utility routines used
 
-Utilities used are the supplied `sobel_gradients`, `gaussian_smooth`, `to_gray`, `rect_corners`, image/video loaders and plotting helpers. The helper `rectangle_to_rectangle` supplies the pixel-centre rectangle scaling. Linear algebra uses NumPy SVD/inversion. Synthetic/GT transforms in the notebooks score correspondences only. The labelled SIFT and whole-frame-warp cells are comparisons, not assessed pipeline calls.
+We used the supplied `sobel_gradients`, `gaussian_smooth`, `to_gray`, `rect_corners`, image/video loaders and plotting helpers. The helper `rectangle_to_rectangle` supplies the pixel-centre rectangle scaling. Linear algebra uses NumPy SVD/inversion. Synthetic/GT transforms in the notebooks score correspondences only. The labelled SIFT and whole-frame-warp cells are comparisons, not assessed pipeline calls.
 
 ### Stress table (Stage 1)
 
@@ -124,7 +124,7 @@ Utilities used are the supplied `sobel_gradients`, `gaussian_smooth`, `to_gray`,
 
 `localise_board` on every annotated frame with the frozen configuration; *affine* = 6-parameter least-squares fit to the same RANSAC inliers.
 
-Table 1.2 is generated by `overlaylab.report` using the frozen thresholds at full resolution and saved in `outputs/stress_tables.md`. It measures independent `localise_board` predictions. Both success columns include all eligible annotated frames. Median/p90 errors describe finite estimates only. Table 1.3 distinguishes an unavailable model from an estimate outside the tolerance.
+We generated Table 1.2 with `overlaylab.report` using the frozen thresholds at full resolution and saved it in `outputs/stress_tables.md`. It measures independent `localise_board` predictions. Both success columns include all eligible annotated frames. Median/p90 errors describe finite estimates only. Table 1.3 distinguishes an unavailable model from an estimate outside the tolerance.
 
 *Table 1.3. Additional summary of unavailable models and failures at the 2% tolerance for frozen independent localisation at 1280 × 720.*
 
@@ -240,7 +240,7 @@ The native-resolution viewpoint row of Table 1.2 compares both models using the 
 
 Figure 1.7 shows that affine error generally rises as the keystone proxy increases. This is because greater perspective asymmetry requires convergence that an affine transformation cannot express. On representative frame **224**, illustrated in Figure 1.8, the homography error is **1.019%**, while the affine error is **9.521%**, despite both models using identical inliers. The relationship is not strictly monotonic because feature coverage and estimation noise also affect corner placement. Figure 1.7 shows finite estimates, while unavailable models count as failures in both success rates in Table 1.2.
 
-![Viewpoint test, 1280 px: GT/homography/affine quadrilaterals and the student's single-frame artwork overlay.](student_files/stage1/native_viewpoint_overlay.png)
+![Viewpoint test, 1280 px: GT/homography/affine quadrilaterals and our single-frame artwork overlay.](student_files/stage1/native_viewpoint_overlay.png)
 
 *Figure 1.8. Annotated, homography and affine quadrilaterals on viewpoint-test frame 224 at 1280 × 720, with the single-frame artwork overlay.*
 
@@ -289,9 +289,9 @@ The online statistics use the supplied grayscale, structure-gradient and quadril
 
 ### Validation choices and frozen settings
 
-Initial testing used the default Stage 2 settings with Stage 1's frozen localiser at **1280 × 720**. The tracker produced raw estimates within the 2% tolerance on all **13 common validation annotations**, but the monitor hid frame **80** because its inlier ratio was **0.3671**, below 0.40, despite a corner error of **0.6581%**. Other accurate estimates triggered ratio or brightness warnings. We therefore targeted these two monitor limits, holding Stage 1, LK and reinitialisation settings fixed.
+We began testing with the default Stage 2 settings and Stage 1's frozen localiser at **1280 × 720**. The tracker produced raw estimates within the 2% tolerance on all **13 common validation annotations**, but the monitor hid frame **80** because its inlier ratio was **0.3671**, below 0.40, despite a corner error of **0.6581%**. Other accurate estimates triggered ratio or brightness warnings. We therefore targeted these two monitor limits, holding Stage 1, LK and reinitialisation settings fixed.
 
-All tuning used common-clip validation annotations. Each candidate tracked consecutive frames **0–448** for temporal context, but only the 13 validation annotations scored parameter choices. Configurations were ranked by **highest monitor-visible success**, then **fewest unavailable models**, **lowest finite p90 error**, **lowest finite median error**, and **fewest localiser calls**, using RANSAC seed **0**. Exact ties retained the earlier candidate, with defaults first. Table 2.1 summarises the six trials saved by Notebook 2 §2.1 in `student_files/stage2/validation.json`. Each trial reran tracking because monitor warnings affect subsequent localisation calls. Call counts cover this 449-frame prefix.
+We used only common-clip validation annotations for tuning. Each candidate tracked consecutive frames **0–448** for temporal context, but only the 13 validation annotations scored parameter choices. We ranked configurations by **highest monitor-visible success**, then **fewest unavailable models**, **lowest finite p90 error**, **lowest finite median error**, and **fewest localiser calls**, using RANSAC seed **0**. On exact ties, we retained the earlier candidate, with defaults first. Table 2.1 summarises the six trials saved by Notebook 2 §2.1 in `student_files/stage2/validation.json`. Each trial reran tracking because monitor warnings affect subsequent localisation calls. Call counts cover this 449-frame prefix.
 
 *Table 2.1. Stage 2 monitor selection on common-clip validation annotations at 1280 × 720.*
 
@@ -304,7 +304,7 @@ All tuning used common-clip validation annotations. Each candidate tracked conse
 | ratio ≥ 0.20, brightness ≤ 0.15 | 13/13 | 0 | 0.5574% | 0.6840% | 180 |
 | ratio ≥ 0.20, brightness ≤ 0.20 (selected) | 13/13 | 0 | 0.5855% | 0.6743% | 144 |
 
-The monitor's minimum inlier ratio changes from **0.40 to 0.20** and its maximum brightness change from **0.15 to 0.20**. In Table 2.1, the selected pair has the lowest p90 among the three configurations with 13/13 visible successes, which takes priority over its slightly higher median. The remaining monitor limits stay at count **12**, geometric residual **3 px**, corner displacement **60 px/frame**, mean flow **25 px/frame**, and escalation after **2** weak frames. LK retains window radius **7**, **20** iterations, minimum normalised eigenvalue **0.0002**, maximum brightness residual **0.08**, convergence tolerance **0.01 px** and one level. Inlier propagation re-localises below **20** valid points or every **60** global frames. All settings and seed **0** are frozen in `outputs/thresholds.json` before test/stress reporting.
+The monitor's minimum inlier ratio changes from **0.40 to 0.20** and its maximum brightness change from **0.15 to 0.20**. In Table 2.1, the selected pair has the lowest p90 among the three configurations with 13/13 visible successes, which takes priority over its slightly higher median. The remaining monitor limits stay at count **12**, geometric residual **3 px**, corner displacement **60 px/frame**, mean flow **25 px/frame**, and escalation after **2** weak frames. LK retains window radius **7**, **20** iterations, minimum normalised eigenvalue **0.0002**, maximum brightness residual **0.08**, convergence tolerance **0.01 px** and one level. Inlier propagation re-localises below **20** valid points or every **60** global frames. We froze all settings and seed **0** in `outputs/thresholds.json` before test/stress reporting.
 
 Success retains Stage 1's **mean corner error ≤ 2% of the longer GT board diagonal**, allowing modest placement error above annotation noise. Hidden or unavailable predictions count as failures, while median and p90 describe finite visible estimates only. No common-test or stress annotations select settings.
 
@@ -343,7 +343,7 @@ Flow's main benefit is **reduced localisation work**: Table 2.2 records **166 ca
 
 #### A stabilisation sequence on shared common-clip frames
 
-Flow provides **modest local stabilisation on common frames 0–29**. Figure 2.1 (upper left) reports jitter of **6.205 px** versus **6.367 px** for independent registration, with **2** localiser calls instead of **30**. Both variants have 30 visible predictions and the same 29 consecutive evaluation pairs. The small improvement is consistent with carrying correspondences between frames. This illustration was selected after freezing and does not overturn the whole-clip result in Table 2.2.
+Flow provides **modest local stabilisation on common frames 0–29**. Figure 2.1 (upper left) reports jitter of **6.205 px** versus **6.367 px** for independent registration, with **2** localiser calls instead of **30**. Both variants have 30 visible predictions and the same 29 consecutive evaluation pairs. The small improvement is consistent with carrying correspondences between frames. We selected this illustration after freezing, and it does not overturn the whole-clip result in Table 2.2.
 
 ![Common clip, final 1280 × 720 independent and flow-assisted runs: local stabilisation on frames 0–29, held-out corner errors, drift ages and frame-20 quadrilaterals.](student_files/stage2/native_common_tracking.png)
 
@@ -434,7 +434,7 @@ In the selected combined events (Table 2.3 and Figure 2.5), model loss takes pre
 
 ### Validation choices and frozen settings
 
-The default difference configuration reached mean IoU **0.911230** on native **1280 × 720** common validation masks **96, 192 and 272**, using independent homographies from the frozen Stage 1 localiser. Its masks include falsely masked board pixels and missed foreground. These errors motivate testing the strong/weak levels that control seed formation and region growth, and the minimum area that removes small components. Localisation, illumination compensation and the opening kernel remain fixed during this search. Test and stress masks do not select any settings.
+We evaluated the default difference configuration, which reached mean IoU **0.911230** on native **1280 × 720** common validation masks **96, 192 and 272**, using independent homographies from the frozen Stage 1 localiser. Its masks include falsely masked board pixels and missed foreground. These errors motivated us to test the strong/weak levels that control seed formation and region growth, and the minimum area that removes small components. We held localisation, illumination compensation and the opening kernel fixed during this search. Test and stress masks do not select any settings.
 
 We maximise mean validation IoU over **216** candidates, using the tie rule in Code Explanation to select **0.30**, the centre of the best strong-threshold plateau **0.15–0.45**. Remaining ties favour weak and area values nearest the defaults. The default strong level **0.25** scores equally well, so this change provides no measured IoU improvement. We then compare opening radii 2 and 0 with the selected thresholds and area fixed, choosing the higher mean IoU and retaining radius 2 on a tie. Table 3.1 summarises this conditional selection, rather than a joint radius/threshold search.
 
@@ -450,11 +450,11 @@ We maximise mean validation IoU over **216** candidates, using the tie rule in C
 
 The final settings are strong **0.30**, weak **0.12**, minimum area **150 original-video pixels**, opening radius **2**, connectivity **8**, and gain quantile **0.5**. Compositing retains feather **3** and `match_gain=False`. Only the strong level changes from `OcclusionConfig()` defaults. Stage 1, Stage 2 and RANSAC seed **0** remain fixed. The **2%** corner-error tolerance justified in Stage 1 remains a localisation criterion, not a mask-IoU cutoff.
 
-The native configuration is saved in `outputs/thresholds.json`. All real-clip results below use **1280 × 720** inputs. Table 3.2 reports the flow-assisted pipeline, while the other tables and figures use independent localisation for diagnosis. Notebook 3's **640-pixel previews** are separate. Rerunning Notebook 3 §6.2 reproduces the figures and the native search and diagnostic measurements in `student_files/stage3/evidence.json`.
+We saved the native configuration in `outputs/thresholds.json`. All real-clip results below use **1280 × 720** inputs. Table 3.2 reports the flow-assisted pipeline, while the other tables and figures use independent localisation for diagnosis. Notebook 3's **640-pixel previews** are separate. Rerunning Notebook 3 §6.2 reproduces the figures and the native search and diagnostic measurements in `student_files/stage3/evidence.json`.
 
 ### Utility routines used
 
-Stage 3 uses our `warp_artwork`, the supplied image conversion/loading helpers and NumPy reductions for the gain/offset fit. Hysteresis uses a queue from `collections.deque`. Mask cleaning uses `cv2.morphologyEx` with a disc and `cv2.connectedComponentsWithStats`, while feathering uses `cv2.distanceTransform`. Metrics use the supplied `overlaylab.metrics` routines. Notebook 3 §6 permits an evaluation-only `cv2.getPerspectiveTransform` fallback to annotated corners when independent localisation fails or exceeds the frozen 2% tolerance. Native diagnostics use it on **2/6 combined masks** (212 and 314) and **1/3 viewpoint masks** (288), with no fallback on common test masks. The pipeline hides these stress frames instead, so fallback results never enter videos or Table 3.2.
+For Stage 3, we used our `warp_artwork`, the supplied image conversion/loading helpers and NumPy reductions for the gain/offset fit. Hysteresis uses a queue from `collections.deque`. Mask cleaning uses `cv2.morphologyEx` with a disc and `cv2.connectedComponentsWithStats`, while feathering uses `cv2.distanceTransform`. Metrics use the supplied `overlaylab.metrics` routines. Notebook 3 §6 permits an evaluation-only `cv2.getPerspectiveTransform` fallback to annotated corners when independent localisation fails or exceeds the frozen 2% tolerance. Native diagnostics use it on **2/6 combined masks** (212 and 314) and **1/3 viewpoint masks** (288), with no fallback on common test masks. The pipeline hides these stress frames instead, so fallback results never enter videos or Table 3.2.
 
 ### Stress table (Stage 3)
 
@@ -544,26 +544,26 @@ Table 3.5's direct mask fractions are not directly comparable with Table 3.2's f
 ## Stage 4 — Your clip
 ### Capture and audit
 
-Both personal clips contain 450 frames at **1280 × 720, constant 30 fps and 15 seconds**. Sean Tham captured and annotated Sean's clip, and Wang Ruijie captured and annotated Ruijie's. Each has ten distributed manual corner annotations and five masks on those audit frames, including three with an occluder blocking the board. These annotations were recorded before either personal pipeline ran. Source metadata and audio were removed from the prepared videos, and photo EXIF was removed from the references. Capture conditions and event ranges are recorded in `manifests/capture_manifest.csv`, with annotations in the two audit manifests.
+Our two personal clips each contain 450 frames at **1280 × 720, constant 30 fps and 15 seconds**. We each captured and annotated our own clip. For each clip, we manually annotated corners on ten distributed frames and masks on five of those frames, including three with an occluder blocking the board. We recorded these annotations before running either personal pipeline. We removed source metadata and audio from the prepared videos and photo EXIF from the references. We recorded capture conditions and event ranges in `manifests/capture_manifest.csv` and the annotations in the two audit manifests.
 
-*Table 4.1. Personal capture conditions and audit geometry. First-frame area is measured from the manual audit quadrilateral at 1280 × 720. Physical dimensions were supplied approximately by the capturers.*
+*Table 4.1. Personal capture conditions and audit geometry. First-frame area is measured from the manual audit quadrilateral at 1280 × 720. Physical dimensions are approximate.*
 
 | Clip | Device and prepared source | Board and reference | First-frame board area | Difficult events, prepared frame indices |
 |---|---|---|---|---|
 | Sean (`stage4_sean`) | iPhone 16 Pro, original first 15 s, HLG converted to SDR | Black outer frame, approximately 72 × 57 cm, 448 × 355 reference | 16.804% | Pan and distance changes, purple object crossing approximately 233–313, oblique view and clipping near the end |
 | Ruijie (`stage4_ruijie`) | Samsung S23+, source seconds 2–17, SDR, stabilisation and auto fps disabled | Flat front face including its white border, approximately 26 × 19 cm, 754 × 551 reference | 44.156% | Pan and distance changes, strong viewing-angle changes approximately 225–285, black object crossing approximately 340–395 |
 
-Both first-frame board fractions exceed 15%. The references were resized to approximately the board's initial on-screen width. Ruijie's side panel is outside the annotated board. The capturers reported no identifiable person in Sean's clip and no real person or body part in Ruijie's clip. Manual corners hidden by an occluder and the approximate physical measurements introduce annotation uncertainty.
+Both first-frame board fractions exceed 15%. We resized each reference to approximately its board's initial on-screen width and excluded the box's side panel from Ruijie's annotated board. Sean's clip contains no identifiable people, and Ruijie's contains no real person or body part, as recorded in our capture notes. Manual corners hidden by an occluder and the approximate physical measurements introduce annotation uncertainty.
 
-The replacement artworks are `sean_explore.png` (**1411 × 1115**) and `ruijie_orbit.png` (**1300 × 950**), which approximately match their boards' aspect ratios. Both use high-contrast structures distributed around identifiable EXPLORE or ORBIT lettering and contain no third-party brands, logos or faces.
+Our replacement artworks are `sean_explore.png` (**1411 × 1115**) and `ruijie_orbit.png` (**1300 × 950**), which approximately match their boards' aspect ratios. Both use high-contrast structures distributed around identifiable EXPLORE or ORBIT lettering and contain no third-party brands, logos or faces.
 
 ### Overlay Scorecard
 
 #### Frozen application and geometry
 
-Both temporal variants were applied at native 1280 × 720 without personal-clip tuning, using `outputs/thresholds.json`, RANSAC seed 0 and the frozen 2% success tolerance. The Stage 3 occlusion and compositing settings were transferred unchanged.
+We applied both temporal variants at native 1280 × 720 without personal-clip tuning, using `outputs/thresholds.json`, RANSAC seed 0 and the frozen 2% success tolerance. We transferred our Stage 3 occlusion and compositing settings unchanged.
 
-The completed per-clip Scorecards are `outputs/scorecards/stage4_sean_scorecard.md` and `stage4_ruijie_scorecard.md`. Their initialisation counts use descriptor-valid keypoints. Sean has **988/861** reference/frame-0 keypoints, **86 matches and 40 inliers (0.465)**, with median residual **0.790 px**. Ruijie has **60/150** keypoints, **45 matches and 24 inliers (0.533)**, with median residual **0.479 px**. The repeated frame-0 diagnostic uses the frozen localiser and does not initialise or correct the saved pipeline.
+We saved our completed Scorecards in `outputs/scorecards/stage4_sean_scorecard.md` and `stage4_ruijie_scorecard.md`. We report initialisation counts using descriptor-valid keypoints. On Sean's clip, we obtained **988/861** reference/frame-0 keypoints, **86 matches and 40 inliers (0.465)**, with median residual **0.790 px**. On Ruijie's clip, we obtained **60/150** keypoints, **45 matches and 24 inliers (0.533)**, with median residual **0.479 px**. We repeated the frame-0 diagnostic with the frozen localiser for analysis, without using it to initialise or correct the saved pipeline.
 
 *Table 4.2. Saved-track geometry on the same ten audit frames per clip. Corner error is mean corner distance divided by the longer annotated board diagonal. Medians and p90 values use finite predictions only, while success includes every audit frame and uses the fixed 2% tolerance.*
 
@@ -574,7 +574,7 @@ The completed per-clip Scorecards are `outputs/scorecards/stage4_sean_scorecard.
 | Ruijie / independent | 3/10 | 0.381% | 0.852% | 3/10 | 170/450 | 280/450 |
 | Ruijie / flow assisted | 3/10 | 0.381% | 0.408% | 3/10 | 175/450 | 275/450 |
 
-Every finite saved-corner estimate in Table 4.2 is within tolerance, so unavailable homographies explain all six Sean failures and all seven Ruijie failures. The small medians describe conditional accuracy rather than reliable placement throughout the clip. Flow assistance adds five tracked frames per clip but does not improve audited success. These saved-track errors differ from the finished-video evaluator's SIFT/RANSAC measurements of the rendered artwork, used in the generative comparison below.
+Every finite saved-corner estimate in Table 4.2 is within tolerance, so unavailable homographies explain all six failures on Sean's clip and all seven on Ruijie's. The small medians describe conditional accuracy rather than reliable placement throughout the clip. Flow assistance adds five tracked frames per clip but does not improve audited success. These saved-track errors differ from the finished-video evaluator's SIFT/RANSAC measurements of the rendered artwork, used in the generative comparison below.
 
 #### Occlusion, coverage and preservation
 
@@ -591,7 +591,7 @@ Sean's mask IoU **0.248** and F1 **0.397** in Table 4.3 come only from frame **3
 
 Ruijie's three occluded audit frames, 345, 360 and 375, are all hidden, and all five mask frames have absent overlays. IoU/F1 and coverage are therefore **unavailable**. Table 4.3's **0% leakage** reflects absent overlays rather than successful separation of the black object.
 
-The Scorecards include an annotated-frame alpha-map baseline that disables masking while retaining saved geometry and HIDE decisions. Sean's direct leakage falls from **33.333% to 19.324%**, while Ruijie's remains zero because all three occluded frames are hidden. This diagnostic is separate from finished-video leakage, whose pixel-change proxy also reflects encoding and artwork colours.
+In our Scorecards, we included an annotated-frame alpha-map baseline that disables masking while retaining saved geometry and HIDE decisions. Sean's direct leakage falls from **33.333% to 19.324%**, while Ruijie's remains zero because all three occluded frames are hidden. This diagnostic is separate from finished-video leakage, whose pixel-change proxy also reflects encoding and artwork colours.
 
 Table 4.3's background PSNR is approximately 36.6–37.2 dB. Question 5 interprets preservation alongside the selected-frame baseline and overlay availability.
 
@@ -608,13 +608,13 @@ Table 4.3's background PSNR is approximately 36.6–37.2 dB. Question 5 interpre
 
 Flow assistance reduces saved-track jitter in Table 4.4, but unchanged audited success and frequent HIDE decisions limit that benefit. Tracker jitter subtracts motion interpolated from ten sparse audit annotations, so unobserved hand-held motion remains a limitation. It differs from the evaluator's recovered-corner jitter on selected pairs. Drift is unavailable for three runs because no eligible finite audit prediction exists, and Ruijie's 0.414% estimate uses only one frame. Neither clip contains a complete board exit and re-entry, so re-entry recovery is not assessed.
 
-Figures 4.2 and 4.4 show the frequent HIDE decisions counted in Table 4.2. All are triggered by `no_model`. Zero REINIT flags do not mean zero localisation retries because no-model HIDE and insufficient propagation points also force retries. Only 41 Sean frames and 73 Ruijie frames use flow propagation, as recorded in `classical_summary.json`. Table 4.4's times describe each person's execution rather than a controlled laptop comparison.
+Figures 4.2 and 4.4 show the frequent HIDE decisions counted in Table 4.2. All are triggered by `no_model`. Zero REINIT flags do not mean zero localisation retries because no-model HIDE and insufficient propagation points also force retries. Only 41 Sean frames and 73 Ruijie frames use flow propagation, as recorded in `classical_summary.json`. Table 4.4's times describe our runs on the respective clips rather than a controlled laptop comparison.
 
 #### Representative overlays and failure evidence
 
 ![Sean classical evidence](student_files/stage4/stage4_sean_classical_evidence.png)
 
-*Figure 4.1. Sean at native 1280 × 720. The upper row shows source frame 300, its saved flow-assisted overlay, and compensated difference with the predicted mask in cyan. The lower row shows hidden failure frame 270 and up to 30 reference-to-frame ratio matches. The frozen localiser finds only 7 inliers from 35 matches, below the required 12. Green audit outlines are illustration only.*
+*Figure 4.1. Sean's clip at native 1280 × 720. The upper row shows source frame 300, its saved flow-assisted overlay, and compensated difference with the predicted mask in cyan. The lower row shows hidden failure frame 270 and up to 30 reference-to-frame ratio matches. The frozen localiser finds only 7 inliers from 35 matches, below the required 12. Green audit outlines are illustration only.*
 
 ![Sean monitor timeline](student_files/stage4/stage4_sean_classical_timeline.png)
 
@@ -622,37 +622,37 @@ Figures 4.2 and 4.4 show the frequent HIDE decisions counted in Table 4.2. All a
 
 ![Ruijie classical evidence](student_files/stage4/stage4_ruijie_classical_evidence.png)
 
-*Figure 4.3. Ruijie at native 1280 × 720. Frame 0 demonstrates a visible overlay. The lower row shows the hidden perspective failure at frame 255, where the fixed localiser finds 4 inliers from 27 matches, below the required 12. The side panel is excluded from the green audit quadrilateral. Difference diagnostics use saved predicted geometry rather than a ground-truth homography.*
+*Figure 4.3. Ruijie's clip at native 1280 × 720. Frame 0 demonstrates a visible overlay. The lower row shows the hidden perspective failure at frame 255, where the fixed localiser finds 4 inliers from 27 matches, below the required 12. The side panel is excluded from the green audit quadrilateral. Difference diagnostics use saved predicted geometry rather than a ground-truth homography.*
 
 ![Ruijie monitor timeline](student_files/stage4/stage4_ruijie_classical_timeline.png)
 
 *Figure 4.4. Ruijie's full-clip monitor evidence, with the same conventions as Figure 4.2. The prolonged weak-match interval includes the strongly oblique board view, while the later occlusion also coincides with hidden overlays.*
 
-The two failure examples show rejection of an insufficient correspondence consensus. Occlusion reduces visible texture in Sean's frame 270, and Ruijie's oblique view changes the appearance of patches that are not fully perspective invariant. This is consistent with the observed inlier shortage, but the clips also change scale and contain blur, so these examples do not isolate one cause. Diagnostic homographies used for the visible-frame difference and alpha baseline are reconstructed from saved predicted corners with `dlt_homography`. Audit corners are used only for scoring and the green illustration outlines. No ground-truth fallback enters the pipeline outputs.
+The two failure examples show rejection of an insufficient correspondence consensus. Occlusion reduces visible texture in Sean's frame 270, and Ruijie's oblique view changes the appearance of patches that are not fully perspective invariant. This is consistent with the observed inlier shortage, but the clips also change scale and contain blur, so these examples do not isolate one cause. We reconstructed the diagnostic homographies for the visible-frame difference and alpha baseline from saved predicted corners with `dlt_homography`. Audit corners are used only for scoring and the green illustration outlines. No ground-truth fallback enters the pipeline outputs.
 
-Notebook 4's `(Our Code)` classical analysis generates both Scorecards and Figures 4.1–4.4 from the saved frozen runs. Detailed measurements are saved in `student_files/stage4/classical_summary.json`, while the four finished-video evaluator reports are grouped by person under `outputs/evaluation/stage4/stage4_sean/` and `outputs/evaluation/stage4/stage4_ruijie/`.
+Notebook 4's `(Our Code)` classical analysis generates both Scorecards and Figures 4.1–4.4 from the saved frozen runs. We saved detailed measurements in `student_files/stage4/classical_summary.json` and grouped the four finished-video evaluator reports by clip under `outputs/evaluation/stage4/stage4_sean/` and `outputs/evaluation/stage4/stage4_ruijie/`.
 
-The following comparison separately evaluates both classical variants on the fixed clean, occluded, strongest-perspective and consecutive-pair indices. These selected-frame scores do not replace the full-audit Scorecards above.
+For the following comparison, we separately evaluated both classical variants on the fixed clean, occluded, strongest-perspective and consecutive-pair indices. These selected-frame scores do not replace the full-audit Scorecards above.
 
 ### Generative comparison
 
 #### Model and fixed inputs
 
-We used the open-weight [Wan2.1-VACE-1.3B](https://huggingface.co/Wan-AI/Wan2.1-VACE-1.3B-diffusers) checkpoint because it fits the available Colab Tesla T4 GPU. [VACE](https://arxiv.org/abs/2503.07598) provides reference-image and masked-video conditioning on the [Wan](https://arxiv.org/abs/2503.20314) model family. Inference generates the edited pixels directly. Preparation resizes the inputs and grey-fills edit regions without pasting the artwork into the output.
+We used the open-weight [Wan2.1-VACE-1.3B](https://huggingface.co/Wan-AI/Wan2.1-VACE-1.3B-diffusers) checkpoint because it fits the available Colab Tesla T4 GPU. [VACE](https://arxiv.org/abs/2503.07598) provides reference-image and masked-video conditioning on the [Wan](https://arxiv.org/abs/2503.20314) model family. Inference generates the edited pixels directly. We prepared the inputs by resizing them and grey-filling edit regions without pasting the artwork into the output.
 
-Both students used Diffusers **0.36.0**, seed **0**, **20 steps**, guidance **5.0**, conditioning scale **1.0** and an empty negative prompt. Each output has **81 frames at 832 × 480 and 16 fps**. The checkpoint revision, precision settings, library versions and scheduler are preserved in the invocation records and `student_files/stage4/colab_vace_run.ipynb`.
+We used Diffusers **0.36.0**, seed **0**, **20 steps**, guidance **5.0**, conditioning scale **1.0** and an empty negative prompt for both clips. Each output has **81 frames at 832 × 480 and 16 fps**. We preserved the checkpoint revision, precision settings, library versions and scheduler in our invocation records and `student_files/stage4/colab_vace_run.ipynb`.
 
-Sean's cut contains source frames **226–376**, while Ruijie's contains **210–360**. Each contains 151 frames at 30 fps and spans five seconds between endpoint timestamps. The model receives the person's artwork and frozen flow-assisted tracker masks, with aligned binary masks and RGB **128** filling after resizing. Audit annotations are excluded. Only **23/81** sampled Sean masks and **25/81** Ruijie masks are nonempty because lost localisation produces an empty edit region.
+Sean's cut contains source frames **226–376**, while Ruijie's contains **210–360**. Each contains 151 frames at 30 fps and spans five seconds between endpoint timestamps. For each clip, we supplied our corresponding artwork and frozen flow-assisted tracker masks, with aligned binary masks and RGB **128** filling after resizing. We excluded audit annotations from the model inputs. Only **23/81** sampled Sean masks and **25/81** Ruijie masks are nonempty because lost localisation produces an empty edit region.
 
-The reported prompts describe the desired EXPLORE or ORBIT artwork, the scene and the passing object. The exact prompts are recorded with each invocation in `manifests/genai_log.csv`.
+Our revised prompts describe the desired EXPLORE or ORBIT artwork, the scene and the passing object. We recorded the exact prompts with each invocation in `manifests/genai_log.csv`.
 
-All four invocations remain in `manifests/genai_log.csv`. Raw outputs are preserved under `outputs/genai/<clip_id>/runs/original_prompt/` and `runs/revised_prompt/`, with conditions, preflight checks and metadata under `student_files/stage4/run_records/`. The unpacked model inputs are retained in `outputs/genai/<clip_id>/inputs/`.
+We retained all four invocations in `manifests/genai_log.csv` and the raw outputs under `outputs/genai/<clip_id>/runs/original_prompt/` and `runs/revised_prompt/`. We preserved the conditions, preflight checks and metadata under `student_files/stage4/run_records/`, and the unpacked model inputs in `outputs/genai/<clip_id>/inputs/`.
 
 #### Identical selected frames and metric denominators
 
-The comparison indices were fixed before generation. Sean's clean, occluded and strongest-perspective frames are **226, 270 and 376**, with pair **226–227**. Ruijie's are **210, 360 and 255**, with pair **210–211**. Both classical variants and VACE use the same four extracts and complete ten-frame audit dictionary per clip. The second pair frame uses interpolated audit geometry and does not add a placement annotation.
+We fixed our comparison indices before generation. Sean's clean, occluded and strongest-perspective frames are **226, 270 and 376**, with pair **226–227**. Ruijie's are **210, 360 and 255**, with pair **210–211**. We evaluated both classical variants and VACE using the same four extracts and complete ten-frame audit dictionary per clip. The second pair frame uses interpolated audit geometry and does not add a placement annotation.
 
-Extraction uses `round((source_index - cut_start) × 16/30)` at nominal timestamps, without searching for better correspondence or correcting retiming. In ascending source-index order, Sean maps to output indices **0, 1, 23 and 80**, and Ruijie to **0, 1, 24 and 80**. Extracts are resized to 1280 × 720 with cubic interpolation for scoring, while raw MP4s remain unchanged.
+We extracted frames using `round((source_index - cut_start) × 16/30)` at nominal timestamps, without searching for better correspondence or correcting retiming. In ascending source-index order, Sean maps to output indices **0, 1, 23 and 80**, and Ruijie to **0, 1, 24 and 80**. We resized extracts to 1280 × 720 with cubic interpolation for scoring and retained the raw MP4s unchanged.
 
 Table 4.5 uses **three annotated placement frames per row**, with unavailable detections counted as failures at the frozen 2% tolerance. Fidelity includes original-board content on absent-overlay frames. Table 4.6 uses those three frames for preservation and **one nonempty mask** for leakage and foreground PSNR. All three selected mask files are present, with two empty masks and zero missing files per method. Coverage includes only frames with detected artwork. Sean's classical outputs have one coverage-scored frame and two artwork-absent frames, while VACE and Ruijie's classical outputs have zero and three respectively. Each row of Table 4.7 uses **one consecutive pair**. These results remain separate from the full-audit Scorecards in Tables 4.2–4.4.
 
@@ -703,21 +703,21 @@ Figures 4.5 and 4.6 show the fixed clean, occluded and strongest-perspective fra
 
 *Figure 4.6. Ruijie's fixed selected frames, with the same columns and conventions as Figure 4.5. Rows are clean 210, occluded 360 and strongest perspective 255. All three classical rows are hidden and all three VACE rows lack detected replacement artwork. The source box side is outside the annotated board.*
 
-The source re-encode in Table 4.6 uses the same 81 sampled source frames at 832 × 480 and 16 fps, then extracts the selected indices. It measures resampling and compression without generation, although its resize implementation and encoder differ from Colab's. Notebook 4 reproduces the analysis from preserved outputs without rerunning the full pipelines or generation. Both original and corrected evaluator results, costs and timestamp mappings remain in `outputs/evaluation/stage4/stage4_genai_reports.json`. Individual selected-frame evaluator reports are grouped alongside the finished-video reports under `outputs/evaluation/stage4/stage4_sean/` and `outputs/evaluation/stage4/stage4_ruijie/`. Each folder contains reports for both classical variants, the original and corrected VACE outputs, and the source-reencode baseline.
+We constructed the source re-encode in Table 4.6 from the same 81 sampled source frames at 832 × 480 and 16 fps, then extracted the selected indices. It measures resampling and compression without generation, although its resize implementation and encoder differ from Colab's. We use Notebook 4 to reproduce our analysis from the preserved outputs without rerunning the full pipelines or generation. We saved both original and corrected evaluator results, costs and timestamp mappings in `outputs/evaluation/stage4/stage4_genai_reports.json`. We grouped the individual selected-frame evaluator reports alongside the finished-video reports under `outputs/evaluation/stage4/stage4_sean/` and `outputs/evaluation/stage4/stage4_ruijie/`. Each folder contains reports for both classical variants, the original and corrected VACE outputs, and the source-reencode baseline.
 
 ### Question 5 — Reflection
 
-Classical rendering reproduces the supplied artwork when localisation succeeds, but limited availability prevents reliable replacement across either clip. In the selected comparison, it succeeds only on Sean's clean frame, while corrected VACE produces no detectable replacement on any of the three named frames for either clip. Tables 4.5–4.7 therefore describe incomplete edits, and preservation or low leakage must be interpreted alongside replacement availability.
+Our classical pipeline reproduces our artwork when localisation succeeds, but limited availability prevents reliable replacement across either clip. In our selected comparison, it succeeds only on Sean's clean frame, while corrected VACE produces no detectable replacement on any of the three named frames for either clip. Tables 4.5–4.7 therefore describe incomplete edits, and preservation or low leakage must be interpreted alongside replacement availability.
 
 #### Geometric placement
 
-Classical placement is accurate on Sean's clean frame 226, with errors of **0.614%** for independent and **0.606%** for flow-assisted rendering in Table 4.5. Both hide the occluded and strongest-perspective frames. Ruijie's three selected classical frames are also hidden, despite visible overlays elsewhere in the full clip. VACE has **0/3 detections** per clip, so its placement median is unavailable. Consequently, neither method demonstrates successful keystone placement at strongest perspective in this selected set.
+Our classical pipeline places the artwork accurately on Sean's clean frame 226, with errors of **0.614%** for independent and **0.606%** for flow-assisted rendering in Table 4.5. Both temporal variants hide the occluded and strongest-perspective frames. Ruijie's three selected classical frames are also hidden, despite visible overlays elsewhere in the full clip. VACE has **0/3 detections** per clip, so its placement median is unavailable. Consequently, neither method demonstrates successful keystone placement at strongest perspective in this selected set.
 
 #### Artwork identity and conditioning limits
 
-Classical rendering preserves recognisable EXPLORE text and motifs on Sean's clean frame in Figure 4.5 (upper row, second column). VACE instead retains the original poster patterns in Figures 4.5 and 4.6, consistent with its negative Sean NCC and low Ruijie NCC in Table 4.5. Classical fidelity means also include hidden frames containing the original board, so they do not isolate fidelity when an overlay is visible.
+Our classical rendering preserves recognisable EXPLORE text and motifs on Sean's clean frame in Figure 4.5 (upper row, second column). VACE instead retains the original poster patterns in Figures 4.5 and 4.6, consistent with its negative Sean NCC and low Ruijie NCC in Table 4.5. Classical fidelity means also include hidden frames containing the original board, so they do not isolate fidelity when an overlay is visible.
 
-Ruijie's three named frames and Sean's occluded and perspective frames have empty tracker masks, leaving original board pixels in the model input. Poster retention is consistent with that conditioning. However, Sean's clean frame also fails despite its nonempty grey-filled edit region. The comparison therefore couples model behaviour to tracker availability and does not isolate generative capacity under perfect masks.
+Ruijie's three named frames and Sean's occluded and perspective frames have empty tracker masks, leaving original board pixels in the model input. Poster retention is consistent with that conditioning. However, Sean's clean frame also fails despite its nonempty grey-filled edit region. Our comparison therefore couples model behaviour to tracker availability and does not isolate generative capacity under perfect masks.
 
 #### Occlusion order and what was generated in front of the board
 
@@ -729,7 +729,7 @@ Sean's corrected VACE leakage is **26.189%**, against **21.471%** for the source
 
 VACE changes background appearance beyond the source-reencode baseline without completing the replacement. Table 4.6 gives background PSNR of **29.02 dB** for Sean and **33.08 dB** for Ruijie, below baseline values of **33.22 and 36.59 dB** and classical values around **36.6 and 37.6 dB**. Its SSIM and background drift also indicate additional outside-board changes, consistent with reconstruction of the original scene. Classical preservation benefits partly from hiding the overlay on two Sean frames and all three Ruijie frames.
 
-The classical compositing rule guarantees unchanged pixels outside predicted alpha support before encoding, although boundary errors and compression can affect the evaluator's background region. VACE reconstructs the frame and can change pixels outside the board. PSNR alone cannot establish pixel provenance or identify hallucination, and the baseline only approximates Colab resampling and encoding. It contextualises preservation loss without isolating generation error perfectly.
+Our classical compositing rule guarantees unchanged pixels outside predicted alpha support before encoding, although boundary errors and compression can affect the evaluator's background region. VACE reconstructs the frame and can change pixels outside the board. PSNR alone cannot establish pixel provenance or identify hallucination, and the baseline only approximates Colab resampling and encoding. It contextualises preservation loss without isolating generation error perfectly.
 
 #### Temporal consistency, nominal sampling and the staff example
 
@@ -741,15 +741,15 @@ The staff MiniMax-H3 example in Notebook 4 reproduces its artwork but changes ba
 
 #### Controllability when artwork or text changes
 
-Replacing the classical artwork file deterministically changes the warped image wherever geometry is available, without retuning on the personal clips. Its text and layout are specified by pixels. Geometric estimation, masking and HIDE behaviour are controlled by the implementation and frozen configuration rather than a prompt. VACE's reference image specifies desired artwork and its prompt describes the scene, but neither guarantees exact lettering, placement or preservation. The reported runs fail to produce EXPLORE or ORBIT, limiting demonstrated identity control under these settings.
+We can change the warped image deterministically wherever geometry is available by replacing our classical artwork file, without retuning on the personal clips. Its text and layout are specified by pixels. We control geometric estimation, masking and HIDE behaviour through our implementation and frozen configuration rather than a prompt. VACE's reference image specifies desired artwork and its prompt describes the scene, but neither guarantees exact lettering, placement or preservation. Our runs fail to produce EXPLORE or ORBIT, limiting demonstrated identity control under these settings.
 
 #### Manual effort, compute and time
 
-Table 4.7 records corrected generation times of **3,077.53 s** for Sean and **2,182.14 s** for Ruijie on a Tesla T4, each for an 81-frame cut. Setup adds **523.47 and 462.84 s**, as recorded in the invocation metadata. Classical times cover all 450 source frames on local CPUs, so these are observed costs across different workloads and hardware. Capture, rectification and audit annotation are shared manual work. Classical implementation and validation require development effort, while VACE adds model setup, mask preparation and prompt preparation. The log retains the cost of both original and corrected invocations.
+Table 4.7 records corrected generation times of **3,077.53 s** for Sean and **2,182.14 s** for Ruijie on a Tesla T4, each for an 81-frame cut. Setup adds **523.47 and 462.84 s**, as recorded in the invocation metadata. Our classical timings cover all 450 source frames on local CPUs, so these are observed costs across different workloads and hardware. Our manual work for both methods included capture, rectification and audit annotation. We also implemented and validated the classical pipeline, while VACE required model setup, mask preparation and prompt preparation. We retained the cost of both original and corrected invocations in our log.
 
 #### Shared and method-specific failures
 
-Both methods fail to replace the board on the selected strongest-perspective frames in Figures 4.5 and 4.6, although this shared outcome does not establish a common cause. Classical rendering specifically disappears when correspondence support is insufficient. VACE specifically retains the old poster even on Sean's clean frame where classical rendering succeeds. These two clips and their recorded invocations are qualitative probes of the settings rather than general success-rate estimates.
+Both methods fail to replace the board on the selected strongest-perspective frames in Figures 4.5 and 4.6, although this shared outcome does not establish a common cause. Classical rendering specifically disappears when correspondence support is insufficient. VACE specifically retains the old poster even on Sean's clean frame where classical rendering succeeds. We treat our two clips and their recorded invocations as qualitative probes of the settings rather than general success-rate estimates.
 
 ## Evidence table
 | Student file | Function | Report section | Notebook figure / table / video |
