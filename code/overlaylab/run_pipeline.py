@@ -55,7 +55,7 @@ def run_one(clip: str, variant: str, occlusion: bool, artwork_name: str, thresho
     if width:
         config.resize_width = width
     suffix = variant + ("" if occlusion else "_no_occlusion")
-    out = Path(out) if out else data.OUTPUT_DIR / "videos" / f"{clip}_{suffix}.mp4"
+    out = Path(out) if out else data.OUTPUT_DIR / "videos" / data.output_group(clip) / f"{clip}_{suffix}.mp4"
     stats = out.with_name(out.stem + "_stats.json")
     fingerprint = hashlib.sha256()
     for source in sorted(Path(__file__).parent.glob("*.py")):

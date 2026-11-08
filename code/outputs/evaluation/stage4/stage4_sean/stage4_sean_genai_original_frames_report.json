@@ -1,0 +1,159 @@
+{
+  "mode": "frames",
+  "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt",
+  "frames": {
+    "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000226.png",
+    "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000227.png",
+    "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000270.png",
+    "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000376.png"
+  },
+  "interval": [
+    226,
+    376
+  ],
+  "offset": 0,
+  "output_resolution": {
+    "226": [
+      1280,
+      720
+    ],
+    "227": [
+      1280,
+      720
+    ],
+    "270": [
+      1280,
+      720
+    ],
+    "376": [
+      1280,
+      720
+    ]
+  },
+  "original_resolution": [
+    1280,
+    720
+  ],
+  "resized": false,
+  "resized_frames": [],
+  "frames_with_corners": [
+    226,
+    270,
+    376
+  ],
+  "frames_with_masks": [
+    226,
+    270,
+    376
+  ],
+  "missing_frames": [],
+  "placement": {
+    "n": 3,
+    "median": NaN,
+    "p90": NaN,
+    "success": 0.0,
+    "failed": 3,
+    "detection_rate": 0.0,
+    "threshold": 0.02,
+    "per_frame": {
+      "226": null,
+      "270": null,
+      "376": null
+    }
+  },
+  "fidelity": {
+    "ncc": -0.12499740537940056,
+    "ssim": 0.3061097260967455,
+    "mae": 0.4132726192474365,
+    "structure": -0.010260257661662569
+  },
+  "preservation": {
+    "psnr_outside": 28.753604076680887,
+    "ssim_outside": 0.9678896893154785,
+    "mad_outside": 0.02784835857649644,
+    "background_drift_px": 25.20292091369629
+  },
+  "preservation_per_frame": [
+    {
+      "frame": 226,
+      "psnr_outside": 30.2040165793896,
+      "ssim_outside": 0.9800864763159893,
+      "mad_outside": 0.02265583537518978,
+      "background_drift_px": 28.180145263671875
+    },
+    {
+      "frame": 270,
+      "psnr_outside": 23.658542914968123,
+      "ssim_outside": 0.9298301272153044,
+      "mad_outside": 0.03863770514726639,
+      "background_drift_px": 22.225696563720703
+    },
+    {
+      "frame": 376,
+      "psnr_outside": 32.398252735684935,
+      "ssim_outside": 0.9937524644151415,
+      "mad_outside": 0.022251535207033157,
+      "background_drift_px": NaN
+    }
+  ],
+  "temporal": {
+    "stride": 1,
+    "flicker": 0.04446844756603241,
+    "warping_error": 0.042164016515016556,
+    "recovered_corner_jitter_px": NaN,
+    "pairs": 1,
+    "pair_frames": [
+      [
+        226,
+        227
+      ]
+    ]
+  },
+  "occlusion": {
+    "leakage": 0.2407960406790987,
+    "psnr_foreground": 20.991954265893117,
+    "coverage_visible": NaN,
+    "false_occlusion": NaN,
+    "mask_frames": 3,
+    "empty_mask_frames": 2,
+    "n_coverage_frames": 0,
+    "n_false_occlusion_frames": 0,
+    "overlay_absent_frames": [
+      226,
+      270,
+      376
+    ],
+    "per_frame": [
+      {
+        "frame": 226,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 270,
+        "leakage": 0.2407960406790987,
+        "psnr_foreground": 20.991954265893117,
+        "mask_empty": false,
+        "foreground_pixels": 47887,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 376,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      }
+    ]
+  }
+}

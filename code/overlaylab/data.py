@@ -61,6 +61,16 @@ NOTEBOOK_STEP = 8          # divides GT_STRIDE, so every annotated frame is on t
 NOTEBOOK_WIDTH = 640
 
 
+
+def output_group(clip_id: str) -> Path:
+    """Relative output folder for a clip, or a common/stress benchmark output stem."""
+    if clip_id.startswith("common_clip"):
+        return Path("common_clip")
+    if clip_id.startswith("coke_"):
+        return Path("stress_clips")
+    return Path("stage4") / clip_id
+
+
 def split_of_annotation_index(k: int) -> str:
     """Even-indexed annotated frames are validation, odd-indexed are test (mirrors Lab 1)."""
     return "validation" if k % 2 == 0 else "test"

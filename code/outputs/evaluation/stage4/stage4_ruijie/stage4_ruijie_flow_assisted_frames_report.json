@@ -1,0 +1,159 @@
+{
+  "mode": "frames",
+  "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted",
+  "frames": {
+    "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000210.png",
+    "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000211.png",
+    "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000255.png",
+    "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000360.png"
+  },
+  "interval": [
+    210,
+    360
+  ],
+  "offset": 0,
+  "output_resolution": {
+    "210": [
+      1280,
+      720
+    ],
+    "211": [
+      1280,
+      720
+    ],
+    "255": [
+      1280,
+      720
+    ],
+    "360": [
+      1280,
+      720
+    ]
+  },
+  "original_resolution": [
+    1280,
+    720
+  ],
+  "resized": false,
+  "resized_frames": [],
+  "frames_with_corners": [
+    210,
+    255,
+    360
+  ],
+  "frames_with_masks": [
+    210,
+    255,
+    360
+  ],
+  "missing_frames": [],
+  "placement": {
+    "n": 3,
+    "median": NaN,
+    "p90": NaN,
+    "success": 0.0,
+    "failed": 3,
+    "detection_rate": 0.0,
+    "threshold": 0.02,
+    "per_frame": {
+      "210": null,
+      "255": null,
+      "360": null
+    }
+  },
+  "fidelity": {
+    "ncc": 0.144231821690863,
+    "ssim": 0.2536774782236025,
+    "mae": 0.4794576168060303,
+    "structure": -0.010172425414843717
+  },
+  "preservation": {
+    "psnr_outside": 37.55636978288053,
+    "ssim_outside": 0.9722385981376954,
+    "mad_outside": 0.010872813252111277,
+    "background_drift_px": 0.11979687462250392
+  },
+  "preservation_per_frame": [
+    {
+      "frame": 210,
+      "psnr_outside": 37.592419919689355,
+      "ssim_outside": 0.9757283083236158,
+      "mad_outside": 0.010827766731381416,
+      "background_drift_px": 0.15958772599697113
+    },
+    {
+      "frame": 255,
+      "psnr_outside": 37.28037392582428,
+      "ssim_outside": 0.9723635047940586,
+      "mad_outside": 0.011159762740135193,
+      "background_drift_px": 0.11061403900384903
+    },
+    {
+      "frame": 360,
+      "psnr_outside": 37.79631550312797,
+      "ssim_outside": 0.9686239812954123,
+      "mad_outside": 0.010630910284817219,
+      "background_drift_px": 0.08918885886669159
+    }
+  ],
+  "temporal": {
+    "stride": 1,
+    "flicker": 0.06688821315765381,
+    "warping_error": 0.021050414070487022,
+    "recovered_corner_jitter_px": NaN,
+    "pairs": 1,
+    "pair_frames": [
+      [
+        210,
+        211
+      ]
+    ]
+  },
+  "occlusion": {
+    "leakage": 0.0,
+    "psnr_foreground": 38.90210188678494,
+    "coverage_visible": NaN,
+    "false_occlusion": NaN,
+    "mask_frames": 3,
+    "empty_mask_frames": 2,
+    "n_coverage_frames": 0,
+    "n_false_occlusion_frames": 0,
+    "overlay_absent_frames": [
+      210,
+      255,
+      360
+    ],
+    "per_frame": [
+      {
+        "frame": 210,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 255,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 360,
+        "leakage": 0.0,
+        "psnr_foreground": 38.90210188678494,
+        "mask_empty": false,
+        "foreground_pixels": 70610,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      }
+    ]
+  }
+}

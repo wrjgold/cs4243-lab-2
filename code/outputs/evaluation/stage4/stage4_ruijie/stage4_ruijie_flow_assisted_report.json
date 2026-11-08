@@ -1,0 +1,238 @@
+{
+  "mode": "video",
+  "video": "outputs/videos/stage4/stage4_ruijie/stage4_ruijie_flow_assisted.mp4",
+  "interval": [
+    0,
+    449
+  ],
+  "offset": 0,
+  "output_resolution": [
+    1280,
+    720
+  ],
+  "original_resolution": [
+    1280,
+    720
+  ],
+  "resized": false,
+  "missing_frames": [],
+  "placement": {
+    "n": 10,
+    "median": 0.00406921897520761,
+    "p90": 0.00509620527712926,
+    "success": 0.3,
+    "failed": 7,
+    "detection_rate": 0.3,
+    "threshold": 0.02,
+    "per_frame": {
+      "0": 0.00406921897520761,
+      "60": null,
+      "120": null,
+      "210": null,
+      "255": null,
+      "300": 0.004027971860748397,
+      "345": null,
+      "360": null,
+      "375": null,
+      "449": 0.005352951852609672
+    }
+  },
+  "fidelity": {
+    "ncc": 0.37398751999205226,
+    "ssim": 0.4085009921825554,
+    "mae": 0.355770418420434,
+    "structure": 0.20228069905391705
+  },
+  "preservation": {
+    "psnr_outside": 37.21663058491431,
+    "ssim_outside": 0.9643081878214174,
+    "mad_outside": 0.010955984983593226,
+    "background_drift_px": 0.1353075735270977
+  },
+  "preservation_per_frame": [
+    {
+      "frame": 0,
+      "psnr_outside": 34.882534007532286,
+      "ssim_outside": 0.9445629220744942,
+      "mad_outside": 0.012139645405113697,
+      "background_drift_px": 0.2964680790901184
+    },
+    {
+      "frame": 60,
+      "psnr_outside": 37.96868030162939,
+      "ssim_outside": 0.9578337170778105,
+      "mad_outside": 0.010462967678904533,
+      "background_drift_px": 0.07070591300725937
+    },
+    {
+      "frame": 120,
+      "psnr_outside": 37.691096981953514,
+      "ssim_outside": 0.961558224433209,
+      "mad_outside": 0.010680495761334896,
+      "background_drift_px": 0.06943879276514053
+    },
+    {
+      "frame": 210,
+      "psnr_outside": 37.592419919689355,
+      "ssim_outside": 0.9757283083236158,
+      "mad_outside": 0.010827766731381416,
+      "background_drift_px": 0.15958772599697113
+    },
+    {
+      "frame": 255,
+      "psnr_outside": 37.28037392582428,
+      "ssim_outside": 0.9723635047940586,
+      "mad_outside": 0.011159762740135193,
+      "background_drift_px": 0.11061403900384903
+    },
+    {
+      "frame": 300,
+      "psnr_outside": 37.01354888047621,
+      "ssim_outside": 0.9721423020744989,
+      "mad_outside": 0.0105054946616292,
+      "background_drift_px": 0.09505097568035126
+    },
+    {
+      "frame": 345,
+      "psnr_outside": 37.34515046357383,
+      "ssim_outside": 0.9717443836674851,
+      "mad_outside": 0.011146469973027706,
+      "background_drift_px": 0.1841357946395874
+    },
+    {
+      "frame": 360,
+      "psnr_outside": 37.79631550312797,
+      "ssim_outside": 0.9686239812954123,
+      "mad_outside": 0.010630910284817219,
+      "background_drift_px": 0.08918885886669159
+    },
+    {
+      "frame": 375,
+      "psnr_outside": 37.50517828581791,
+      "ssim_outside": 0.9682904214525418,
+      "mad_outside": 0.01097884215414524,
+      "background_drift_px": 0.1453612893819809
+    },
+    {
+      "frame": 449,
+      "psnr_outside": 37.09100757951834,
+      "ssim_outside": 0.9502341130210479,
+      "mad_outside": 0.011027494445443153,
+      "background_drift_px": 0.1325242668390274
+    }
+  ],
+  "temporal": {
+    "stride": 1,
+    "flicker": 0.03697725488907761,
+    "warping_error": 0.015567590275572406,
+    "recovered_corner_jitter_px": 4.802551366070736,
+    "pairs": 9,
+    "pair_frames": [
+      [
+        0,
+        1
+      ],
+      [
+        60,
+        61
+      ],
+      [
+        120,
+        121
+      ],
+      [
+        210,
+        211
+      ],
+      [
+        255,
+        256
+      ],
+      [
+        300,
+        301
+      ],
+      [
+        345,
+        346
+      ],
+      [
+        360,
+        361
+      ],
+      [
+        375,
+        376
+      ]
+    ]
+  },
+  "occlusion": {
+    "leakage": 0.0,
+    "psnr_foreground": 38.58706670129723,
+    "coverage_visible": NaN,
+    "false_occlusion": NaN,
+    "mask_frames": 5,
+    "empty_mask_frames": 2,
+    "n_coverage_frames": 0,
+    "n_false_occlusion_frames": 0,
+    "overlay_absent_frames": [
+      210,
+      255,
+      345,
+      360,
+      375
+    ],
+    "per_frame": [
+      {
+        "frame": 210,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 255,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 345,
+        "leakage": 0.0,
+        "psnr_foreground": 38.20434578077435,
+        "mask_empty": false,
+        "foreground_pixels": 52146,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 360,
+        "leakage": 0.0,
+        "psnr_foreground": 38.90210188678494,
+        "mask_empty": false,
+        "foreground_pixels": 70610,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 375,
+        "leakage": 0.0,
+        "psnr_foreground": 38.65475243633242,
+        "mask_empty": false,
+        "foreground_pixels": 85541,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      }
+    ]
+  }
+}

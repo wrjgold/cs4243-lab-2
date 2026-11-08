@@ -1,0 +1,1846 @@
+{
+  "stage4_sean": {
+    "conditions": {
+      "mode": "personal_clip_frames",
+      "clip_id": "stage4_sean",
+      "artwork": "../../data/artwork/sean_explore.png",
+      "reference": "../../data/personal/stage4_sean/reference.png",
+      "frames": {
+        "clean": 226,
+        "occluded": 270,
+        "perspective": 376,
+        "pair": [
+          226,
+          227
+        ],
+        "note": "Audit frames of your clip (inside your cut if you cut it): one with nothing in front of the board, one with the occluder on the board (a mask frame), the one with the strongest perspective, and one consecutive pair (f, f+1) for the temporal terms. Fill in the frame indices and model.interval before the first generation. The three named frames must be distinct and have audit corners; the occluded frame also needs an audit mask. Choose a pair mapping to distinct output frames at the model frame rate. Use the same full audit dictionary for classical and generative temporal interpolation."
+      },
+      "model": {
+        "requirement": "One open-weight video model generates the edited pixels directly. Inference scripts are permitted. One attempt, fixed settings/seed across duration-limited segments; log every segment and technical retry.",
+        "examples": "Use an open-weight video model your hardware supports, for example MiniMax-H3 (MiniMax, 2026, https://huggingface.co/MiniMaxAI/MiniMax-H3), JoyAI-Video-Edit (JD Open Source, 2026, https://github.com/jd-opensource/JoyAI-Video-Edit), LTX-2.3 (Lightricks, 2026, in/outpainting IC-LoRA) or Wan2.1-VACE-14B (Wan, arXiv:2503.20314; VACE, Jiang et al., arXiv:2503.07598); other open-weight models are equally welcome. Wan2.1-VACE-1.3B (Apache 2.0) is a smaller option; memory depends on settings (staff trial: 14 GB, 13 min for a 5.5 s cut at 480p, mask + reference image). The staff example with MiniMax-H3 is in data/genai_oracle/.",
+        "name": "Wan-AI/Wan2.1-VACE-1.3B-diffusers @ ec4d2cb062b548996b179d493fdd05340de702a1 (Diffusers 0.36.0)",
+        "interval": {
+          "start": 226,
+          "end": 376,
+          "note": "leave empty to give the model the whole clip; if the model does not accept a clip this long, the first and last frame of your cut (it must contain the clean / occluded / perspective / pair frames). If you split the clip into consecutive segments instead, run each with the same settings, join the outputs in order into output.mp4, and list the segments in notes."
+        },
+        "output_fps": 16,
+        "output": "outputs/genai/output.mp4 (the model's video) + outputs/genai/frame_XXXXXX.png (audit frames extracted at their source time, original indices)",
+        "seed": 0,
+        "settings": {
+          "width": 832,
+          "height": 480,
+          "num_frames": 81,
+          "num_inference_steps": 20,
+          "guidance_scale": 5.0,
+          "conditioning_scale": 1.0,
+          "negative_prompt": "",
+          "max_sequence_length": 512
+        }
+      },
+      "prompt": {
+        "inputs": [
+          "your clip (or your cut of it)",
+          "artwork",
+          "board masks from your frozen pipeline (only if the model needs a mask)"
+        ],
+        "template": "A handheld video of a rectangular framed poster on a light-coloured wall displaying the reference artwork: large dark navy EXPLORE lettering on a cream background, an orange sun, dark navy mountain peaks, teal trees and a winding cream path. The camera moves around the poster, and a purple patterned object passes in front of it."
+      },
+      "evaluation": "python -m overlaylab.evaluate --frames outputs/genai/frame_*.png --clip <clip_id> --artwork <your_artwork>",
+      "declaration": "model name and visible version, date, settings (steps, resolution, seed), the video you gave it (whole clip, cut, or joined segments), output fps, prompt, time, compute",
+      "log_fields": [
+        "date",
+        "model",
+        "visible_version",
+        "settings",
+        "seed",
+        "interval",
+        "output_fps",
+        "prompt",
+        "inputs",
+        "input_resolution",
+        "output_resolution",
+        "processing_time_s",
+        "compute",
+        "output_path",
+        "notes"
+      ]
+    },
+    "source_indices": [
+      226,
+      227,
+      270,
+      376
+    ],
+    "output_indices": {
+      "226": 0,
+      "227": 1,
+      "270": 23,
+      "376": 80
+    },
+    "reports": {
+      "generative_original": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt",
+        "frames": {
+          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000226.png",
+          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000227.png",
+          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000270.png",
+          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/original_prompt/frame_000376.png"
+        },
+        "interval": [
+          226,
+          376
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "226": [
+            1280,
+            720
+          ],
+          "227": [
+            1280,
+            720
+          ],
+          "270": [
+            1280,
+            720
+          ],
+          "376": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          226,
+          270,
+          376
+        ],
+        "frames_with_masks": [
+          226,
+          270,
+          376
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": NaN,
+          "p90": NaN,
+          "success": 0.0,
+          "failed": 3,
+          "detection_rate": 0.0,
+          "threshold": 0.02,
+          "per_frame": {
+            "226": null,
+            "270": null,
+            "376": null
+          }
+        },
+        "fidelity": {
+          "ncc": -0.12499740537940056,
+          "ssim": 0.3061097260967455,
+          "mae": 0.4132726192474365,
+          "structure": -0.010260257661662569
+        },
+        "preservation": {
+          "psnr_outside": 28.753604076680887,
+          "ssim_outside": 0.9678896893154785,
+          "mad_outside": 0.02784835857649644,
+          "background_drift_px": 25.20292091369629
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 226,
+            "psnr_outside": 30.2040165793896,
+            "ssim_outside": 0.9800864763159893,
+            "mad_outside": 0.02265583537518978,
+            "background_drift_px": 28.180145263671875
+          },
+          {
+            "frame": 270,
+            "psnr_outside": 23.658542914968123,
+            "ssim_outside": 0.9298301272153044,
+            "mad_outside": 0.03863770514726639,
+            "background_drift_px": 22.225696563720703
+          },
+          {
+            "frame": 376,
+            "psnr_outside": 32.398252735684935,
+            "ssim_outside": 0.9937524644151415,
+            "mad_outside": 0.022251535207033157,
+            "background_drift_px": NaN
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.04446844756603241,
+          "warping_error": 0.042164016515016556,
+          "recovered_corner_jitter_px": NaN,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              226,
+              227
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.2407960406790987,
+          "psnr_foreground": 20.991954265893117,
+          "coverage_visible": NaN,
+          "false_occlusion": NaN,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 0,
+          "n_false_occlusion_frames": 0,
+          "overlay_absent_frames": [
+            226,
+            270,
+            376
+          ],
+          "per_frame": [
+            {
+              "frame": 226,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 270,
+              "leakage": 0.2407960406790987,
+              "psnr_foreground": 20.991954265893117,
+              "mask_empty": false,
+              "foreground_pixels": 47887,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 376,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      },
+      "generative": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt",
+        "frames": {
+          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000226.png",
+          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000227.png",
+          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000270.png",
+          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/runs/revised_prompt/frame_000376.png"
+        },
+        "interval": [
+          226,
+          376
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "226": [
+            1280,
+            720
+          ],
+          "227": [
+            1280,
+            720
+          ],
+          "270": [
+            1280,
+            720
+          ],
+          "376": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          226,
+          270,
+          376
+        ],
+        "frames_with_masks": [
+          226,
+          270,
+          376
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": NaN,
+          "p90": NaN,
+          "success": 0.0,
+          "failed": 3,
+          "detection_rate": 0.0,
+          "threshold": 0.02,
+          "per_frame": {
+            "226": null,
+            "270": null,
+            "376": null
+          }
+        },
+        "fidelity": {
+          "ncc": -0.12247844390611301,
+          "ssim": 0.30104963051696837,
+          "mae": 0.40967680017153424,
+          "structure": -0.010602477017910417
+        },
+        "preservation": {
+          "psnr_outside": 29.0217095677845,
+          "ssim_outside": 0.9683104495900866,
+          "mad_outside": 0.026630540067950886,
+          "background_drift_px": 11.384366035461426
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 226,
+            "psnr_outside": 30.04559588595209,
+            "ssim_outside": 0.9802699419383031,
+            "mad_outside": 0.02221313863992691,
+            "background_drift_px": 10.13388442993164
+          },
+          {
+            "frame": 270,
+            "psnr_outside": 23.678001187591498,
+            "ssim_outside": 0.9304679377805068,
+            "mad_outside": 0.03773254528641701,
+            "background_drift_px": 12.634847640991211
+          },
+          {
+            "frame": 376,
+            "psnr_outside": 33.34153162980993,
+            "ssim_outside": 0.9941934690514497,
+            "mad_outside": 0.019945936277508736,
+            "background_drift_px": NaN
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.04435467720031738,
+          "warping_error": 0.04236570745706558,
+          "recovered_corner_jitter_px": NaN,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              226,
+              227
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.26188735982625766,
+          "psnr_foreground": 20.645224613984468,
+          "coverage_visible": NaN,
+          "false_occlusion": NaN,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 0,
+          "n_false_occlusion_frames": 0,
+          "overlay_absent_frames": [
+            226,
+            270,
+            376
+          ],
+          "per_frame": [
+            {
+              "frame": 226,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 270,
+              "leakage": 0.26188735982625766,
+              "psnr_foreground": 20.645224613984468,
+              "mask_empty": false,
+              "foreground_pixels": 47887,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 376,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      },
+      "classical_independent": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent",
+        "frames": {
+          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000226.png",
+          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000227.png",
+          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000270.png",
+          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_independent/frame_000376.png"
+        },
+        "interval": [
+          226,
+          376
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "226": [
+            1280,
+            720
+          ],
+          "227": [
+            1280,
+            720
+          ],
+          "270": [
+            1280,
+            720
+          ],
+          "376": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          226,
+          270,
+          376
+        ],
+        "frames_with_masks": [
+          226,
+          270,
+          376
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": 0.00614064305551801,
+          "p90": 0.00614064305551801,
+          "success": 0.3333333333333333,
+          "failed": 2,
+          "detection_rate": 0.3333333333333333,
+          "threshold": 0.02,
+          "per_frame": {
+            "226": 0.00614064305551801,
+            "270": null,
+            "376": null
+          }
+        },
+        "fidelity": {
+          "ncc": 0.2309236207113129,
+          "ssim": 0.41463361959580247,
+          "mae": 0.2927559204399586,
+          "structure": 0.18723278116733955
+        },
+        "preservation": {
+          "psnr_outside": 36.564113882900195,
+          "ssim_outside": 0.9921226054962652,
+          "mad_outside": 0.010656544007360935,
+          "background_drift_px": 2.874961957335472
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 226,
+            "psnr_outside": 33.110774821957854,
+            "ssim_outside": 0.9914003219147638,
+            "mad_outside": 0.010719445534050465,
+            "background_drift_px": 5.539058208465576
+          },
+          {
+            "frame": 270,
+            "psnr_outside": 38.070994633374575,
+            "ssim_outside": 0.9883580328542458,
+            "mad_outside": 0.010599320754408836,
+            "background_drift_px": 0.21086570620536804
+          },
+          {
+            "frame": 376,
+            "psnr_outside": 38.51057219336815,
+            "ssim_outside": 0.9966094617197856,
+            "mad_outside": 0.010650865733623505,
+            "background_drift_px": NaN
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.04656924679875374,
+          "warping_error": 0.0340469591319561,
+          "recovered_corner_jitter_px": 2.7607868905236046,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              226,
+              227
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.0,
+          "psnr_foreground": 37.39478810406892,
+          "coverage_visible": 0.9863420193050847,
+          "false_occlusion": 0.013657980694915306,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 1,
+          "n_false_occlusion_frames": 1,
+          "overlay_absent_frames": [
+            270,
+            376
+          ],
+          "per_frame": [
+            {
+              "frame": 226,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": false,
+              "coverage_visible": 0.9863420193050847,
+              "false_occlusion": 0.013657980694915306
+            },
+            {
+              "frame": 270,
+              "leakage": 0.0,
+              "psnr_foreground": 37.39478810406892,
+              "mask_empty": false,
+              "foreground_pixels": 47887,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 376,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      },
+      "classical_flow_assisted": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted",
+        "frames": {
+          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000226.png",
+          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000227.png",
+          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000270.png",
+          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000376.png"
+        },
+        "interval": [
+          226,
+          376
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "226": [
+            1280,
+            720
+          ],
+          "227": [
+            1280,
+            720
+          ],
+          "270": [
+            1280,
+            720
+          ],
+          "376": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          226,
+          270,
+          376
+        ],
+        "frames_with_masks": [
+          226,
+          270,
+          376
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": 0.006061065374712512,
+          "p90": 0.006061065374712512,
+          "success": 0.3333333333333333,
+          "failed": 2,
+          "detection_rate": 0.3333333333333333,
+          "threshold": 0.02,
+          "per_frame": {
+            "226": 0.006061065374712512,
+            "270": null,
+            "376": null
+          }
+        },
+        "fidelity": {
+          "ncc": 0.2313332289405273,
+          "ssim": 0.4180895772764186,
+          "mae": 0.29254599784811336,
+          "structure": 0.19690979579511728
+        },
+        "preservation": {
+          "psnr_outside": 36.60782469768272,
+          "ssim_outside": 0.9919671624446611,
+          "mad_outside": 0.010650480166077614,
+          "background_drift_px": 3.5723436921834946
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 226,
+            "psnr_outside": 33.24190726630545,
+            "ssim_outside": 0.9909339927599516,
+            "mad_outside": 0.0107012540102005,
+            "background_drift_px": 6.933821678161621
+          },
+          {
+            "frame": 270,
+            "psnr_outside": 38.070994633374575,
+            "ssim_outside": 0.9883580328542458,
+            "mad_outside": 0.010599320754408836,
+            "background_drift_px": 0.21086570620536804
+          },
+          {
+            "frame": 376,
+            "psnr_outside": 38.51057219336815,
+            "ssim_outside": 0.9966094617197856,
+            "mad_outside": 0.010650865733623505,
+            "background_drift_px": NaN
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.028884831815958023,
+          "warping_error": 0.021165756508708,
+          "recovered_corner_jitter_px": 1.0910569609294072,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              226,
+              227
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.0,
+          "psnr_foreground": 37.39478810406892,
+          "coverage_visible": 0.9852927072814356,
+          "false_occlusion": 0.014707292718564413,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 1,
+          "n_false_occlusion_frames": 1,
+          "overlay_absent_frames": [
+            270,
+            376
+          ],
+          "per_frame": [
+            {
+              "frame": 226,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": false,
+              "coverage_visible": 0.9852927072814356,
+              "false_occlusion": 0.014707292718564413
+            },
+            {
+              "frame": 270,
+              "leakage": 0.0,
+              "psnr_foreground": 37.39478810406892,
+              "mask_empty": false,
+              "foreground_pixels": 47887,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 376,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      },
+      "source_reencoded": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean",
+        "frames": {
+          "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000226.png",
+          "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000227.png",
+          "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000270.png",
+          "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_sean/frame_000376.png"
+        },
+        "interval": [
+          226,
+          376
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "226": [
+            1280,
+            720
+          ],
+          "227": [
+            1280,
+            720
+          ],
+          "270": [
+            1280,
+            720
+          ],
+          "376": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          226,
+          270,
+          376
+        ],
+        "frames_with_masks": [
+          226,
+          270,
+          376
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": NaN,
+          "p90": NaN,
+          "success": 0.0,
+          "failed": 3,
+          "detection_rate": 0.0,
+          "threshold": 0.02,
+          "per_frame": {
+            "226": null,
+            "270": null,
+            "376": null
+          }
+        },
+        "fidelity": {
+          "ncc": -0.12197215245473166,
+          "ssim": 0.26542620271473477,
+          "mae": 0.4123530089855194,
+          "structure": -0.005938487075639341
+        },
+        "preservation": {
+          "psnr_outside": 33.22012412729254,
+          "ssim_outside": 0.9727816008564455,
+          "mad_outside": 0.01760746135065953,
+          "background_drift_px": 9.641700983047485
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 226,
+            "psnr_outside": 37.25716835641529,
+            "ssim_outside": 0.9931329967064235,
+            "mad_outside": 0.011153439059853554,
+            "background_drift_px": 6.73956823348999
+          },
+          {
+            "frame": 270,
+            "psnr_outside": 24.159738775596907,
+            "ssim_outside": 0.9294361657717422,
+            "mad_outside": 0.0308852456510067,
+            "background_drift_px": 12.54383373260498
+          },
+          {
+            "frame": 376,
+            "psnr_outside": 38.24346524986544,
+            "ssim_outside": 0.9957756400911709,
+            "mad_outside": 0.010783699341118336,
+            "background_drift_px": NaN
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.0366690494120121,
+          "warping_error": 0.032621949911117554,
+          "recovered_corner_jitter_px": NaN,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              226,
+              227
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.214713805416919,
+          "psnr_foreground": 21.989745171770124,
+          "coverage_visible": NaN,
+          "false_occlusion": NaN,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 0,
+          "n_false_occlusion_frames": 0,
+          "overlay_absent_frames": [
+            226,
+            270,
+            376
+          ],
+          "per_frame": [
+            {
+              "frame": 226,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 270,
+              "leakage": 0.214713805416919,
+              "psnr_foreground": 21.989745171770124,
+              "mask_empty": false,
+              "foreground_pixels": 47887,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 376,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      }
+    },
+    "costs": {
+      "generative_original": {
+        "seconds": 2243.5211378799995,
+        "setup_seconds": 750.111669141,
+        "compute": "Google Colab Tesla T4",
+        "invocation_id": "20261108T153824Z_8beedfad"
+      },
+      "generative": {
+        "seconds": 3077.534678878,
+        "setup_seconds": 523.465222048,
+        "compute": "Google Colab Tesla T4",
+        "invocation_id": "20261108T175612Z_352f1d7c"
+      },
+      "classical_independent": {
+        "seconds": 659.6359689235687,
+        "compute": "Local CPU, hardware not recorded",
+        "source_frames": 450
+      },
+      "classical_flow_assisted": {
+        "seconds": 542.8204462528229,
+        "compute": "Local CPU, hardware not recorded",
+        "source_frames": 450
+      }
+    },
+    "attempts": [
+      {
+        "clip_id": "stage4_sean",
+        "role": "original",
+        "invocation_id": "20261108T153824Z_8beedfad",
+        "archive_name": "stage4_sean_results.zip",
+        "archive_sha256": "03da38b5ba1e4dd8f9320f6c86a908c4faf516a0c4ee5f024ea703a33fcfc3b0",
+        "records": "student_files/stage4/run_records/stage4_sean/original_prompt",
+        "output": "outputs/genai/stage4_sean/runs/original_prompt/output.mp4",
+        "output_sha256": "73bb3ad624480677a7b55225d81e4a2ed1a93ba7370beebf9b31137dee83dc66"
+      },
+      {
+        "clip_id": "stage4_sean",
+        "role": "corrected",
+        "invocation_id": "20261108T175612Z_352f1d7c",
+        "archive_name": "stage4_sean_prompt_revision_results.zip",
+        "archive_sha256": "10077b7d34d05751e566289b1aec7d0fdd38112fbf7f604ef8de39b7eb6b1060",
+        "records": "student_files/stage4/run_records/stage4_sean/revised_prompt",
+        "output": "outputs/genai/stage4_sean/runs/revised_prompt/output.mp4",
+        "output_sha256": "e3b5cd0c009755bb50a9dad144ba6d13d405b2b263df28962d8255b88e50b8ba"
+      }
+    ]
+  },
+  "stage4_ruijie": {
+    "conditions": {
+      "mode": "personal_clip_frames",
+      "clip_id": "stage4_ruijie",
+      "artwork": "../../data/artwork/ruijie_orbit.png",
+      "reference": "../../data/personal/stage4_ruijie/reference.png",
+      "frames": {
+        "clean": 210,
+        "occluded": 360,
+        "perspective": 255,
+        "pair": [
+          210,
+          211
+        ],
+        "note": "Audit frames of your clip (inside your cut if you cut it): one with nothing in front of the board, one with the occluder on the board (a mask frame), the one with the strongest perspective, and one consecutive pair (f, f+1) for the temporal terms. Fill in the frame indices and model.interval before the first generation. The three named frames must be distinct and have audit corners; the occluded frame also needs an audit mask. Choose a pair mapping to distinct output frames at the model frame rate. Use the same full audit dictionary for classical and generative temporal interpolation."
+      },
+      "model": {
+        "requirement": "One open-weight video model generates the edited pixels directly. Inference scripts are permitted. One attempt, fixed settings/seed across duration-limited segments; log every segment and technical retry.",
+        "examples": "Use an open-weight video model your hardware supports, for example MiniMax-H3 (MiniMax, 2026, https://huggingface.co/MiniMaxAI/MiniMax-H3), JoyAI-Video-Edit (JD Open Source, 2026, https://github.com/jd-opensource/JoyAI-Video-Edit), LTX-2.3 (Lightricks, 2026, in/outpainting IC-LoRA) or Wan2.1-VACE-14B (Wan, arXiv:2503.20314; VACE, Jiang et al., arXiv:2503.07598); other open-weight models are equally welcome. Wan2.1-VACE-1.3B (Apache 2.0) is a smaller option; memory depends on settings (staff trial: 14 GB, 13 min for a 5.5 s cut at 480p, mask + reference image). The staff example with MiniMax-H3 is in data/genai_oracle/.",
+        "name": "Wan-AI/Wan2.1-VACE-1.3B-diffusers @ ec4d2cb062b548996b179d493fdd05340de702a1 (Diffusers 0.36.0)",
+        "interval": {
+          "start": 210,
+          "end": 360,
+          "note": "leave empty to give the model the whole clip; if the model does not accept a clip this long, the first and last frame of your cut (it must contain the clean / occluded / perspective / pair frames). If you split the clip into consecutive segments instead, run each with the same settings, join the outputs in order into output.mp4, and list the segments in notes."
+        },
+        "output_fps": 16,
+        "output": "outputs/genai/output.mp4 (the model's video) + outputs/genai/frame_XXXXXX.png (audit frames extracted at their source time, original indices)",
+        "seed": 0,
+        "settings": {
+          "width": 832,
+          "height": 480,
+          "num_frames": 81,
+          "num_inference_steps": 20,
+          "guidance_scale": 5.0,
+          "conditioning_scale": 1.0,
+          "negative_prompt": "",
+          "max_sequence_length": 512
+        }
+      },
+      "prompt": {
+        "inputs": [
+          "your clip (or your cut of it)",
+          "artwork",
+          "board masks from your frozen pipeline (only if the model needs a mask)"
+        ],
+        "template": "A handheld video of a rectangular board displaying the reference artwork: large dark-blue ORBIT lettering on a cream background, surrounded by coral-red and teal planets and stars. The board stands on a dark bed beside plush toys. The camera moves around the board, and a black padded object passes in front of it."
+      },
+      "evaluation": "python -m overlaylab.evaluate --frames outputs/genai/frame_*.png --clip <clip_id> --artwork <your_artwork>",
+      "declaration": "model name and visible version, date, settings (steps, resolution, seed), the video you gave it (whole clip, cut, or joined segments), output fps, prompt, time, compute",
+      "log_fields": [
+        "date",
+        "model",
+        "visible_version",
+        "settings",
+        "seed",
+        "interval",
+        "output_fps",
+        "prompt",
+        "inputs",
+        "input_resolution",
+        "output_resolution",
+        "processing_time_s",
+        "compute",
+        "output_path",
+        "notes"
+      ]
+    },
+    "source_indices": [
+      210,
+      211,
+      255,
+      360
+    ],
+    "output_indices": {
+      "210": 0,
+      "211": 1,
+      "255": 24,
+      "360": 80
+    },
+    "reports": {
+      "generative_original": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt",
+        "frames": {
+          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000210.png",
+          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000211.png",
+          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000255.png",
+          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/original_prompt/frame_000360.png"
+        },
+        "interval": [
+          210,
+          360
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "210": [
+            1280,
+            720
+          ],
+          "211": [
+            1280,
+            720
+          ],
+          "255": [
+            1280,
+            720
+          ],
+          "360": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          210,
+          255,
+          360
+        ],
+        "frames_with_masks": [
+          210,
+          255,
+          360
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": NaN,
+          "p90": NaN,
+          "success": 0.0,
+          "failed": 3,
+          "detection_rate": 0.0,
+          "threshold": 0.02,
+          "per_frame": {
+            "210": null,
+            "255": null,
+            "360": null
+          }
+        },
+        "fidelity": {
+          "ncc": 0.14578777454262049,
+          "ssim": 0.25181816362979154,
+          "mae": 0.48375798265139264,
+          "structure": -0.011967695059701139
+        },
+        "preservation": {
+          "psnr_outside": 32.461260939776025,
+          "ssim_outside": 0.9443919361381568,
+          "mad_outside": 0.020187587787707646,
+          "background_drift_px": 0.5615585347016653
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 210,
+            "psnr_outside": 32.61346101394593,
+            "ssim_outside": 0.9571766706328296,
+            "mad_outside": 0.020273692905902863,
+            "background_drift_px": 0.412095308303833
+          },
+          {
+            "frame": 255,
+            "psnr_outside": 32.20648318343738,
+            "ssim_outside": 0.9445640309494321,
+            "mad_outside": 0.020825905725359917,
+            "background_drift_px": 0.7784813642501831
+          },
+          {
+            "frame": 360,
+            "psnr_outside": 32.56383862194477,
+            "ssim_outside": 0.9314351068322083,
+            "mad_outside": 0.01946316473186016,
+            "background_drift_px": 0.4940989315509796
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.08704370260238647,
+          "warping_error": 0.05849622189998627,
+          "recovered_corner_jitter_px": NaN,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              210,
+              211
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.000424868998725393,
+          "psnr_foreground": 34.58012011010532,
+          "coverage_visible": NaN,
+          "false_occlusion": NaN,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 0,
+          "n_false_occlusion_frames": 0,
+          "overlay_absent_frames": [
+            210,
+            255,
+            360
+          ],
+          "per_frame": [
+            {
+              "frame": 210,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 255,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 360,
+              "leakage": 0.000424868998725393,
+              "psnr_foreground": 34.58012011010532,
+              "mask_empty": false,
+              "foreground_pixels": 70610,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      },
+      "generative": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt",
+        "frames": {
+          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000210.png",
+          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000211.png",
+          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000255.png",
+          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/runs/revised_prompt/frame_000360.png"
+        },
+        "interval": [
+          210,
+          360
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "210": [
+            1280,
+            720
+          ],
+          "211": [
+            1280,
+            720
+          ],
+          "255": [
+            1280,
+            720
+          ],
+          "360": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          210,
+          255,
+          360
+        ],
+        "frames_with_masks": [
+          210,
+          255,
+          360
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": NaN,
+          "p90": NaN,
+          "success": 0.0,
+          "failed": 3,
+          "detection_rate": 0.0,
+          "threshold": 0.02,
+          "per_frame": {
+            "210": null,
+            "255": null,
+            "360": null
+          }
+        },
+        "fidelity": {
+          "ncc": 0.14592972041962093,
+          "ssim": 0.25128508573628755,
+          "mae": 0.48231248060862225,
+          "structure": -0.011721109006153446
+        },
+        "preservation": {
+          "psnr_outside": 33.0824875389083,
+          "ssim_outside": 0.9427560306225828,
+          "mad_outside": 0.018687746797998745,
+          "background_drift_px": 0.5948803424835205
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 210,
+            "psnr_outside": 33.33470240849432,
+            "ssim_outside": 0.9569599590379113,
+            "mad_outside": 0.018619373440742493,
+            "background_drift_px": 0.3998953104019165
+          },
+          {
+            "frame": 255,
+            "psnr_outside": 32.80458929016296,
+            "ssim_outside": 0.9435636386394891,
+            "mad_outside": 0.01922859065234661,
+            "background_drift_px": 0.8358060121536255
+          },
+          {
+            "frame": 360,
+            "psnr_outside": 33.10817091806764,
+            "ssim_outside": 0.927744494190348,
+            "mad_outside": 0.018215276300907135,
+            "background_drift_px": 0.5489397048950195
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.08803272247314453,
+          "warping_error": 0.058879464864730835,
+          "recovered_corner_jitter_px": NaN,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              210,
+              211
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.0003823820988528537,
+          "psnr_foreground": 34.4307329779967,
+          "coverage_visible": NaN,
+          "false_occlusion": NaN,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 0,
+          "n_false_occlusion_frames": 0,
+          "overlay_absent_frames": [
+            210,
+            255,
+            360
+          ],
+          "per_frame": [
+            {
+              "frame": 210,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 255,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 360,
+              "leakage": 0.0003823820988528537,
+              "psnr_foreground": 34.4307329779967,
+              "mask_empty": false,
+              "foreground_pixels": 70610,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      },
+      "classical_independent": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent",
+        "frames": {
+          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000210.png",
+          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000211.png",
+          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000255.png",
+          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_independent/frame_000360.png"
+        },
+        "interval": [
+          210,
+          360
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "210": [
+            1280,
+            720
+          ],
+          "211": [
+            1280,
+            720
+          ],
+          "255": [
+            1280,
+            720
+          ],
+          "360": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          210,
+          255,
+          360
+        ],
+        "frames_with_masks": [
+          210,
+          255,
+          360
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": NaN,
+          "p90": NaN,
+          "success": 0.0,
+          "failed": 3,
+          "detection_rate": 0.0,
+          "threshold": 0.02,
+          "per_frame": {
+            "210": null,
+            "255": null,
+            "360": null
+          }
+        },
+        "fidelity": {
+          "ncc": 0.144231821690863,
+          "ssim": 0.2536774782236025,
+          "mae": 0.4794576168060303,
+          "structure": -0.010172425414843717
+        },
+        "preservation": {
+          "psnr_outside": 37.55636978288053,
+          "ssim_outside": 0.9722385981376954,
+          "mad_outside": 0.010872813252111277,
+          "background_drift_px": 0.11979687462250392
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 210,
+            "psnr_outside": 37.592419919689355,
+            "ssim_outside": 0.9757283083236158,
+            "mad_outside": 0.010827766731381416,
+            "background_drift_px": 0.15958772599697113
+          },
+          {
+            "frame": 255,
+            "psnr_outside": 37.28037392582428,
+            "ssim_outside": 0.9723635047940586,
+            "mad_outside": 0.011159762740135193,
+            "background_drift_px": 0.11061403900384903
+          },
+          {
+            "frame": 360,
+            "psnr_outside": 37.79631550312797,
+            "ssim_outside": 0.9686239812954123,
+            "mad_outside": 0.010630910284817219,
+            "background_drift_px": 0.08918885886669159
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.06688821315765381,
+          "warping_error": 0.021050414070487022,
+          "recovered_corner_jitter_px": NaN,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              210,
+              211
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.0,
+          "psnr_foreground": 38.90210188678494,
+          "coverage_visible": NaN,
+          "false_occlusion": NaN,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 0,
+          "n_false_occlusion_frames": 0,
+          "overlay_absent_frames": [
+            210,
+            255,
+            360
+          ],
+          "per_frame": [
+            {
+              "frame": 210,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 255,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 360,
+              "leakage": 0.0,
+              "psnr_foreground": 38.90210188678494,
+              "mask_empty": false,
+              "foreground_pixels": 70610,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      },
+      "classical_flow_assisted": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted",
+        "frames": {
+          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000210.png",
+          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000211.png",
+          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000255.png",
+          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_ruijie/classical_flow_assisted/frame_000360.png"
+        },
+        "interval": [
+          210,
+          360
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "210": [
+            1280,
+            720
+          ],
+          "211": [
+            1280,
+            720
+          ],
+          "255": [
+            1280,
+            720
+          ],
+          "360": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          210,
+          255,
+          360
+        ],
+        "frames_with_masks": [
+          210,
+          255,
+          360
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": NaN,
+          "p90": NaN,
+          "success": 0.0,
+          "failed": 3,
+          "detection_rate": 0.0,
+          "threshold": 0.02,
+          "per_frame": {
+            "210": null,
+            "255": null,
+            "360": null
+          }
+        },
+        "fidelity": {
+          "ncc": 0.144231821690863,
+          "ssim": 0.2536774782236025,
+          "mae": 0.4794576168060303,
+          "structure": -0.010172425414843717
+        },
+        "preservation": {
+          "psnr_outside": 37.55636978288053,
+          "ssim_outside": 0.9722385981376954,
+          "mad_outside": 0.010872813252111277,
+          "background_drift_px": 0.11979687462250392
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 210,
+            "psnr_outside": 37.592419919689355,
+            "ssim_outside": 0.9757283083236158,
+            "mad_outside": 0.010827766731381416,
+            "background_drift_px": 0.15958772599697113
+          },
+          {
+            "frame": 255,
+            "psnr_outside": 37.28037392582428,
+            "ssim_outside": 0.9723635047940586,
+            "mad_outside": 0.011159762740135193,
+            "background_drift_px": 0.11061403900384903
+          },
+          {
+            "frame": 360,
+            "psnr_outside": 37.79631550312797,
+            "ssim_outside": 0.9686239812954123,
+            "mad_outside": 0.010630910284817219,
+            "background_drift_px": 0.08918885886669159
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.06688821315765381,
+          "warping_error": 0.021050414070487022,
+          "recovered_corner_jitter_px": NaN,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              210,
+              211
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 0.0,
+          "psnr_foreground": 38.90210188678494,
+          "coverage_visible": NaN,
+          "false_occlusion": NaN,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 0,
+          "n_false_occlusion_frames": 0,
+          "overlay_absent_frames": [
+            210,
+            255,
+            360
+          ],
+          "per_frame": [
+            {
+              "frame": 210,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 255,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 360,
+              "leakage": 0.0,
+              "psnr_foreground": 38.90210188678494,
+              "mask_empty": false,
+              "foreground_pixels": 70610,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      },
+      "source_reencoded": {
+        "mode": "frames",
+        "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie",
+        "frames": {
+          "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000210.png",
+          "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000211.png",
+          "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000255.png",
+          "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/source_baseline/stage4_ruijie/frame_000360.png"
+        },
+        "interval": [
+          210,
+          360
+        ],
+        "offset": 0,
+        "output_resolution": {
+          "210": [
+            1280,
+            720
+          ],
+          "211": [
+            1280,
+            720
+          ],
+          "255": [
+            1280,
+            720
+          ],
+          "360": [
+            1280,
+            720
+          ]
+        },
+        "original_resolution": [
+          1280,
+          720
+        ],
+        "resized": false,
+        "resized_frames": [],
+        "frames_with_corners": [
+          210,
+          255,
+          360
+        ],
+        "frames_with_masks": [
+          210,
+          255,
+          360
+        ],
+        "missing_frames": [],
+        "placement": {
+          "n": 3,
+          "median": NaN,
+          "p90": NaN,
+          "success": 0.0,
+          "failed": 3,
+          "detection_rate": 0.0,
+          "threshold": 0.02,
+          "per_frame": {
+            "210": null,
+            "255": null,
+            "360": null
+          }
+        },
+        "fidelity": {
+          "ncc": 0.14445784411966398,
+          "ssim": 0.2513830485484155,
+          "mae": 0.4796464741230011,
+          "structure": -0.011288512080698606
+        },
+        "preservation": {
+          "psnr_outside": 36.585783374107734,
+          "ssim_outside": 0.9633012195315551,
+          "mad_outside": 0.01185121356199185,
+          "background_drift_px": 0.27998875578244525
+        },
+        "preservation_per_frame": [
+          {
+            "frame": 210,
+            "psnr_outside": 36.18033568556492,
+            "ssim_outside": 0.9640101166943474,
+            "mad_outside": 0.012468751519918442,
+            "background_drift_px": 0.2706412672996521
+          },
+          {
+            "frame": 255,
+            "psnr_outside": 37.070745905952926,
+            "ssim_outside": 0.9681102912986325,
+            "mad_outside": 0.011275652796030045,
+            "background_drift_px": 0.27063223719596863
+          },
+          {
+            "frame": 360,
+            "psnr_outside": 36.50626853080536,
+            "ssim_outside": 0.9577832506016857,
+            "mad_outside": 0.011809236370027065,
+            "background_drift_px": 0.2986927628517151
+          }
+        ],
+        "temporal": {
+          "stride": 1,
+          "flicker": 0.0900196060538292,
+          "warping_error": 0.06083663925528526,
+          "recovered_corner_jitter_px": NaN,
+          "pairs": 1,
+          "pair_frames": [
+            [
+              210,
+              211
+            ]
+          ]
+        },
+        "occlusion": {
+          "leakage": 2.83245999150262e-05,
+          "psnr_foreground": 38.1220660385594,
+          "coverage_visible": NaN,
+          "false_occlusion": NaN,
+          "mask_frames": 3,
+          "empty_mask_frames": 2,
+          "n_coverage_frames": 0,
+          "n_false_occlusion_frames": 0,
+          "overlay_absent_frames": [
+            210,
+            255,
+            360
+          ],
+          "per_frame": [
+            {
+              "frame": 210,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 255,
+              "leakage": NaN,
+              "psnr_foreground": NaN,
+              "mask_empty": true,
+              "foreground_pixels": 0,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            },
+            {
+              "frame": 360,
+              "leakage": 2.83245999150262e-05,
+              "psnr_foreground": 38.1220660385594,
+              "mask_empty": false,
+              "foreground_pixels": 70610,
+              "overlay_absent": true,
+              "coverage_visible": NaN,
+              "false_occlusion": NaN
+            }
+          ]
+        }
+      }
+    },
+    "costs": {
+      "generative_original": {
+        "seconds": 2335.907309811,
+        "setup_seconds": 720.731068202,
+        "compute": "Google Colab Tesla T4",
+        "invocation_id": "20261108T153457Z_8816156e"
+      },
+      "generative": {
+        "seconds": 2182.135907987,
+        "setup_seconds": 462.84178041100006,
+        "compute": "Google Colab Tesla T4",
+        "invocation_id": "20261108T173545Z_c97d606a"
+      },
+      "classical_independent": {
+        "seconds": 129.88333201408386,
+        "compute": "Local CPU, hardware not recorded",
+        "source_frames": 450
+      },
+      "classical_flow_assisted": {
+        "seconds": 129.94504404067993,
+        "compute": "Local CPU, hardware not recorded",
+        "source_frames": 450
+      }
+    },
+    "attempts": [
+      {
+        "clip_id": "stage4_ruijie",
+        "role": "original",
+        "invocation_id": "20261108T153457Z_8816156e",
+        "archive_name": "stage4_ruijie_results.zip",
+        "archive_sha256": "36b082adb7d85e0f2ba16ca487201eb566ed729ee2d7f1520fe706075855260f",
+        "records": "student_files/stage4/run_records/stage4_ruijie/original_prompt",
+        "output": "outputs/genai/stage4_ruijie/runs/original_prompt/output.mp4",
+        "output_sha256": "e92ab6c94f561e408862ad4079c4d3e61df11d1a938daf8fc991ae71f16e5ac7"
+      },
+      {
+        "clip_id": "stage4_ruijie",
+        "role": "corrected",
+        "invocation_id": "20261108T173545Z_c97d606a",
+        "archive_name": "stage4_ruijie_prompt_revision_results.zip",
+        "archive_sha256": "e1e21d7f486a7575ba7b4027e5bbcf44108f5c644d0d1c6ac15e423076f162b9",
+        "records": "student_files/stage4/run_records/stage4_ruijie/revised_prompt",
+        "output": "outputs/genai/stage4_ruijie/runs/revised_prompt/output.mp4",
+        "output_sha256": "9201f27bfb6761cd8b3cd2536cced47f3c0084f2253b5920e3b275225a38e00f"
+      }
+    ]
+  }
+}

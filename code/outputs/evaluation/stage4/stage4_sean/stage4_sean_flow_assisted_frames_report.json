@@ -1,0 +1,158 @@
+{
+  "mode": "frames",
+  "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted",
+  "frames": {
+    "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000226.png",
+    "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000227.png",
+    "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000270.png",
+    "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4/comparison_frames/stage4_sean/classical_flow_assisted/frame_000376.png"
+  },
+  "interval": [
+    226,
+    376
+  ],
+  "offset": 0,
+  "output_resolution": {
+    "226": [
+      1280,
+      720
+    ],
+    "227": [
+      1280,
+      720
+    ],
+    "270": [
+      1280,
+      720
+    ],
+    "376": [
+      1280,
+      720
+    ]
+  },
+  "original_resolution": [
+    1280,
+    720
+  ],
+  "resized": false,
+  "resized_frames": [],
+  "frames_with_corners": [
+    226,
+    270,
+    376
+  ],
+  "frames_with_masks": [
+    226,
+    270,
+    376
+  ],
+  "missing_frames": [],
+  "placement": {
+    "n": 3,
+    "median": 0.006061065374712512,
+    "p90": 0.006061065374712512,
+    "success": 0.3333333333333333,
+    "failed": 2,
+    "detection_rate": 0.3333333333333333,
+    "threshold": 0.02,
+    "per_frame": {
+      "226": 0.006061065374712512,
+      "270": null,
+      "376": null
+    }
+  },
+  "fidelity": {
+    "ncc": 0.2313332289405273,
+    "ssim": 0.4180895772764186,
+    "mae": 0.29254599784811336,
+    "structure": 0.19690979579511728
+  },
+  "preservation": {
+    "psnr_outside": 36.60782469768272,
+    "ssim_outside": 0.9919671624446611,
+    "mad_outside": 0.010650480166077614,
+    "background_drift_px": 3.5723436921834946
+  },
+  "preservation_per_frame": [
+    {
+      "frame": 226,
+      "psnr_outside": 33.24190726630545,
+      "ssim_outside": 0.9909339927599516,
+      "mad_outside": 0.0107012540102005,
+      "background_drift_px": 6.933821678161621
+    },
+    {
+      "frame": 270,
+      "psnr_outside": 38.070994633374575,
+      "ssim_outside": 0.9883580328542458,
+      "mad_outside": 0.010599320754408836,
+      "background_drift_px": 0.21086570620536804
+    },
+    {
+      "frame": 376,
+      "psnr_outside": 38.51057219336815,
+      "ssim_outside": 0.9966094617197856,
+      "mad_outside": 0.010650865733623505,
+      "background_drift_px": NaN
+    }
+  ],
+  "temporal": {
+    "stride": 1,
+    "flicker": 0.028884831815958023,
+    "warping_error": 0.021165756508708,
+    "recovered_corner_jitter_px": 1.0910569609294072,
+    "pairs": 1,
+    "pair_frames": [
+      [
+        226,
+        227
+      ]
+    ]
+  },
+  "occlusion": {
+    "leakage": 0.0,
+    "psnr_foreground": 37.39478810406892,
+    "coverage_visible": 0.9852927072814356,
+    "false_occlusion": 0.014707292718564413,
+    "mask_frames": 3,
+    "empty_mask_frames": 2,
+    "n_coverage_frames": 1,
+    "n_false_occlusion_frames": 1,
+    "overlay_absent_frames": [
+      270,
+      376
+    ],
+    "per_frame": [
+      {
+        "frame": 226,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": false,
+        "coverage_visible": 0.9852927072814356,
+        "false_occlusion": 0.014707292718564413
+      },
+      {
+        "frame": 270,
+        "leakage": 0.0,
+        "psnr_foreground": 37.39478810406892,
+        "mask_empty": false,
+        "foreground_pixels": 47887,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 376,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      }
+    ]
+  }
+}
