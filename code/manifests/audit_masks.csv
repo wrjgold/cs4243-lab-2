@@ -1,0 +1,11 @@
+clip_id,frame,frame_path,mask_path,annotator,occluder,annotated_before_inference
+stage4_ruijie,210,../../data/personal/stage4_ruijie/frames/frame_000210.png,../../data/personal/stage4_ruijie/masks/mask_000210.png,Wang Ruijie,none,yes
+stage4_ruijie,255,../../data/personal/stage4_ruijie/frames/frame_000255.png,../../data/personal/stage4_ruijie/masks/mask_000255.png,Wang Ruijie,none,yes
+stage4_ruijie,345,../../data/personal/stage4_ruijie/frames/frame_000345.png,../../data/personal/stage4_ruijie/masks/mask_000345.png,Wang Ruijie,black padded object,yes
+stage4_ruijie,360,../../data/personal/stage4_ruijie/frames/frame_000360.png,../../data/personal/stage4_ruijie/masks/mask_000360.png,Wang Ruijie,black padded object,yes
+stage4_ruijie,375,../../data/personal/stage4_ruijie/frames/frame_000375.png,../../data/personal/stage4_ruijie/masks/mask_000375.png,Wang Ruijie,black padded object,yes
+stage4_sean,226,../../data/personal/stage4_sean/frames/frame_000226.png,../../data/personal/stage4_sean/masks/mask_000226.png,Sean Tham,none,yes
+stage4_sean,255,../../data/personal/stage4_sean/frames/frame_000255.png,../../data/personal/stage4_sean/masks/mask_000255.png,Sean Tham,purple patterned object,yes
+stage4_sean,270,../../data/personal/stage4_sean/frames/frame_000270.png,../../data/personal/stage4_sean/masks/mask_000270.png,Sean Tham,purple patterned object,yes
+stage4_sean,300,../../data/personal/stage4_sean/frames/frame_000300.png,../../data/personal/stage4_sean/masks/mask_000300.png,Sean Tham,purple patterned object,yes
+stage4_sean,376,../../data/personal/stage4_sean/frames/frame_000376.png,../../data/personal/stage4_sean/masks/mask_000376.png,Sean Tham,none,yes

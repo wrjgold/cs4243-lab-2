@@ -12,3 +12,13 @@ __pycache__/
 /code/student_files/stage2/blur_diagnostics.json
 /code/student_files/stage2/monitor_events.json
 /code/student_files/stage2/common_sequence.json
+
+# Local Stage 4 preparation and Colab setup helpers.
+/code/student_files/stage4_sean/
+/code/student_files/stage4_ruijie/
+/code/student_files/stage4_shared/preparation_archive.zip
+
+# Local raw recordings and regenerable annotation previews, excluded from submission.
+/data/stage4_sean/
+/data/stage4_ruijie/
+/code/outputs/annotation_check/
