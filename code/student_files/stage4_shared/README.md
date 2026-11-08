@@ -148,6 +148,41 @@ conditions are preserved next to their separate outputs. To use the starter
 Notebook 4 for a different active clip, copy that person's conditions into the
 active manifest and preserve the other person's archived outputs first.
 
+## Complete the assignment's Notebook 4
+
+The helper does not replace the required notebook analysis. Part I evaluates
+both full-length classical videos and provides the Scorecard to complete with
+measured values. Part II exports the model inputs, extracts the generated
+comparison frames, checks the log and evaluates the same selected frames for
+both classical variants and VACE. Finish the comparison table, staff-oracle
+discussion and Question 5 reflection from the actual evidence.
+
+The starter notebook reads one active clip and expects the active generative
+video at `outputs/genai/output.mp4`. After importing a person's results, copy
+that person's conditions and raw video into the starter's active locations.
+For Ruijie, from `code/`:
+
+```bash
+cp outputs/genai/stage4_ruijie/conditions.json manifests/genai_conditions.json
+cp outputs/genai/stage4_ruijie/output.mp4 outputs/genai/output.mp4
+```
+
+For Sean, use `stage4_sean` in both commands. Restart the Notebook 4 kernel and
+run in order. Do not run model generation again. The starter's input-export
+cell can run normally even if the helper already built the fixed input ZIP.
+Its frame-extraction cell removes stale active PNGs before extracting the
+selected indices. The helper uses the same cubic resizing for its extracts.
+The archived raw video and conditions remain intact in each person's folder.
+Preserve each person's evaluator reports and notebook evidence before switching
+the active clip, since the starter uses shared report filenames.
+
+VACE uses a short cut because 81 output frames at 16 fps span five seconds.
+Both classical variants still process the full 15-second source clip. The
+comparison frames and temporal pair remain fixed inside that cut. The board
+masks come from flow-assisted statistics because Notebook 4 Part II section 1
+explicitly uses `<clip_id>_flow_assisted_stats.json`, rather than selecting a
+variant after inspecting personal-clip results.
+
 ## Verification performed during preparation
 
 Prepared-media metadata and hashes, both annotation sets, notebook syntax and

@@ -138,7 +138,7 @@ def extract_frames(video, indices, destination, original_size, output_fps=None, 
             if not ok:
                 raise RuntimeError(f"Cannot extract output index {k} for source frame {f}.")
             if (frame.shape[1], frame.shape[0]) != original_size:
-                frame = cv2.resize(frame, original_size, interpolation=cv2.INTER_LINEAR)
+                frame = cv2.resize(frame, original_size, interpolation=cv2.INTER_CUBIC)
             cv2.imwrite(str(destination / f"frame_{f:06d}.png"), frame)
     finally:
         cap.release()
