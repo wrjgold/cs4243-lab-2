@@ -5,3 +5,10 @@ __pycache__/
 .DS_Store
 /data/common_clip/frames/
 .vscode/
+
+# Stage 2 development caches and detailed diagnostic exports.
+/code/student_files/stage2/validation_ratio_*.json
+/code/student_files/stage2/*_tracking.json
+/code/student_files/stage2/blur_diagnostics.json
+/code/student_files/stage2/monitor_events.json
+/code/student_files/stage2/common_sequence.json

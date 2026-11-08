@@ -339,7 +339,7 @@ def failure_monitor(stats: Sequence[Dict], config: MonitorConfig) -> List[Tuple[
         consecutive = 0
         for name, maximum in maxima:
             value = frame[name]
-            if np.isfinite(value) and value > maximum:
+            if not np.isnan(value) and value > maximum:
                 trigger = name
                 break
         # Request reinitialisation for a breached limit; otherwise accept the frame.
