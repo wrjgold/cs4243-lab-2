@@ -432,8 +432,114 @@ In the selected combined events (Table 2.3 and Figure 2.5), model loss takes pre
   - Forms a visible-board mask from artwork coverage minus occlusion. With feathering enabled, a distance transform reduces alpha near visible-region boundaries; with feathering disabled, alpha is exactly one on visible board pixels and zero elsewhere.
   - Optionally fits a shared gain and offset to the visible artwork and frame pixels, then blends the artwork and original frame with the alpha map. It returns an RGB float32 frame and an alpha map bounded by zero and one.
 
+### Validation choices and frozen settings
+
+The default difference configuration reached mean IoU **0.911230** on native **1280 × 720** common validation masks **96, 192 and 272**, using independent homographies from the frozen Stage 1 localiser. Its masks include falsely masked board pixels and missed foreground. These errors motivate testing the strong/weak levels that control seed formation and region growth, and the minimum area that removes small components. Localisation, illumination compensation and the opening kernel remain fixed during this search. Test and stress masks do not select any settings.
+
+We maximise mean validation IoU over **216** candidates, using the tie rule in Code Explanation to select **0.30**, the centre of the best strong-threshold plateau **0.15–0.45**. Remaining ties favour weak and area values nearest the defaults. The default strong level **0.25** scores equally well, so this change provides no measured IoU improvement. We then compare opening radii 2 and 0 with the selected thresholds and area fixed, choosing the higher mean IoU and retaining radius 2 on a tie. Table 3.1 summarises this conditional selection, rather than a joint radius/threshold search.
+
+*Table 3.1. Added validation summary for independent localisation on common masks 96, 192 and 272 at 1280 × 720. Each row averages the same three mask IoUs.*
+
+| Native common validation trial | Strong | Weak | Minimum area (px) | Radius (px) | Mean IoU |
+|---|---|---|---|---|---|
+| Default | .25 | .12 | 150 | 2 | 0.911230 |
+| Lower weak threshold | .30 | .10 | 150 | 2 | 0.907525 |
+| Plateau centre (selected) | .30 | .12 | 150 | 2 | 0.911230 |
+| Larger component cutoff | .30 | .12 | 600 | 2 | 0.911230 |
+| Opening disabled | .30 | .12 | 150 | 0 | 0.905710 |
+
+The final settings are strong **0.30**, weak **0.12**, minimum area **150 original-video pixels**, opening radius **2**, connectivity **8**, and gain quantile **0.5**. Compositing retains feather **3** and `match_gain=False`. Only the strong level changes from `OcclusionConfig()` defaults. Stage 1, Stage 2 and RANSAC seed **0** remain fixed. The **2%** corner-error tolerance justified in Stage 1 remains a localisation criterion, not a mask-IoU cutoff.
+
+The native configuration is saved in `outputs/thresholds.json`. All real-clip results below use **1280 × 720** inputs. Table 3.2 reports the flow-assisted pipeline, while the other tables and figures use independent localisation for diagnosis. Notebook 3's **640-pixel previews** are separate. Its §6.2 saves the native search and diagnostic measurements in `student_files/stage3/evidence.json`, alongside the notebook's executed outputs.
+
+### Utility routines used
+
+Stage 3 uses our `warp_artwork`, the supplied image conversion/loading helpers and NumPy reductions for the gain/offset fit. Hysteresis uses a queue from `collections.deque`. Mask cleaning uses `cv2.morphologyEx` with a disc and `cv2.connectedComponentsWithStats`, while feathering uses `cv2.distanceTransform`. Metrics use the supplied `overlaylab.metrics` routines. Notebook 3 §6 permits an evaluation-only `cv2.getPerspectiveTransform` fallback to annotated corners when independent localisation fails or exceeds the frozen 2% tolerance. Native diagnostics use it on **2/6 combined masks** (212 and 314) and **1/3 viewpoint masks** (288), with no fallback on common test masks. The pipeline hides these stress frames instead, so fallback results never enter videos or Table 3.2.
+
 ### Stress table (Stage 3)
+
+*Table 3.2. Generated Stage 3 stress table, pasted unchanged with its supplied note. Results use the frozen full-resolution flow-assisted runs and artwork `ad`.*
+
+| row | eligible masks | scored masks | hidden masks | missing masks | overlay absent | IoU | F1 | leakage | baseline leakage | false occlusion |
+|---|---|---|---|---|---|---|---|---|---|---|
+| common · validation | 3 | 3 | 0 | 0 | 0 | 0.909 | 0.952 | 1.51% | 95.95% | n/a |
+| common · test | 3 | 3 | 0 | 0 | 0 | 0.920 | 0.958 | 0.77% | 93.23% | n/a |
+| combined (coke_unconstrained) | 6 | 4 | 2 | 0 | 2 | 0.934 | 0.965 | 0.19% | n/a | n/a |
+| viewpoint (coke_perspective) | 3 | 0 | 1 | 0 | 1 | n/a | n/a | n/a | n/a | 8.95% |
+
+IoU / F1 from the occlusion masks saved by `run_pipeline` on the ground-truth mask frames (frames on which the overlay is hidden are not scored); leakage, baseline leakage and false occlusion from `overlaylab.evaluate` on the finished videos. The viewpoint clip has empty masks: only false occlusion applies.
+
+Table 3.2's **viewpoint** row records **8.95%** false occlusion on the **two** frames with detected artwork, 128 and 224. Hidden frame **288** is excluded from coverage. Foreground IoU/F1 do not apply because all three ground-truth masks are empty, which explains the zero scored-mask count. This finished-video measure is a pixel-change proxy rather than a direct mask fraction.
+
+The **combined** row's IoU/F1 describe **four of six** mask frames. Frames **212 and 314** are hidden rather than missing. Leakage averages all six foreground-mask frames, including the two hidden frames with zero painted foreground, so low leakage alone does not establish successful visible overlays. On the **common test** masks, leakage falls from **93.23%** without occlusion handling to **0.77%** with it because the mask protects the card from the artwork.
+
+### Boundary evidence and an observed mask error
+
+The card remains in front of the advertisement on both crossings in Figure 3.1, but accurate region overlap does not imply an equally accurate contour. Table 3.3 gives direct metrics for **common test frame 144** and **combined test frame 216**, using independent frozen-localiser homographies without fallback.
+
+*Table 3.3. Added summary of the two native boundary examples in Notebook 3 §6.1. Direct leakage is the fraction of annotated foreground with alpha > 0.5. The baseline uses the same frame, homography, artwork coverage and feathering with occlusion disabled.*
+
+| Native diagnostic frame | H source | IoU | F1 | Boundary F1 (2 px) | Alpha leakage | Baseline alpha leakage |
+|---|---|---|---|---|---|---|
+| Common test 144 | frozen | 0.9369 | 0.9674 | 0.4377 | 0.817% | 95.650% |
+| Combined test 216 | frozen | 0.9415 | 0.9699 | 0.3514 | 0.146% | 99.991% |
+
+![Native common and combined crossing boundaries](student_files/stage3/native_boundaries.png)
+
+*Figure 3.1. Native independent-localiser diagnostics for common test frame 144 (upper row) and combined test frame 216 (lower row). Columns show compensated difference, mask errors against ground truth, and the composite. Red denotes falsely masked pixels and cyan denotes missed annotated foreground. Crops illustrate boundaries and do not change scoring.*
+
+In Figure 3.1 (lower middle), the red band extends beyond the annotated card's lower and right edges. The evidence log records mean compensated difference **0.3861** on the frame's false-positive pixels, above the **0.30** strong level. These residuals can seed false foreground and grow into connected weak responses. Blur and residual registration error are consistent with the displaced contour, although this example does not isolate their contributions. Table 3.3's boundary F1 of **0.3514**, despite IoU **0.9415**, exposes the contour error. Feathering softens the transition in Figure 3.1 (lower right) without correcting the mask.
+
 ### Question 4 — Occlusion
+
+#### Recoverable and ambiguous occluders
+
+Motion-compensated differencing recovers an occluder when its colour differs sufficiently from the aligned clean reference and its connected region survives cleaning. Figure 3.1's card provides that contrast across most of its area. An occluder coloured like the board can remain below the weak threshold, while a weak response disconnected from every strong seed is also lost. Hysteresis cannot recover a foreground region that supplies no distinguishing appearance signal.
+
+A shadow or specular highlight can instead produce a false foreground response because both alter appearance without placing an object in front of the board. Fitting gain and offset suppresses approximately uniform illumination changes, but one global fit cannot explain a local shadow or view-dependent reflection. A stopped occluder can remain detected because the comparison is with the clean board reference, not with the previous video frame. Stopping alone does not remove its difference signal, although board-like colour remains ambiguous.
+
+#### Strong threshold and minimum component area
+
+With the weak threshold and other settings fixed, raising the strong threshold can shrink the mask or leave it unchanged because it removes strong seeds. A connected weak region disappears only when no surviving seed reaches it. Raising the minimum area removes entire small components. Either change can reduce false masks, but removing true foreground protection can increase leakage.
+
+On **common validation frame 192**, Table 3.4 shows no change when strong rises from **0.30 to 0.45** or minimum area rises from **150 to 900 pixels**. Surviving seeds still reach the same weak card region, and its retained components exceed both area cutoffs. The unchanged result therefore reflects connectivity and component size, rather than showing that these parameters never affect the mask.
+
+*Table 3.4. Added fixed-setting ablation summary on common validation frame 192 at 1280 × 720 with independent localisation. Opening radius 2 and all unlisted settings remain fixed. Leakage is measured directly from alpha.*
+
+| Common validation frame 192 | Strong / weak | Minimum area (px) | Mask pixels | IoU | Alpha leakage |
+|---|---|---|---|---|---|
+| selected | 0.30 / 0.12 | 150 | 65,405 | 0.927669 | 0.1979% |
+| strong × 1.5 | 0.45 / 0.12 | 150 | 65,405 | 0.927669 | 0.1979% |
+| minimum area × 6 | 0.30 / 0.12 | 900 | 65,405 | 0.927669 | 0.1979% |
+| no hysteresis | 0.30 / 0.30 | 150 | 30,466 | 0.470529 | 42.1510% |
+
+#### Hysteresis, thin occluders and opening
+
+Hysteresis preserves weak foreground connected to a strong seed. When weak equals strong on frame 192, Table 3.4 shows a mask reduction from **65,405 to 30,466 pixels**, with leakage rising from **0.1979% to 42.1510%**. The intermediate differences that previously joined the mask are no longer accepted, which explains the loss of the card's weaker responses.
+
+Notebook 3's controlled pole probe shows why opening works against this recovery. At frozen radius **2**, ideal vertical poles **1–4 pixels** wide disappear and the thinnest survivor is **5 native pixels**, matching the disc's **2r+1** diameter. Hysteresis retains **99.625%** of that pole's weak segment, compared with **0%** without hysteresis. With radius 0, even a one-pixel pole survives. Opening therefore removes thin structures after hysteresis recovers them. This probe isolates cleaning and does not establish whether a real blurred or board-coloured pole supplies a detectable difference signal.
+
+Radius 2 nevertheless improves mean validation IoU from **0.905710 to 0.911230** in Table 3.1. The §6.2 evidence log also records mean false-positive pixels falling from **2,430.3 to 2,202.0**, while direct leakage rises slightly from **1.2815% to 1.3502%**. This supports the selected radius for suppressing false protrusions, with a measured cost to foreground protection.
+
+#### False occlusion under strong perspective
+
+False occlusion occurs when the differencing step mistakes appearance changes for foreground, even though a correct homography aligns the board geometrically. Strong perspective compresses texture unevenly, so the warped reference can differ from the observed frame in sampling and blur. Local lighting and view-dependent reflections can also change colours. The single global gain-and-offset correction in `compensated_difference` cannot remove all these local differences, leaving residuals that thresholding and hysteresis can turn into false foreground.
+
+Figure 3.2 (middle row, third and fourth columns) locates these responses around faces, lettering and high-contrast boundaries on **viewpoint test frame 224**. Table 3.5 records its **7.181%** direct false-mask fraction. Frame **288** still masks **11.354%** with **GT-fallback**, demonstrating that failure to find a homography is not necessary for false occlusion. The images are consistent with sampling and local appearance changes but do not isolate their individual causes. Residual registration can also contribute on frozen-localiser frames.
+
+*Table 3.5. Added native viewpoint mask-isolation summary on the three supplied test mask frames at 1280 × 720. Corner error scores the independent frozen localiser before fallback. Direct false occlusion divides masked visible-board pixels by annotated visible-board pixels. All ground-truth foreground masks are empty.*
+
+| Viewpoint test frame | H used for diagnostic | Frozen-localiser corner error | False-mask / visible-board pixels | Direct false occlusion |
+|---|---|---|---|---|
+| 128 | frozen | 0.311% | 0 / 220,750 | 0.000% |
+| 224 | frozen | 1.019% | 11,515 / 160,354 | 7.181% |
+| 288 | GT-fallback | unavailable | 9,863 / 86,869 | 11.354% |
+
+![Native viewpoint appearance and false-mask diagnostics](student_files/stage3/native_viewpoint.png)
+
+*Figure 3.2. Native viewpoint diagnostics for test frames 128, 224 and 288 (upper, middle and lower rows). Columns show the observed board, warped reference, compensated difference and false-mask locations. Frame 288 uses evaluation-only GT-fallback. Board crops use annotations for illustration only.*
+
+Table 3.5's direct mask fractions are not directly comparable with Table 3.2's finished-video proxy, which uses different homographies and eligible frames and also reflects feathering and appearance similarity.
 
 ## Stage 4 — Your clip
 ### Capture and audit
@@ -448,7 +554,7 @@ In the selected combined events (Table 2.3 and Figure 2.5), model loss takes pre
 | geometry.py | bilinear_sample, normalise_points, dlt_homography, symmetric_transfer_error, ransac_homography, transfer_points, warp_artwork | Stage 1 — Code Explanation; Coordinate conventions; Estimator comparison; Question 2 | Notebook 1 §§6–8 (sanity checks); Notebook 2 §§4–6.1; native_worst_cases.png; native_ransac_vs_all.png |
 | localisation.py | localise_board, artwork_to_frame, overlay_frame, evaluate_audit_frames | Stage 1 — Code Explanation; Validation choices; Stress table; Questions 1–2 | Notebook 2 §§2–6.1; native_inliers.png; native_viewpoint_overlay.png; outputs/stress_tables.md |
 | temporal.py | lk_flow, track_board, failure_monitor | Stage 2 — Code Explanation, Validation choices, Stress table and Question 3 | Notebook 2 §§2.1, 7–9 and 10.1–10.5, student_files/stage2/validation.json, native_common_tracking.png, native_blur_points.png, native_blur_failure.png, native_exit_monitor.png, native_combined_monitor.png, outputs/stress_tables.md, outputs/videos/common_clip_independent.mp4 and common_clip_flow_assisted.mp4 |
-| compositing.py | hysteresis, compensated_difference, occlusion_mask, select_difference_thresholds, composite | | |
+| compositing.py | hysteresis, compensated_difference, occlusion_mask, select_difference_thresholds, composite | Stage 3 — Code Explanation, Validation choices, Stress table, Boundary evidence and Question 4 | Notebook 3 §§2–6.2, student_files/stage3/evidence.json, native_boundaries.png, native_viewpoint.png, outputs/stress_tables.md, outputs/videos/common_clip_flow_assisted.mp4 and common_clip_flow_assisted_no_occlusion.mp4, coke_unconstrained_flow_assisted.mp4 and coke_perspective_flow_assisted.mp4 |
 
 ## AI-use disclosure table
 | Tool / model | Affected artefacts (file, cell, figure, section) | Markers | What the tool contributed | How it was verified |
