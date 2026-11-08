@@ -543,7 +543,95 @@ Table 3.5's direct mask fractions are not directly comparable with Table 3.2's f
 
 ## Stage 4 — Your clip
 ### Capture and audit
+
+Both personal clips contain 450 frames at **1280 × 720, constant 30 fps and 15 seconds**. Each has ten distributed manual corner annotations and five manual occluder masks, including three genuinely occluded frames. The annotations were recorded before either personal pipeline ran. Source recording metadata and audio were removed from the prepared videos, and photo EXIF was removed from the rectified references. The raw recordings are retained only as local backups. Capture details and approximate event ranges are in `manifests/capture_manifest.csv`, with corner and mask rows in the two audit manifests.
+
+*Table 4.1. Personal capture conditions and audit geometry. First-frame area is measured from the manual audit quadrilateral at 1280 × 720. Physical dimensions were supplied approximately by the capturers.*
+
+| Clip | Device and prepared source | Board and reference | First-frame board area | Difficult events, prepared frame indices |
+|---|---|---|---|---|
+| Sean (`stage4_sean`) | iPhone 16 Pro, original first 15 s, HLG converted to SDR | Black outer frame, approximately 72 × 57 cm, 448 × 355 reference | 16.804% | Pan and distance changes, purple object crossing approximately 233–313, oblique view and clipping near the end |
+| Ruijie (`stage4_ruijie`) | Samsung S23+, source seconds 2–17, SDR, stabilisation and auto fps disabled | Flat front face including its white border, approximately 26 × 19 cm, 754 × 551 reference | 44.156% | Distance changes, strong viewing-angle changes approximately 225–285, black object crossing approximately 340–395 |
+
+Both first-frame board fractions exceed 15%. The references were resized to approximately the board's initial on-screen width. Ruijie's side panel is outside the annotated board. The capturers reported no identifiable person in Sean's clip and no real person or body part in Ruijie's clip. Manual corners hidden by an occluder and the approximate physical measurements introduce annotation uncertainty.
+
 ### Overlay Scorecard
+
+#### Frozen application and geometry
+
+Both temporal variants were applied without personal-clip tuning, using `outputs/thresholds.json`, RANSAC seed 0, the 2% success tolerance, and native 1280 × 720 processing. The final occlusion thresholds are strong 0.30 and weak 0.12, with minimum component area 150 pixels, opening radius 2 and feather radius 3. The reference is scaled consistently with the video. Sean uses `sean_explore` and Ruijie uses `ruijie_orbit`.
+
+The completed per-clip Scorecards are `outputs/scorecards/stage4_sean_scorecard.md` and `stage4_ruijie_scorecard.md`. Their initialisation counts use descriptor-valid keypoints. Sean has **988/861** reference/frame-0 keypoints, **86 matches and 40 inliers (0.465)**, with median residual **0.790 px**. Ruijie has **60/150** keypoints, **45 matches and 24 inliers (0.533)**, with median residual **0.479 px**. The repeated frame-0 diagnostic uses the frozen localiser and does not initialise or correct the saved pipeline.
+
+*Table 4.2. Saved-track geometry on the same ten audit frames per clip. Corner error is mean corner distance divided by the longer annotated board diagonal. Medians and p90 values use finite predictions only, while success includes every audit frame and uses the fixed 2% tolerance.*
+
+| Clip / variant | Finite audit estimates | Median error | p90 error | Success | Tracked frames | HIDE frames |
+|---|---|---|---|---|---|---|
+| Sean / independent | 4/10 | 0.674% | 0.717% | 4/10 | 115/450 | 335/450 |
+| Sean / flow assisted | 4/10 | 0.670% | 0.717% | 4/10 | 120/450 | 330/450 |
+| Ruijie / independent | 3/10 | 0.381% | 0.852% | 3/10 | 170/450 | 280/450 |
+| Ruijie / flow assisted | 3/10 | 0.381% | 0.408% | 3/10 | 175/450 | 275/450 |
+
+Every finite saved-corner estimate is within tolerance, so unavailable homographies explain all six Sean failures and all seven Ruijie failures. The small finite medians therefore describe conditional accuracy rather than reliable placement throughout the clip. Flow assistance adds five tracked frames on each clip but does not improve success on the ten audited frames. The finished-video evaluator independently recovers the artwork with SIFT and RANSAC. Its medians are approximately 0.63% for Sean and 0.41% for Ruijie, which differ from saved-corner errors because they measure recovered rendered artwork rather than the pipeline's own predicted corners.
+
+#### Occlusion, coverage and preservation
+
+*Table 4.3. Classical mask and finished-video results. IoU/F1 counts refer to the three nonempty ground-truth masks per clip. Leakage uses all three, including hidden overlays. Visible-board coverage uses only mask frames on which the evaluator detects the artwork, including eligible empty-mask frames.*
+
+| Clip / variant | Mask IoU / F1 | Scored / hidden / missing | Video leakage | Visible-board coverage | Background PSNR (dB) |
+|---|---|---|---|---|---|
+| Sean / independent | 0.248 / 0.397 | 1 / 2 / 0 | 20.80% | 94.753% (2 frames) | 36.59 |
+| Sean / flow assisted | 0.248 / 0.397 | 1 / 2 / 0 | 20.80% | 94.701% (2 frames) | 36.60 |
+| Ruijie / independent | n/a / n/a | 0 / 3 / 0 | 0.00% | n/a (0 frames) | 37.02 |
+| Ruijie / flow assisted | n/a / n/a | 0 / 3 / 0 | 0.00% | n/a (0 frames) | 37.22 |
+
+Sean's mask IoU **0.248** and F1 **0.397** come only from frame **300**. Frames 255 and 270 are hidden, rather than missing mask files. Frame 300 leaks onto **62.393%** of the annotated occluder, but averaging its leakage with two hidden zero-leakage frames lowers the reported mean to **20.798%**. Figure 4.1 (upper middle) shows that the artwork visibly covers much of the purple object. Its compensated-difference panel shows only limited cyan mask coverage of that overlap. Only **7.313%** of the annotated foreground exceeds the frozen strong threshold of 0.30, and the final binary mask covers **35.528%** of that foreground. Hysteresis can extend strong seeds through connected weak differences, but the resulting mask still leaves much of the object available for painting, which explains why localisation can succeed while occlusion ordering fails. Coverage is approximately 94.7% over frames 226 and 300, with only about 90.9% on occluded frame 300 itself. The empty-mask false-occlusion proxy is 1.37% for independent and 1.47% for flow-assisted on frame 226 only.
+
+Ruijie's three occluded audit frames, 345, 360 and 375, are all hidden. All five mask frames have absent overlays. IoU/F1 and visible-board coverage are therefore **unavailable**, rather than zero-valued estimates. Its **0% leakage** means that hidden overlays paint nothing, not that the algorithm successfully separates the black object from the board. This distinction prevents the lower leakage from being interpreted as better occlusion handling.
+
+The Scorecards also include a direct alpha-map baseline with occlusion disabled while retaining the same saved geometry and HIDE decisions. Sean's mean direct leakage falls from **33.333% to 19.324%** across the three nonempty masks. Ruijie's two direct means are both zero because all three frames are hidden. This baseline is computed on annotated frames only and is not an additional submitted video. It must not be equated with finished-video leakage, whose pixel-change proxy also reflects encoding and artwork colours.
+
+Background PSNR in Table 4.3 is approximately 36.6–37.2 dB. The known compositing rule preserves pixels outside the predicted alpha support before encoding, while disagreement between predicted and annotated board boundaries and video recompression can still change the evaluator's background region. PSNR alone does not prove the origin of the pixels. Full-audit artwork NCC is about 0.297 for Sean and 0.369–0.374 for Ruijie. These averages also include hidden frames containing the original board, so they mix overlay availability with fidelity and do not isolate reproduction error in visible overlays.
+
+#### Temporal behaviour, monitor and cost
+
+*Table 4.4. Saved-track temporal metrics and recorded pipeline wall time. Drift is the median finite audit error at least 16 frames after a localisation call, with its contributing-frame count in parentheses. Longest interval is measured between localisation calls, not a guarantee of correct tracking.*
+
+| Clip / variant | Tracker jitter (px) | Drift ≥16 frames (%) | Localisation calls | Longest interval (frames) | Pipeline time (s) |
+|---|---|---|---|---|---|
+| Sean / independent | 2.623 | n/a (0) | 450 | 1 | 659.64 |
+| Sean / flow assisted | 2.455 | n/a (0) | 409 | 10 | 542.82 |
+| Ruijie / independent | 4.969 | n/a (0) | 450 | 1 | 129.88 |
+| Ruijie / flow assisted | 3.908 | 0.414% (1) | 377 | 23 | 129.95 |
+
+Tracker jitter removes motion interpolated from the ten sparse audit annotations, so unobserved hand-held motion still limits its interpretation. It differs from the evaluator's SIFT-recovered corner jitter and its temporal sample. The evaluator uses ten one-frame pairs for Sean and nine for Ruijie. Flow-assisted tracking reduces the saved-track jitter on both clips, but the unchanged audited success and high HIDE counts limit that benefit. Drift is unavailable for three runs because no eligible finite audit prediction exists. Ruijie's flow-assisted 0.414% estimate has only one contributing audit frame. Neither clip contains a complete board exit and re-entry, so recovery after re-entry is not assessed.
+
+Figures 4.2 and 4.4 show **335/330 HIDE frames** for Sean and **280/275** for Ruijie, for independent/flow-assisted respectively. Sean has 26/25 HIDE episodes and Ruijie has 31/27. All HIDE decisions are triggered by `no_model`. Both variants have zero REINIT flags, but this does not mean that localisation is not retried. Independent localisation runs on every frame, while no-model HIDE and insufficient propagation points force frequent flow-assisted retries. The flow-assisted runs contain only 41 propagated frames for Sean and 73 for Ruijie. Table 4.4 reports measured run times from each person's execution, not a controlled comparison of different laptops.
+
+#### Representative overlays and failure evidence
+
+![Sean classical evidence](student_files/stage4_shared/stage4_sean_classical_evidence.png)
+
+*Figure 4.1. Sean at native 1280 × 720. The upper row shows source frame 300, its saved flow-assisted overlay, and compensated difference with the predicted mask in cyan. The lower row shows hidden failure frame 270 and up to 30 reference-to-frame ratio matches. The frozen localiser finds only 7 inliers from 35 matches, below the required 12. Green audit outlines are illustration only.*
+
+![Sean monitor timeline](student_files/stage4_shared/stage4_sean_classical_timeline.png)
+
+*Figure 4.2. Sean's full-clip inlier counts, finite audit-corner errors and monitor flags for both variants. Dashed horizontal lines show the 12-inlier requirement and 2% audit tolerance. Pale blue marks the approximate occlusion crossing. Grey and purple vertical lines identify the representative and failed evidence frames.*
+
+![Ruijie classical evidence](student_files/stage4_shared/stage4_ruijie_classical_evidence.png)
+
+*Figure 4.3. Ruijie at native 1280 × 720. Frame 0 demonstrates a visible overlay. The lower row shows the hidden perspective failure at frame 255, where the fixed localiser finds 4 inliers from 27 matches, below the required 12. The side panel is excluded from the green audit quadrilateral. Difference diagnostics use saved predicted geometry rather than a ground-truth homography.*
+
+![Ruijie monitor timeline](student_files/stage4_shared/stage4_ruijie_classical_timeline.png)
+
+*Figure 4.4. Ruijie's full-clip monitor evidence, with the same conventions as Figure 4.2. The prolonged weak-match interval includes the strongly oblique board view, while the later occlusion also coincides with hidden overlays.*
+
+The two failure examples show rejection of an insufficient correspondence consensus. Occlusion reduces visible texture in Sean's frame 270, and Ruijie's oblique view changes the appearance of patches that are not fully perspective invariant. This is consistent with the observed inlier shortage, but the clips also change scale and contain blur, so these examples do not isolate one cause. Diagnostic homographies used for the visible-frame difference and alpha baseline are reconstructed from saved predicted corners with `dlt_homography`. Audit corners are used only for scoring and the green illustration outlines. No ground-truth fallback enters the pipeline outputs.
+
+All detailed classical measurements are saved in `outputs/evaluation/stage4_classical_summary.json`, alongside the four `<clip_id>_<variant>_report.json` evaluator reports. Notebook 4's separate `(Our Code)` classical section generates the completed Scorecards and these evidence figures from the frozen saved runs.
+
+The classical comparison baselines are also extracted and evaluated on the fixed clean, occluded, perspective and consecutive-pair indices. Their four `<clip_id>_<variant>_frames_report.json` files and per-clip `classical_<variant>/frame_XXXXXX.png` extracts are ready for the generative comparison. These selected-frame scores are kept separate from the full-audit results above.
+
 ### Generative comparison
 ### Question 5 — Reflection
 
@@ -552,9 +640,9 @@ Table 3.5's direct mask fractions are not directly comparable with Table 3.2's f
 |---|---|---|---|
 | keypoints.py | harris_response, detect_corners, describe_keypoints, match_descriptors | Stage 1 — Code Explanation; Validation choices; Question 1 | Notebook 1 §§3–5 and SIFT cell; ratio_rejections.png; matching_coke_*.png |
 | geometry.py | bilinear_sample, normalise_points, dlt_homography, symmetric_transfer_error, ransac_homography, transfer_points, warp_artwork | Stage 1 — Code Explanation; Coordinate conventions; Estimator comparison; Question 2 | Notebook 1 §§6–8 (sanity checks); Notebook 2 §§4–6.1; native_worst_cases.png; native_ransac_vs_all.png |
-| localisation.py | localise_board, artwork_to_frame, overlay_frame, evaluate_audit_frames | Stage 1 — Code Explanation; Validation choices; Stress table; Questions 1–2 | Notebook 2 §§2–6.1; native_inliers.png; native_viewpoint_overlay.png; outputs/stress_tables.md |
-| temporal.py | lk_flow, track_board, failure_monitor | Stage 2 — Code Explanation, Validation choices, Stress table and Question 3 | Notebook 2 §§2.1, 7–9 and 10.1–10.5, student_files/stage2/validation.json, native_common_tracking.png, native_blur_points.png, native_blur_failure.png, native_exit_monitor.png, native_combined_monitor.png, outputs/stress_tables.md, outputs/videos/common_clip_independent.mp4 and common_clip_flow_assisted.mp4 |
-| compositing.py | hysteresis, compensated_difference, occlusion_mask, select_difference_thresholds, composite | Stage 3 — Code Explanation, Validation choices, Stress table, Boundary evidence and Question 4 | Notebook 3 §§2–6.2, student_files/stage3/evidence.json, native_boundaries.png, native_viewpoint.png, outputs/stress_tables.md, outputs/videos/common_clip_flow_assisted.mp4 and common_clip_flow_assisted_no_occlusion.mp4, coke_unconstrained_flow_assisted.mp4 and coke_perspective_flow_assisted.mp4 |
+| localisation.py | localise_board, artwork_to_frame, overlay_frame, evaluate_audit_frames | Stage 1 — Code Explanation; Validation choices; Stress table; Questions 1–2 | Notebook 2 §§2–6.1; native_inliers.png; native_viewpoint_overlay.png; outputs/stress_tables.md; Notebook 4 (Our Code) classical analysis, outputs/evaluation/stage4_classical_summary.json and stage4_shared/stage4_*_classical_*.png |
+| temporal.py | lk_flow, track_board, failure_monitor | Stage 2 — Code Explanation, Validation choices, Stress table and Question 3 | Notebook 2 §§2.1, 7–9 and 10.1–10.5, student_files/stage2/validation.json, native_common_tracking.png, native_blur_points.png, native_blur_failure.png, native_exit_monitor.png, native_combined_monitor.png, outputs/stress_tables.md, outputs/videos/common_clip_independent.mp4 and common_clip_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, outputs/evaluation/stage4_classical_summary.json and stage4_shared/stage4_*_classical_*.png |
+| compositing.py | hysteresis, compensated_difference, occlusion_mask, select_difference_thresholds, composite | Stage 3 — Code Explanation, Validation choices, Stress table, Boundary evidence and Question 4 | Notebook 3 §§2–6.2, student_files/stage3/evidence.json, native_boundaries.png, native_viewpoint.png, outputs/stress_tables.md, outputs/videos/common_clip_flow_assisted.mp4 and common_clip_flow_assisted_no_occlusion.mp4, coke_unconstrained_flow_assisted.mp4 and coke_perspective_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, outputs/evaluation/stage4_classical_summary.json and stage4_shared/stage4_*_classical_*.png |
 
 ## AI-use disclosure table
 | Tool / model | Affected artefacts (file, cell, figure, section) | Markers | What the tool contributed | How it was verified |

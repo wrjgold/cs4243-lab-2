@@ -1,0 +1,21 @@
+clip_id,frame,frame_path,annotator,x1,y1,x2,y2,x3,y3,x4,y4,annotated_before_inference
+stage4_ruijie,0,../../data/personal/stage4_ruijie/frames/frame_000000.png,Wang Ruijie,301.000,89.000,1056.000,107.000,1036.000,650.000,297.000,635.000,yes
+stage4_ruijie,60,../../data/personal/stage4_ruijie/frames/frame_000060.png,Wang Ruijie,466.000,209.000,880.000,227.000,872.000,528.000,453.000,513.000,yes
+stage4_ruijie,120,../../data/personal/stage4_ruijie/frames/frame_000120.png,Wang Ruijie,505.000,91.000,858.000,160.000,851.000,448.000,503.000,494.000,yes
+stage4_ruijie,210,../../data/personal/stage4_ruijie/frames/frame_000210.png,Wang Ruijie,453.000,127.000,953.000,206.000,942.000,574.000,446.000,645.000,yes
+stage4_ruijie,255,../../data/personal/stage4_ruijie/frames/frame_000255.png,Wang Ruijie,583.000,94.000,788.000,190.000,782.000,508.000,580.000,678.000,yes
+stage4_ruijie,300,../../data/personal/stage4_ruijie/frames/frame_000300.png,Wang Ruijie,304.000,126.000,910.000,159.000,899.000,568.000,314.000,614.000,yes
+stage4_ruijie,345,../../data/personal/stage4_ruijie/frames/frame_000345.png,Wang Ruijie,422.000,209.000,899.000,216.000,893.000,564.000,421.000,573.000,yes
+stage4_ruijie,360,../../data/personal/stage4_ruijie/frames/frame_000360.png,Wang Ruijie,423.000,224.000,896.000,235.000,890.000,562.000,421.000,568.000,yes
+stage4_ruijie,375,../../data/personal/stage4_ruijie/frames/frame_000375.png,Wang Ruijie,422.000,222.000,897.000,235.000,894.000,563.000,423.000,561.000,yes
+stage4_ruijie,449,../../data/personal/stage4_ruijie/frames/frame_000449.png,Wang Ruijie,431.000,199.000,933.000,209.000,919.000,572.000,424.000,556.000,yes
+stage4_sean,0,../../data/personal/stage4_sean/frames/frame_000000.png,Sean Tham,416.000,195.000,860.000,189.000,862.000,540.000,416.000,540.000,yes
+stage4_sean,60,../../data/personal/stage4_sean/frames/frame_000060.png,Sean Tham,424.000,249.000,872.000,242.000,879.000,599.000,426.000,601.000,yes
+stage4_sean,120,../../data/personal/stage4_sean/frames/frame_000120.png,Sean Tham,269.000,194.000,843.000,184.000,854.000,642.000,265.000,646.000,yes
+stage4_sean,180,../../data/personal/stage4_sean/frames/frame_000180.png,Sean Tham,277.000,107.000,947.000,108.000,949.000,640.000,264.000,633.000,yes
+stage4_sean,226,../../data/personal/stage4_sean/frames/frame_000226.png,Sean Tham,361.000,154.000,835.000,149.000,837.000,521.000,360.000,524.000,yes
+stage4_sean,255,../../data/personal/stage4_sean/frames/frame_000255.png,Sean Tham,373.000,217.000,859.000,202.000,869.000,571.000,393.000,579.000,yes
+stage4_sean,270,../../data/personal/stage4_sean/frames/frame_000270.png,Sean Tham,404.000,238.000,871.000,225.000,880.000,596.000,407.000,602.000,yes
+stage4_sean,300,../../data/personal/stage4_sean/frames/frame_000300.png,Sean Tham,413.000,236.000,875.000,224.000,887.000,597.000,409.000,601.000,yes
+stage4_sean,330,../../data/personal/stage4_sean/frames/frame_000330.png,Sean Tham,466.000,178.000,959.000,170.000,961.000,564.000,464.000,554.000,yes
+stage4_sean,376,../../data/personal/stage4_sean/frames/frame_000376.png,Sean Tham,340.000,74.000,969.000,6.000,966.000,632.000,326.000,574.000,yes
