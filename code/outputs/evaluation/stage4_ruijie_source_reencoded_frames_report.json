@@ -1,0 +1,159 @@
+{
+  "mode": "frames",
+  "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_ruijie",
+  "frames": {
+    "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_ruijie/frame_000210.png",
+    "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_ruijie/frame_000211.png",
+    "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_ruijie/frame_000255.png",
+    "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/student_files/stage4_shared/source_baseline/stage4_ruijie/frame_000360.png"
+  },
+  "interval": [
+    210,
+    360
+  ],
+  "offset": 0,
+  "output_resolution": {
+    "210": [
+      1280,
+      720
+    ],
+    "211": [
+      1280,
+      720
+    ],
+    "255": [
+      1280,
+      720
+    ],
+    "360": [
+      1280,
+      720
+    ]
+  },
+  "original_resolution": [
+    1280,
+    720
+  ],
+  "resized": false,
+  "resized_frames": [],
+  "frames_with_corners": [
+    210,
+    255,
+    360
+  ],
+  "frames_with_masks": [
+    210,
+    255,
+    360
+  ],
+  "missing_frames": [],
+  "placement": {
+    "n": 3,
+    "median": NaN,
+    "p90": NaN,
+    "success": 0.0,
+    "failed": 3,
+    "detection_rate": 0.0,
+    "threshold": 0.02,
+    "per_frame": {
+      "210": null,
+      "255": null,
+      "360": null
+    }
+  },
+  "fidelity": {
+    "ncc": 0.14445784411966398,
+    "ssim": 0.2513830485484155,
+    "mae": 0.4796464741230011,
+    "structure": -0.011288512080698606
+  },
+  "preservation": {
+    "psnr_outside": 36.585783374107734,
+    "ssim_outside": 0.9633012195315551,
+    "mad_outside": 0.01185121356199185,
+    "background_drift_px": 0.27998875578244525
+  },
+  "preservation_per_frame": [
+    {
+      "frame": 210,
+      "psnr_outside": 36.18033568556492,
+      "ssim_outside": 0.9640101166943474,
+      "mad_outside": 0.012468751519918442,
+      "background_drift_px": 0.2706412672996521
+    },
+    {
+      "frame": 255,
+      "psnr_outside": 37.070745905952926,
+      "ssim_outside": 0.9681102912986325,
+      "mad_outside": 0.011275652796030045,
+      "background_drift_px": 0.27063223719596863
+    },
+    {
+      "frame": 360,
+      "psnr_outside": 36.50626853080536,
+      "ssim_outside": 0.9577832506016857,
+      "mad_outside": 0.011809236370027065,
+      "background_drift_px": 0.2986927628517151
+    }
+  ],
+  "temporal": {
+    "stride": 1,
+    "flicker": 0.0900196060538292,
+    "warping_error": 0.06083663925528526,
+    "recovered_corner_jitter_px": NaN,
+    "pairs": 1,
+    "pair_frames": [
+      [
+        210,
+        211
+      ]
+    ]
+  },
+  "occlusion": {
+    "leakage": 2.83245999150262e-05,
+    "psnr_foreground": 38.1220660385594,
+    "coverage_visible": NaN,
+    "false_occlusion": NaN,
+    "mask_frames": 3,
+    "empty_mask_frames": 2,
+    "n_coverage_frames": 0,
+    "n_false_occlusion_frames": 0,
+    "overlay_absent_frames": [
+      210,
+      255,
+      360
+    ],
+    "per_frame": [
+      {
+        "frame": 210,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 255,
+        "leakage": NaN,
+        "psnr_foreground": NaN,
+        "mask_empty": true,
+        "foreground_pixels": 0,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      },
+      {
+        "frame": 360,
+        "leakage": 2.83245999150262e-05,
+        "psnr_foreground": 38.1220660385594,
+        "mask_empty": false,
+        "foreground_pixels": 70610,
+        "overlay_absent": true,
+        "coverage_visible": NaN,
+        "false_occlusion": NaN
+      }
+    ]
+  }
+}

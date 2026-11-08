@@ -1,209 +1,108 @@
-# Stage 4: separate Sean and Ruijie runs
+# Stage 4 reproduction for both group members
 
-Both clips are prepared and their manual audit annotations pass the checker.
-Sean's source frames and annotations are unchanged. Ruijie's reference uses the
-outer white border of the flat front face, excluding the side panel. Do not
-modify either prepared video now that annotation is complete.
+The group follows the in-class requirement of one personal clip per student.
+Both Sean and Ruijie are required experiments. Each has a 15-second source,
+manual audit annotations, two frozen classical videos, an original VACE run and
+a staff-permitted descriptive-prompt correction. Neither clip is supplementary.
 
-## Current files and submission
+The supplied staff response in `staff_prompt_correction.png` permits a correction,
+requires both runs to be logged, and directs reporting of the corrected output.
+The original runs already used aligned binary masks and grey-filled edit regions.
+The recorded correction changes the prompt only. All numeric settings, seed,
+sampled source indices and input assets stay fixed. The report does not claim
+that grey filling was added only on the second run.
 
-Four active helper files are needed: this README, `handoff.py`,
-`colab_vace_run.ipynb` and `classical_analysis.py`. Keep them while finishing Stage 4. They are not individually
-named mandatory deliverables, but they reproduce input export and the model run.
-The assignment requests the whole `code/` folder and permits added helper scripts
-under `student_files/`.
+## Reproduce the submitted analysis
 
-`preparation_archive.zip` preserves the nine superseded files from
-`stage4_sean/` and `stage4_ruijie/`, including conversion scripts, original
-preparation hashes and geometry, synthetic setup records and the old setup-only
-notebook. Every member was hash-verified before its working copy was removed.
-This archive is a local backup and is not needed in the submission. To restore
-the old files, extract it into `code/student_files/`.
-
-Keep and submit each chosen clip's prepared `clip.mp4`, `reference.png`, ten
-audit frame PNGs and five masks under `data/personal/<clip_id>/`, plus its
-replacement PNG under `data/artwork/`. Keep the capture/audit manifests, active
-generative conditions and the per-person conditions under `outputs/genai/`.
-The completed submission also needs both classical variants and their statistics,
-the actual raw generative output and invocation log, evaluator reports,
-Scorecards and the completed report/notebooks. Those outputs are not replaced by
-these preparation files.
-
-Do not include raw backup recordings/photos under `data/stage4_sean/` or
-`data/stage4_ruijie/`, annotation-check previews, caches, `.DS_Store`, the old
-setup archive or the supplied data. These backups and previews stay on the laptop.
-Git ignore rules do not automatically exclude files from a manually created ZIP.
-
-## What each person receives
-
-Complete notebook in Sean's Drive: https://colab.research.google.com/drive/1vDx_YdlaJGKZDOl4a19jP9lik0kMBIZL
-
-The Drive copy is shared with Wang Ruijie as Editor, as requested.
-General access remains Restricted. Ruijie should save his own copy in Drive
-before running, so both people keep independent notebook versions. He can also
-upload the local `colab_vace_run.ipynb` into his own account.
-
-Send `colab_vace_run.ipynb` from this directory, or its uploaded Colab link,
-and that person's input ZIP after the final pipeline results exist. Each person
-opens the notebook in their own Google account, saves a copy in Drive and chooses
-a free T4 GPU. Their sessions and account limits are separate. No paid plan or
-Hugging Face token is required. The first cell uploads one input ZIP. Subsequent
-cells prepare the inputs, load VACE, perform one actual generation and download
-the raw result and logs. There are no GPU benchmark cells.
-
-The old Sean setup-only notebook is historical. Use the complete notebook in
-this directory for both people. It encodes the new explicit replacement prompt,
-so old cached wall-poster prompt embeddings must not be reused.
-
-## Before producing input ZIPs
-
-Confirm that the final Stage 1-3 code and `outputs/thresholds.json` have been
-integrated into the current branch. A thresholds file existing is not evidence
-that the friend has finished Stage 3. Do not tune settings on either personal
-clip. Run the required classical variants from `code/`:
+Run from `code/` in the Python 3.11 environment:
 
 ```bash
-../.venv/bin/python -m overlaylab.run_pipeline --clip stage4_sean --variant independent --artwork sean_explore --thresholds outputs/thresholds.json
-../.venv/bin/python -m overlaylab.run_pipeline --clip stage4_sean --variant flow_assisted --artwork sean_explore --thresholds outputs/thresholds.json
-../.venv/bin/python -m overlaylab.run_pipeline --clip stage4_ruijie --variant independent --artwork ruijie_orbit --thresholds outputs/thresholds.json
-../.venv/bin/python -m overlaylab.run_pipeline --clip stage4_ruijie --variant flow_assisted --artwork ruijie_orbit --thresholds outputs/thresholds.json
+python student_files/stage4_shared/generative_analysis.py
 ```
 
-## Produce the two separate model input bundles
+Restart Notebook 4 and run it from top to bottom to reproduce both classical
+Scorecards and the complete comparison. This uses the preserved raw videos and
+the supplied evaluator. It does not run a generative model or rerender the full
+classical videos. Settings in `outputs/thresholds.json` remain fixed.
 
-From `code/`:
+The complete report is in `REPORT.md`. The two-clip evaluator aggregate is
+`outputs/evaluation/stage4_genai_reports.json`. Per-clip reports distinguish
+`genai_original` from the corrected `genai` result. The original and corrected
+invocation rows are retained unchanged in `manifests/genai_log.csv`.
+
+## Data and outputs
+
+- `data/personal/stage4_sean/` and `data/personal/stage4_ruijie/` contain each
+  prepared source, reference, ten audit frames and five masks.
+- `data/artwork/sean_explore.png` and `ruijie_orbit.png` are the replacements.
+- `outputs/videos/` holds both full-length classical variants per person.
+- `outputs/genai/<clip_id>/inputs/` contains the actual input cut, artwork and
+  frozen-tracker board masks exported in the fixed input bundle.
+- `outputs/genai/<clip_id>/invocations/<invocation_id>/output.mp4` preserves each
+  raw VACE output byte for byte. Its selected extracts are stored alongside it.
+- `outputs/genai/<clip_id>/output.mp4` and its `frame_XXXXXX.png` files expose the
+  corrected result for each person.
+- `outputs/genai/<clip_id>/classical_<variant>/` holds the identical classical
+  comparison indices.
+- `run_records/<clip_id>/<invocation_id>/` preserves the exact input-export
+  manifest, actual invocation conditions, log row, metadata and preflight check.
+- `input_bundles/` retains the fixed source/mask ZIPs used for generation.
+- `classical_summary.json` is the custom classical aggregate. It belongs here,
+  while supplied evaluator reports remain in `outputs/evaluation/`.
+- `source_baseline/` contains the resolution/frame-rate matched source re-encode
+  used to contextualise preservation and timing errors. This is not an edit.
+
+The starter-compatible active paths `manifests/genai_conditions.json`,
+`outputs/genai/output.mp4`, `outputs/genai/inputs/`, the root selected extracts
+and `outputs/evaluation/genai_frames_report.json` point to Sean's corrected run.
+Both students' results remain separately named. Videos from different personal
+clips are not concatenated and their scores are not averaged together.
+
+## Original import and fixed sampling
+
+The four downloaded ZIPs were imported with:
 
 ```bash
-../.venv/bin/python student_files/stage4_shared/handoff.py bundle stage4_sean
-../.venv/bin/python student_files/stage4_shared/handoff.py bundle stage4_ruijie
+python student_files/stage4_shared/generative_analysis.py --import-results \
+  ../stage4_sean_results.zip ../stage4_sean_prompt_revision_results.zip \
+  ../stage4_ruijie_results.zip ../stage4_ruijie_prompt_revision_results.zip
 ```
 
-The helper reads each person's fixed `outputs/genai/<clip_id>/conditions.json`.
-It checks annotations and verifies that the pipeline statistics match the
-current code, source, reference and frozen settings. It exports the chosen cut
-and one binary board-quadrilateral mask per source frame, using the same
-construction as Notebook 4. Lost tracking produces an empty mask, without
-ground-truth correction. Audit masks and audit corner coordinates are not
-included in the upload ZIP.
+Use actual archive paths when reproducing that import. Import validates source,
+settings and raw-output hashes. The archive SHA256 values and invocation roles
+are in `run_records/index.json`. Repeating analysis uses the already imported
+records and does not require these external ZIPs.
 
-The input ZIPs are written to:
+Each input-export `run.json` retains the initial instruction prompt. The
+corrected archive's `conditions.json`, invocation metadata and log row record
+the descriptive prompt actually used. These are different stages of the
+experiment, not inconsistent claims about which prompt reached the model.
 
-- `code/outputs/genai/stage4_sean/stage4_sean_inputs.zip`
-- `code/outputs/genai/stage4_ruijie/stage4_ruijie_inputs.zip`
+Sean's source indices 226, 227, 270, 376 map to generated indices 0, 1, 23, 80.
+Ruijie's 210, 211, 255, 360 map to 0, 1, 24, 80. Extraction uses nominal source
+timestamps, preserves the original source labels, and uses cubic resizing.
+Every method receives the same full audit dictionary. No favourable-frame
+search or ground-truth correction enters generation or the pipeline.
 
-Keep the fixed bundles after generation. The script refuses to overwrite an
-existing input ZIP. It never runs the classical pipeline or a video model.
+## Model reproduction
 
-## Run Colab independently
+`colab_vace_run.ipynb` documents the pinned T4 setup and both recorded prompt
+modes. `PROMPT_REVISION=False` selects the original instruction and `True` the
+staff-permitted scene description. The modes use separate output directories
+and result ZIP names. All actual outputs are already complete, so do not run
+another generation merely to improve them.
 
-1. Open the complete notebook and use File > Save a copy in Drive.
-2. Select Runtime > Change runtime type > T4 GPU. Free availability is not guaranteed.
-3. Run from the top. Upload only your own input ZIP when prompted.
-4. Check the printed clip ID, displayed artwork and greyed source previews.
-5. Let the setup and single generation complete. The settings are 832 x 480,
-   81 output frames at 16 fps, 20 steps, seed 0, guidance 5 and conditioning scale 1.
-   The prompt is `Replace the artwork on the board in this video with the attached artwork.`
-6. Download `<clip_id>_results.zip` using the last cell. Save it before disconnecting.
+`handoff.py bundle <clip_id>` is the original source/mask exporter. It now saves
+input bundles in `student_files/stage4_shared/input_bundles/` and refuses to
+replace an existing fixed bundle. The older `handoff.py import-results` command
+handles a single unmodified attempt. Use `generative_analysis.py --import-results`
+for this completed original-plus-correction experiment.
 
-White board-mask regions are resized with nearest-neighbour interpolation and
-grey-filled after the video is resized. VACE receives the new artwork as its
-reference image, not the original-board reference. The model itself generates
-the output pixels. The notebook never pastes artwork into the result.
+## Local backups and submission
 
-Keep the first completed output even if it looks poor. On a technical error,
-run the final download cell to preserve the log and failure record. Only an
-unchanged technical retry is permitted, with both invocations preserved. A new
-runtime cannot recover files lost when an old runtime was disconnected.
-
-## Import and evaluate the results on Sean's laptop
-
-From `code/`, use the actual downloaded ZIP paths:
-
-```bash
-../.venv/bin/python student_files/stage4_shared/handoff.py import-results "$HOME/Downloads/stage4_sean_results.zip"
-../.venv/bin/python student_files/stage4_shared/handoff.py import-results "$HOME/Downloads/stage4_ruijie_results.zip"
-```
-
-The helper preserves the raw MP4 unchanged in each person's output folder,
-retains per-invocation records and merges actual invocation rows into the
-required `manifests/genai_log.csv`. It extracts the selected generative frames
-at nominal timestamps, resizes the extracts to source resolution and retains
-their original source indices. It also extracts the same indices from both
-classical videos when present. It does not search for visually better frames.
-
-Use the existing evaluator in frames mode. For Ruijie:
-
-```bash
-../.venv/bin/python -m overlaylab.evaluate --frames outputs/genai/stage4_ruijie/frame_*.png --clip stage4_ruijie --artwork ruijie_orbit --out outputs/evaluation/stage4_ruijie_genai_frames_report.json
-../.venv/bin/python -m overlaylab.evaluate --frames outputs/genai/stage4_ruijie/classical_independent/frame_*.png --clip stage4_ruijie --artwork ruijie_orbit --out outputs/evaluation/stage4_ruijie_independent_frames_report.json
-../.venv/bin/python -m overlaylab.evaluate --frames outputs/genai/stage4_ruijie/classical_flow_assisted/frame_*.png --clip stage4_ruijie --artwork ruijie_orbit --out outputs/evaluation/stage4_ruijie_flow_assisted_frames_report.json
-```
-
-For Sean, replace `stage4_ruijie` with `stage4_sean` and `ruijie_orbit` with
-`sean_explore`. The evaluator loads the same complete audit dictionary for
-each method's selected frames. Finish each Scorecard and the Notebook 4/report
-analysis from the actual results. The assignment's active
-`manifests/genai_conditions.json` remains Sean's, while each person's complete
-conditions are preserved next to their separate outputs. To use the starter
-Notebook 4 for a different active clip, copy that person's conditions into the
-active manifest and preserve the other person's archived outputs first.
-
-## Complete the assignment's Notebook 4
-
-The helper does not replace the required notebook analysis. Part I evaluates
-both full-length classical videos and provides the Scorecard to complete with
-measured values. Part II exports the model inputs, extracts the generated
-comparison frames, checks the log and evaluates the same selected frames for
-both classical variants and VACE. Finish the comparison table, staff-oracle
-discussion and Question 5 reflection from the actual evidence.
-
-The starter notebook reads one active clip and expects the active generative
-video at `outputs/genai/output.mp4`. After importing a person's results, copy
-that person's conditions and raw video into the starter's active locations.
-For Ruijie, from `code/`:
-
-```bash
-cp outputs/genai/stage4_ruijie/conditions.json manifests/genai_conditions.json
-cp outputs/genai/stage4_ruijie/output.mp4 outputs/genai/output.mp4
-```
-
-For Sean, use `stage4_sean` in both commands. Restart the Notebook 4 kernel and
-run in order. Do not run model generation again. The starter's input-export
-cell can run normally even if the helper already built the fixed input ZIP.
-Its frame-extraction cell removes stale active PNGs before extracting the
-selected indices. The helper uses the same cubic resizing for its extracts.
-The archived raw video and conditions remain intact in each person's folder.
-Preserve each person's evaluator reports and notebook evidence before switching
-the active clip, since the starter uses shared report filenames.
-
-VACE uses a short cut because 81 output frames at 16 fps span five seconds.
-Both classical variants still process the full 15-second source clip. The
-comparison frames and temporal pair remain fixed inside that cut. The board
-masks come from flow-assisted statistics because Notebook 4 Part II section 1
-explicitly uses `<clip_id>_flow_assisted_stats.json`, rather than selecting a
-variant after inspecting personal-clip results.
-
-## Verification performed during preparation
-
-Prepared-media metadata and hashes, both annotation sets, notebook syntax and
-cell separation were checked. A synthetic local harness exercised ZIP upload,
-timestamp sampling, grey filling, a fake model call, invocation logging,
-download/import and original-index extraction. It also checked that a completed
-output cannot be regenerated accidentally. This is not a real GPU run or an
-artwork-quality check. These preparation checks did not run personal generation.
-
-The active handoff and classical-analysis files are versioned so both people can run them from
-their own checkout. The preparation archive and original recordings remain
-ignored. Actual per-person conditions, required manifests, generation outputs
-and invocation logs are retained.
-
-## Completed classical analysis
-
-Notebook 4 now includes a separate `(Our Code)` classical section for both clips.
-It uses `classical_analysis.py`, saves the two completed Scorecards and four
-evaluator reports, and generates four evidence/timeline figures used in REPORT.md.
-It also prepares both classical variants on the fixed selected indices, with
-separate frames-mode reports for the later generative comparison.
-The starter cells and frozen algorithms remain intact. The supplied placeholder
-Scorecard is overwritten by the measured per-clip Scorecards in the added section.
-Only the classical notebook cells have been executed at this stage.
+Raw recordings, optional WEBM previews, annotation previews and superseded
+preparation files have been moved under the repository's ignored
+`.local_backups/`. They are excluded from the final ZIP. The supplied datasets,
+Python environment, caches and editor files also stay out of the submission.
+The ZIP retains both required personal clips, both artworks, all four raw model
+outputs, their technical records and the evidence used by the report.

@@ -1,0 +1,42 @@
+[
+  {
+    "clip_id": "stage4_ruijie",
+    "role": "original",
+    "invocation_id": "20261108T153457Z_8816156e",
+    "archive_name": "stage4_ruijie_results.zip",
+    "archive_sha256": "36b082adb7d85e0f2ba16ca487201eb566ed729ee2d7f1520fe706075855260f",
+    "records": "student_files/stage4_shared/run_records/stage4_ruijie/20261108T153457Z_8816156e",
+    "output": "outputs/genai/stage4_ruijie/invocations/20261108T153457Z_8816156e/output.mp4",
+    "output_sha256": "e92ab6c94f561e408862ad4079c4d3e61df11d1a938daf8fc991ae71f16e5ac7"
+  },
+  {
+    "clip_id": "stage4_sean",
+    "role": "original",
+    "invocation_id": "20261108T153824Z_8beedfad",
+    "archive_name": "stage4_sean_results.zip",
+    "archive_sha256": "03da38b5ba1e4dd8f9320f6c86a908c4faf516a0c4ee5f024ea703a33fcfc3b0",
+    "records": "student_files/stage4_shared/run_records/stage4_sean/20261108T153824Z_8beedfad",
+    "output": "outputs/genai/stage4_sean/invocations/20261108T153824Z_8beedfad/output.mp4",
+    "output_sha256": "73bb3ad624480677a7b55225d81e4a2ed1a93ba7370beebf9b31137dee83dc66"
+  },
+  {
+    "clip_id": "stage4_ruijie",
+    "role": "corrected",
+    "invocation_id": "20261108T173545Z_c97d606a",
+    "archive_name": "stage4_ruijie_prompt_revision_results.zip",
+    "archive_sha256": "e1e21d7f486a7575ba7b4027e5bbcf44108f5c644d0d1c6ac15e423076f162b9",
+    "records": "student_files/stage4_shared/run_records/stage4_ruijie/20261108T173545Z_c97d606a",
+    "output": "outputs/genai/stage4_ruijie/invocations/20261108T173545Z_c97d606a/output.mp4",
+    "output_sha256": "9201f27bfb6761cd8b3cd2536cced47f3c0084f2253b5920e3b275225a38e00f"
+  },
+  {
+    "clip_id": "stage4_sean",
+    "role": "corrected",
+    "invocation_id": "20261108T175612Z_352f1d7c",
+    "archive_name": "stage4_sean_prompt_revision_results.zip",
+    "archive_sha256": "10077b7d34d05751e566289b1aec7d0fdd38112fbf7f604ef8de39b7eb6b1060",
+    "records": "student_files/stage4_shared/run_records/stage4_sean/20261108T175612Z_352f1d7c",
+    "output": "outputs/genai/stage4_sean/invocations/20261108T175612Z_352f1d7c/output.mp4",
+    "output_sha256": "e3b5cd0c009755bb50a9dad144ba6d13d405b2b263df28962d8255b88e50b8ba"
+  }
+]

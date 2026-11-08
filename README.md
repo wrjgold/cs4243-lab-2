@@ -52,10 +52,16 @@ Run lab terminal commands from `code/` with the environment activated:
 python -m unittest discover -s tests -v
 ```
 
-Some tests fail initially because the assessed functions are unfinished. Open the notebooks in `code/notebooks/` using the `.venv` kernel, and work through `01` to `04`. Restart each notebook's kernel and run its cells from top to bottom.
+The assessed functions are implemented. The optional pyramidal-flow extension test is skipped. Open the notebooks in `code/notebooks/` using the `.venv` kernel. Notebook 4 reproduces the completed two-person Stage 4 analysis from the preserved outputs. Notebooks 1–3 also contain the original validation studies, including expensive full-resolution calibration passes. Restart a notebook's kernel before running its cells in order.
 
 For a new terminal, activate the environment from the repository root with `source .venv/bin/activate`, then `cd code`.
 
 See `code/README.md` for the full assignment commands and submission rules. Submit `code/` and only your created data, excluding the supplied datasets and `.venv/`.
+
+## 5. Completed submission
+
+The group has two required personal clips, one for Sean and one for Ruijie. Both original VACE runs and both staff-permitted descriptive-prompt corrections are preserved and logged. The report uses the corrected result for each person. See `code/student_files/stage4_shared/README.md` for the data layout and reproduction commands.
+
+`CS4243_Lab_2_submission.zip` contains only `code/` and the created personal data and artwork under `data/`. Supplied datasets, environments, caches, editor files and `.local_backups/` are excluded. The local backups retain raw recordings and optional development previews. To reproduce supplied-clip results from the submitted folders, place them beside the supplied release data.
 
 Setup guide prepared with AI assistance. [AI-LANGUAGE]

@@ -81,7 +81,8 @@ def bundle(clip):
     sample_indices = [start + round(k * info["fps"] / output_fps) for k in range(settings["num_frames"])]
     if sample_indices[-1] != end or len(set(round((f-start)*output_fps/info["fps"]) for f in frames["pair"])) != 2:
         raise SystemExit("Output duration or temporal-pair mapping is inconsistent with the fixed run.")
-    archive = folder / f"{clip}_inputs.zip"
+    archive = Path(__file__).parent / "input_bundles" / f"{clip}_inputs.zip"
+    archive.parent.mkdir(parents=True, exist_ok=True)
     if archive.exists():
         raise SystemExit(f"Input ZIP already exists: {archive}. Preserve fixed inputs after generation.")
     with tempfile.TemporaryDirectory(prefix="stage4-inputs-") as tmp:

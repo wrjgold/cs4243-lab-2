@@ -218,7 +218,7 @@ def analyse():
         (score_dir / f"{clip}_scorecard.md").write_text(text.rstrip()+'\n')
         all_results[clip] = result
         print(clip, 'classical analysis and Scorecard saved.')
-    (OUT / 'stage4_classical_summary.json').write_text(json.dumps(all_results,indent=2)+'\n')
+    (FIGURES / 'classical_summary.json').write_text(json.dumps(all_results,indent=2)+'\n')
     return all_results
 
 

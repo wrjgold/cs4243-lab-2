@@ -42,7 +42,7 @@
       "artwork",
       "board masks from your frozen pipeline (only if the model needs a mask)"
     ],
-    "template": "Replace the artwork on the board in this video with the attached artwork."
+    "template": "A handheld video of a rectangular framed poster on a light-coloured wall displaying the reference artwork: large dark navy EXPLORE lettering on a cream background, an orange sun, dark navy mountain peaks, teal trees and a winding cream path. The camera moves around the poster, and a purple patterned object passes in front of it."
   },
   "evaluation": "python -m overlaylab.evaluate --frames outputs/genai/frame_*.png --clip <clip_id> --artwork <your_artwork>",
   "declaration": "model name and visible version, date, settings (steps, resolution, seed), the video you gave it (whole clip, cut, or joined segments), output fps, prompt, time, compute",

@@ -450,7 +450,7 @@ We maximise mean validation IoU over **216** candidates, using the tie rule in C
 
 The final settings are strong **0.30**, weak **0.12**, minimum area **150 original-video pixels**, opening radius **2**, connectivity **8**, and gain quantile **0.5**. Compositing retains feather **3** and `match_gain=False`. Only the strong level changes from `OcclusionConfig()` defaults. Stage 1, Stage 2 and RANSAC seed **0** remain fixed. The **2%** corner-error tolerance justified in Stage 1 remains a localisation criterion, not a mask-IoU cutoff.
 
-The native configuration is saved in `outputs/thresholds.json`. All real-clip results below use **1280 × 720** inputs. Table 3.2 reports the flow-assisted pipeline, while the other tables and figures use independent localisation for diagnosis. Notebook 3's **640-pixel previews** are separate. Its §6.2 saves the native search and diagnostic measurements in `student_files/stage3/evidence.json`, alongside the notebook's executed outputs.
+The native configuration is saved in `outputs/thresholds.json`. All real-clip results below use **1280 × 720** inputs. Table 3.2 reports the flow-assisted pipeline, while the other tables and figures use independent localisation for diagnosis. Notebook 3's **640-pixel previews** are separate. Rerunning Notebook 3 §6.2 reproduces the figures and the native search and diagnostic measurements in `student_files/stage3/evidence.json`.
 
 ### Utility routines used
 
@@ -628,23 +628,141 @@ Figures 4.2 and 4.4 show **335/330 HIDE frames** for Sean and **280/275** for Ru
 
 The two failure examples show rejection of an insufficient correspondence consensus. Occlusion reduces visible texture in Sean's frame 270, and Ruijie's oblique view changes the appearance of patches that are not fully perspective invariant. This is consistent with the observed inlier shortage, but the clips also change scale and contain blur, so these examples do not isolate one cause. Diagnostic homographies used for the visible-frame difference and alpha baseline are reconstructed from saved predicted corners with `dlt_homography`. Audit corners are used only for scoring and the green illustration outlines. No ground-truth fallback enters the pipeline outputs.
 
-All detailed classical measurements are saved in `outputs/evaluation/stage4_classical_summary.json`, alongside the four `<clip_id>_<variant>_report.json` evaluator reports. Notebook 4's separate `(Our Code)` classical section generates the completed Scorecards and these evidence figures from the frozen saved runs.
+All detailed classical measurements are saved in `student_files/stage4_shared/classical_summary.json`, alongside the four `<clip_id>_<variant>_report.json` evaluator reports. Notebook 4's separate `(Our Code)` classical section generates the completed Scorecards and these evidence figures from the frozen saved runs.
 
-The classical comparison baselines are also extracted and evaluated on the fixed clean, occluded, perspective and consecutive-pair indices. Their four `<clip_id>_<variant>_frames_report.json` files and per-clip `classical_<variant>/frame_XXXXXX.png` extracts are ready for the generative comparison. These selected-frame scores are kept separate from the full-audit results above.
+The classical comparison baselines are also extracted and evaluated on the fixed clean, occluded, perspective and consecutive-pair indices. Their four `<clip_id>_<variant>_frames_report.json` files and per-clip `classical_<variant>/frame_XXXXXX.png` extracts support the completed generative comparison in Tables 4.6–4.8. These selected-frame scores are kept separate from the full-audit results above.
 
 ### Generative comparison
+
+#### Model, fixed inputs and recorded correction
+
+We used [Wan2.1-VACE-1.3B](https://huggingface.co/Wan-AI/Wan2.1-VACE-1.3B-diffusers), an open-weight video model with reference-image and masked-video conditioning. The [VACE paper](https://arxiv.org/abs/2503.07598) describes its unified video editing interface, while the [Wan report](https://arxiv.org/abs/2503.20314) describes the underlying video model family. We selected the 1.3B checkpoint for the available free Colab Tesla T4 GPU. Its inference produces the edited pixels directly. The preparation code resizes the source and masks and fills edit regions with grey, but never pastes the replacement artwork into the model output.
+
+Both students used checkpoint revision `ec4d2cb062b548996b179d493fdd05340de702a1`, Diffusers **0.36.0**, seed **0**, **20 steps**, guidance **5.0**, conditioning scale **1.0**, an empty negative prompt and maximum text length **512**. Each output has **81 frames at 832 × 480 and 16 fps**. The transformer uses native fp16, the VAE uses float32 with tiling, and the text encoder uses NF4 quantisation with float32 computation before being released. The GPU exposes approximately 14.56 GiB. These settings and the actual library versions, scheduler and timings are retained with every invocation.
+
+Sean's cut contains source frames **226–376**, while Ruijie's contains **210–360**. Each is 151 frames at 30 fps and spans five seconds between its endpoint timestamps. Each model receives the same person's artwork and board masks from the frozen flow-assisted tracker. Audit masks and corners are not model inputs. The preflight records confirm binary aligned masks and RGB **128** filling after resizing in both original and corrected runs. Only **23/81** sampled Sean masks and **25/81** Ruijie masks are nonempty. Lost localisation produces an empty mask rather than an audit-derived correction.
+
+The initial prompt was “Replace the artwork on the board in this video with the attached artwork.” Following the supplied [staff response](student_files/stage4_shared/staff_prompt_correction.png), each student made one permitted correction using a description of the desired scene. Sean's description names the EXPLORE lettering, orange sun, navy mountains, teal trees and cream path. Ruijie's names the ORBIT lettering, cream background and coral/teal planets and stars. Both also describe the actual scene and passing object. The inputs, seed and numeric settings stayed fixed. Therefore, the recorded correction is a prompt change, not a claim that the original run omitted grey filling.
+
+Table 4.5 records all four invocations. We report the corrected outputs as directed by the staff response rather than selecting whichever result has better metrics. Both raw outputs per person and their hashes are preserved under `outputs/genai/<clip_id>/invocations/`. All four actual invocation rows remain in `manifests/genai_log.csv`, and the original CSVs, conditions, preflight checks and metadata are retained under `student_files/stage4_shared/run_records/`. The input-export `run.json` correctly retains the original bundle prompt, while the invocation conditions, metadata and log record the prompt actually used.
+
+*Table 4.5. Recorded VACE invocations for both required personal clips. Start times use Singapore time (UTC+8). The corrected invocation is the reported result for each person.*
+
+| Clip | Run | Start (2026, SGT) | Invocation ID | Reported |
+|---|---|---|---|---|
+| Sean | original | 08 Nov 23:38:24 | 20261108T153824Z_8beedfad | no |
+| Sean | corrected | 09 Nov 01:56:12 | 20261108T175612Z_352f1d7c | yes |
+| Ruijie | original | 08 Nov 23:34:57 | 20261108T153457Z_8816156e | no |
+| Ruijie | corrected | 09 Nov 01:35:45 | 20261108T173545Z_c97d606a | yes |
+
+#### Identical selected frames and metric denominators
+
+Sean's selected indices are **226, 227, 270 and 376**, with clean, occluded and strongest-perspective frames **226, 270 and 376**. Ruijie's are **210, 211, 255 and 360**, with named frames **210, 360 and 255** respectively. The clean frame also starts the consecutive pair, so four extracts per method satisfy the protocol. Both classical variants and both VACE outputs use these same source indices and the complete ten-frame audit dictionary. The second pair frame is interpolated from that dictionary and does not add another placement annotation.
+
+Generated indices are taken at nominal timestamps using `round((source_index - cut_start) × 16/30)`. Sean maps to output indices **0, 1, 23 and 80**, and Ruijie to **0, 1, 24 and 80**. We neither search for a better correspondence nor correct retiming. Extracts are resized to 1280 × 720 with cubic interpolation for scoring, while every raw 832 × 480 MP4 remains unchanged.
+
+Table 4.6 uses **three annotated placement frames per row**, and unavailable detections count as failures at the frozen 2% tolerance. Its fidelity means also use those three frames, including original-board content where replacement is absent. Table 4.7 uses the same three frames for background preservation and **one nonempty mask** for leakage and foreground PSNR. The other two masks are empty. Visible-board coverage is computed only on mask frames with detected artwork, so its contributing count is shown explicitly. Each temporal row in Table 4.8 uses **one consecutive pair**. These selected-frame results must not be substituted for the full-audit Scorecards in Tables 4.2–4.4.
+
+*Table 4.6. Selected-frame placement and rectified artwork fidelity. Classical outputs are native 1280 × 720. VACE outputs originate at 832 × 480 and are resized for the identical 1280 × 720 audit geometry. Higher NCC and SSIM indicate closer artwork identity.*
+
+| Clip / method | Detected | Median corner error | Success at 2% | NCC | SSIM |
+|---|---|---|---|---|---|
+| Sean / Independent | 1/3 | 0.614% | 33.3% | 0.231 | 0.415 |
+| Sean / Flow-assisted | 1/3 | 0.606% | 33.3% | 0.231 | 0.418 |
+| Sean / VACE original | 0/3 | n/a | 0.0% | -0.125 | 0.306 |
+| Sean / VACE corrected | 0/3 | n/a | 0.0% | -0.122 | 0.301 |
+| Ruijie / Independent | 0/3 | n/a | 0.0% | 0.144 | 0.254 |
+| Ruijie / Flow-assisted | 0/3 | n/a | 0.0% | 0.144 | 0.254 |
+| Ruijie / VACE original | 0/3 | n/a | 0.0% | 0.146 | 0.252 |
+| Ruijie / VACE corrected | 0/3 | n/a | 0.0% | 0.146 | 0.251 |
+
+*Table 4.7. Selected-frame preservation and occlusion proxies. Background means use three named frames. Leakage and foreground PSNR use the single nonempty mask. Coverage parentheses give the number of contributing mask frames out of three. Source re-encoding is an added preservation baseline, not an advertisement-editing method.*
+
+| Clip / method | Background PSNR (dB) | Background SSIM | Background drift (px) | Leakage | Foreground PSNR (dB) | Coverage (n) |
+|---|---|---|---|---|---|---|
+| Sean / Independent | 36.56 | 0.992 | 2.87 | 0.000% | 37.39 | 98.63% (1) |
+| Sean / Flow-assisted | 36.61 | 0.992 | 3.57 | 0.000% | 37.39 | 98.53% (1) |
+| Sean / VACE original | 28.75 | 0.968 | 25.20 | 24.080% | 20.99 | n/a (0) |
+| Sean / VACE corrected | 29.02 | 0.968 | 11.38 | 26.189% | 20.65 | n/a (0) |
+| Sean / Source re-encode | 33.22 | 0.973 | 9.64 | 21.471% | 21.99 | n/a (0) |
+| Ruijie / Independent | 37.56 | 0.972 | 0.12 | 0.000% | 38.90 | n/a (0) |
+| Ruijie / Flow-assisted | 37.56 | 0.972 | 0.12 | 0.000% | 38.90 | n/a (0) |
+| Ruijie / VACE original | 32.46 | 0.944 | 0.56 | 0.042% | 34.58 | n/a (0) |
+| Ruijie / VACE corrected | 33.08 | 0.943 | 0.59 | 0.038% | 34.43 | n/a (0) |
+| Ruijie / Source re-encode | 36.59 | 0.963 | 0.28 | 0.003% | 38.12 | n/a (0) |
+
+*Table 4.8. Temporal measurements on the single selected pair and recorded processing times. Classical time covers the full 15-second clip, while VACE generation time covers its five-second cut and excludes setup. CPU hardware was not recorded, so these are observed costs rather than a controlled speed benchmark.*
+
+| Clip / method | Flicker | Warp error | Recovered jitter (px) | Pairs | Time (s) | Workload / compute |
+|---|---|---|---|---|---|---|
+| Sean / Independent | 0.0466 | 0.0340 | 2.76 | 1 | 659.64 | 450 source frames, CPU |
+| Sean / Flow-assisted | 0.0289 | 0.0212 | 1.09 | 1 | 542.82 | 450 source frames, CPU |
+| Sean / VACE original | 0.0445 | 0.0422 | n/a | 1 | 2243.52 | 81 output frames, T4 |
+| Sean / VACE corrected | 0.0444 | 0.0424 | n/a | 1 | 3077.53 | 81 output frames, T4 |
+| Ruijie / Independent | 0.0669 | 0.0211 | n/a | 1 | 129.88 | 450 source frames, CPU |
+| Ruijie / Flow-assisted | 0.0669 | 0.0211 | n/a | 1 | 129.95 | 450 source frames, CPU |
+| Ruijie / VACE original | 0.0870 | 0.0585 | n/a | 1 | 2335.91 | 81 output frames, T4 |
+| Ruijie / VACE corrected | 0.0880 | 0.0589 | n/a | 1 | 2182.14 | 81 output frames, T4 |
+
+#### Visual comparison and reproducible evidence
+
+Figures 4.5 and 4.6 show the fixed clean, occluded and strongest-perspective frames for each clip. Both original and corrected VACE outputs retain the source posters rather than rendering the supplied artwork. The corrected prompt therefore does not recover the intended edit in either recorded comparison. The lower and middle rows also show why an unedited-looking occluder cannot demonstrate successful occlusion handling when the replacement is absent.
+
+![Sean selected-frame classical and generative comparison](student_files/stage4_shared/stage4_sean_generative_comparison.png)
+
+*Figure 4.5. Sean's fixed selected frames at 1280 × 720 display resolution. Rows are clean 226, occluded 270 and strongest perspective 376. Columns are source, classical flow-assisted output, original VACE and corrected VACE. Green outlines show source audit geometry for illustration only. Both VACE columns are extracted from their unchanged 832 × 480 videos at nominal timestamps.*
+
+![Ruijie selected-frame classical and generative comparison](student_files/stage4_shared/stage4_ruijie_generative_comparison.png)
+
+*Figure 4.6. Ruijie's fixed selected frames, with the same columns and conventions as Figure 4.5. Rows are clean 210, occluded 360 and strongest perspective 255. All three classical rows are hidden and all three VACE rows lack detected replacement artwork. The source box side is outside the annotated board.*
+
+The source re-encode in Table 4.7 resizes the same 81 sampled source frames to 832 × 480, encodes them at 16 fps using the supplied VideoWriter, and extracts the same selected indices. It measures resampling and compression without generation. Its resize implementation and encoder are not exact replicas of the Colab preprocessing and export. Detailed reports for both clips, both VACE invocations, both classical variants and this baseline are saved in `outputs/evaluation/`. The combined `stage4_genai_reports.json` retains the per-clip results, costs and timestamp mappings. Rerunning Notebook 4 reproduces the comparison tables and figures from the preserved outputs without running either full classical pipeline or generating another model result.
+
 ### Question 5 — Reflection
+
+#### Geometric placement and artwork identity
+
+The classical method is more controllable when it has a valid model, but neither method reliably completes these selected-frame edits. In Table 4.6, both Sean classical variants detect the artwork only on clean frame 226, where the rendered corner error is approximately **0.606%** and the supplied EXPLORE text and motifs remain recognisable in Figure 4.5 (upper row, second column). The occluded and strongest-perspective frames are hidden. Ruijie's three selected classical frames are all hidden, despite successful overlays elsewhere in the full clip. Therefore, this selected set does not demonstrate successful keystone placement for either method at strongest perspective.
+
+VACE has **0/3 detections and 0% success** for both clips, so its median placement error is unavailable rather than zero. Figures 4.5 and 4.6 show the original poster patterns instead of the new lettering. The negative Sean NCC and low Ruijie NCC in Table 4.6 support failure of artwork identity. Classical NCC is also diluted by original-board content on hidden frames, so its mean should not be interpreted as the fidelity of a visible overlay alone. The prompt correction changes these fidelity values only slightly and never restores a detection. One original and one corrected run per clip do not establish a reliable general effect of descriptive prompting.
+
+The input records reveal an important limitation. Ruijie's three named frames have empty tracker masks. Sean's occluded and strongest-perspective frames also have empty masks, although his clean frame has a nonempty grey-filled edit region. Missing edit regions leave original board pixels in the model input. Retention of the old posters is consistent with that conditioning, while Sean's failed clean edit also shows that a positive mask and descriptive prompt do not guarantee the intended artwork. This comparison does not isolate model capacity from tracker-mask availability, resampling or conditioning behaviour.
+
+#### Occlusion order and what was generated in front of the board
+
+Low leakage alone does not establish correct foreground ordering. Sean's classical **0%** selected-frame leakage in Table 4.7 comes from hiding the overlay at frame 270, unlike the visibly leaking frame 300 in the separate full-audit evidence. Ruijie's selected classical occluder is also hidden. Both VACE outputs visually retain the passing objects, but neither supplies detectable replacement artwork behind them. Their unavailable coverage therefore prevents a claim that they completed the edit while preserving occlusion order.
+
+Sean's corrected VACE leakage is **26.189%**, compared with **21.471%** for the source re-encode. This metric counts foreground pixels changed by more than the fixed RGB tolerance. It includes timestamp quantisation, interpolation and appearance changes, so it does not prove that EXPLORE artwork was painted over the object. Ruijie's corrected leakage is only **0.038%**, but it accompanies zero artwork detections and unavailable coverage. The observations support preservation of much of that foreground appearance, not successful replacement behind it. Each leakage mean uses one occluded frame, while coverage uses one clean mask frame for Sean's classical outputs and zero frames for the other reported methods.
+
+#### Background preservation and the limits of PSNR
+
+Classical compositing copies the original frame outside its predicted alpha support before encoding. VACE inference can alter the whole reconstructed frame. Table 4.7 measures corrected VACE background PSNR of **29.02 dB** for Sean and **33.08 dB** for Ruijie, below the corresponding source-reencode baselines of **33.22 and 36.59 dB** and classical values around **36.6 and 37.6 dB**. Classical preservation also benefits from hiding the overlay on two of Sean’s three selected frames and all three of Ruijie’s, so it must be read together with availability. The accompanying SSIM and background-drift measurements indicate additional outside-board change beyond this resampling baseline. They are consistent with smoothing and reconstruction of the original scene, rather than a successful advertisement edit confined to the board.
+
+PSNR does not prove how every pixel was produced or identify hallucination by itself. The known classical alpha rule gives a stronger preservation guarantee before compression, although errors in predicted boundaries can still change pixels the evaluator labels as background. Conversely, VACE's fairly recognisable background does not establish that it left those pixels untouched. The comparison changes processing resolution and frame rate as well as editing mechanism, so the source-reencode baseline is necessary context rather than a perfect isolation of generation error.
+
+#### Temporal consistency, nominal sampling and the staff example
+
+Table 4.8 gives Sean flow-assisted flicker and warping error of **0.0289 and 0.0212**, compared with corrected VACE **0.0444 and 0.0424** on the one selected pair. Ruijie's corrected VACE values are **0.0880 and 0.0589**, compared with classical **0.0669 and 0.0211**, but those classical frames contain the original board because the overlay is hidden. Temporal similarity of unedited content is not evidence of a successful stable replacement. VACE recovered-corner jitter is unavailable because artwork detection fails.
+
+An output step at 16 fps spans **1.875 source frames**. The second extracted pair frame corresponds to sampled source 228 for Sean and 212 for Ruijie, although it is scored at the required source labels 227 and 211. Sean's occluded source label 270 maps to sampled source 269. These nearest-timestamp mismatches are retained as errors. Sean's source-reencode background drift is already **9.64 px**, compared with corrected VACE **11.38 px** in Table 4.7. Therefore, the selected evidence does not justify attributing all displacement to model retiming. One pair and three named frames also cannot certify timing throughout the complete output.
+
+The staff MiniMax-H3 example, shown in Notebook 4, reproduces its artwork but changes background pixels and retimes camera motion. Our VACE outputs instead largely retain the original poster and scene. This illustrates different failure modes rather than a ranking by model size because the clips, artwork, masks, settings and hardware differ. The staff example shows that generating recognisable artwork does not automatically solve background preservation or timing, while our example shows that preserving much of the scene does not establish the intended edit.
+
+#### Controllability, effort and compute cost
+
+Changing the classical artwork file deterministically changes what is warped wherever geometry is available. Its text and layout do not depend on a language model interpreting a prompt, although the evaluator may react differently to artwork texture. VACE allows a scene description and reference image, but the approved revision still fails to produce EXPLORE or ORBIT. This limits fine control over lettering and identity in these runs without establishing that every alternative prompt or larger model would fail.
+
+Table 4.8 records corrected generation times of **3,077.53 s** for Sean and **2,182.14 s** for Ruijie on a Tesla T4, each for an 81-frame cut. Their recorded setup overheads are another **523.47 and 462.84 s**, respectively. Keeping both original and corrected runs gives generation totals of **5,321.06 s** for Sean and **4,518.04 s** for Ruijie, excluding setup. Classical times cover all 450 source frames and use different local CPU executions, so these figures describe observed effort and latency rather than a controlled hardware benchmark. Capture, rectification and audit annotation are shared manual work. Classical development and validation required implementation effort, while VACE additionally required model setup, input-mask preparation and a documented correction.
+
+#### Shared and method-specific failures
+
+Both methods fail to deliver the requested replacement on the selected strongest-perspective frames, as Figures 4.5 and 4.6 show. A distinctive classical failure is abrupt monitor-driven disappearance when correspondence support is insufficient. Its deterministic geometry and preservation safeguards do not ensure continuous availability. A distinctive VACE failure in these examples is retaining the original poster instead of producing the supplied artwork even on Sean's clean frame where classical rendering succeeds. The two submitted clips and their single permitted corrections are qualitative probes of these settings. They do not support a general success-rate estimate for either model family.
 
 ## Evidence table
 | Student file | Function | Report section | Notebook figure / table / video |
 |---|---|---|---|
 | keypoints.py | harris_response, detect_corners, describe_keypoints, match_descriptors | Stage 1 — Code Explanation; Validation choices; Question 1 | Notebook 1 §§3–5 and SIFT cell; ratio_rejections.png; matching_coke_*.png |
 | geometry.py | bilinear_sample, normalise_points, dlt_homography, symmetric_transfer_error, ransac_homography, transfer_points, warp_artwork | Stage 1 — Code Explanation; Coordinate conventions; Estimator comparison; Question 2 | Notebook 1 §§6–8 (sanity checks); Notebook 2 §§4–6.1; native_worst_cases.png; native_ransac_vs_all.png |
-| localisation.py | localise_board, artwork_to_frame, overlay_frame, evaluate_audit_frames | Stage 1 — Code Explanation; Validation choices; Stress table; Questions 1–2 | Notebook 2 §§2–6.1; native_inliers.png; native_viewpoint_overlay.png; outputs/stress_tables.md; Notebook 4 (Our Code) classical analysis, outputs/evaluation/stage4_classical_summary.json and stage4_shared/stage4_*_classical_*.png |
-| temporal.py | lk_flow, track_board, failure_monitor | Stage 2 — Code Explanation, Validation choices, Stress table and Question 3 | Notebook 2 §§2.1, 7–9 and 10.1–10.5, student_files/stage2/validation.json, native_common_tracking.png, native_blur_points.png, native_blur_failure.png, native_exit_monitor.png, native_combined_monitor.png, outputs/stress_tables.md, outputs/videos/common_clip_independent.mp4 and common_clip_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, outputs/evaluation/stage4_classical_summary.json and stage4_shared/stage4_*_classical_*.png |
-| compositing.py | hysteresis, compensated_difference, occlusion_mask, select_difference_thresholds, composite | Stage 3 — Code Explanation, Validation choices, Stress table, Boundary evidence and Question 4 | Notebook 3 §§2–6.2, student_files/stage3/evidence.json, native_boundaries.png, native_viewpoint.png, outputs/stress_tables.md, outputs/videos/common_clip_flow_assisted.mp4 and common_clip_flow_assisted_no_occlusion.mp4, coke_unconstrained_flow_assisted.mp4 and coke_perspective_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, outputs/evaluation/stage4_classical_summary.json and stage4_shared/stage4_*_classical_*.png |
-
-## AI-use disclosure table
-| Tool / model | Affected artefacts (file, cell, figure, section) | Markers | What the tool contributed | How it was verified |
-|---|---|---|---|---|
-| | | [AI-CODE] [AI-DESIGN] [AI-VISION] [AI-GENERATION] [AI-LANGUAGE] [HUMAN-DATA] [HUMAN-CHECK] | | |
+| localisation.py | localise_board, artwork_to_frame, overlay_frame, evaluate_audit_frames | Stage 1 — Code Explanation; Validation choices; Stress table; Questions 1–2 | Notebook 2 §§2–6.1; native_inliers.png; native_viewpoint_overlay.png; outputs/stress_tables.md; Notebook 4 (Our Code) classical analysis, student_files/stage4_shared/classical_summary.json and stage4_shared/stage4_*_classical_*.png |
+| temporal.py | lk_flow, track_board, failure_monitor | Stage 2 — Code Explanation, Validation choices, Stress table and Question 3 | Notebook 2 §§2.1, 7–9 and 10.1–10.5, student_files/stage2/validation.json, native_common_tracking.png, native_blur_points.png, native_blur_failure.png, native_exit_monitor.png, native_combined_monitor.png, outputs/stress_tables.md, outputs/videos/common_clip_independent.mp4 and common_clip_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, student_files/stage4_shared/classical_summary.json and stage4_shared/stage4_*_classical_*.png |
+| compositing.py | hysteresis, compensated_difference, occlusion_mask, select_difference_thresholds, composite | Stage 3 — Code Explanation, Validation choices, Stress table, Boundary evidence and Question 4 | Notebook 3 §§2–6.2, student_files/stage3/evidence.json, native_boundaries.png, native_viewpoint.png, outputs/stress_tables.md, outputs/videos/common_clip_flow_assisted.mp4 and common_clip_flow_assisted_no_occlusion.mp4, coke_unconstrained_flow_assisted.mp4 and coke_perspective_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, student_files/stage4_shared/classical_summary.json and stage4_shared/stage4_*_classical_*.png |
