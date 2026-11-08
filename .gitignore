@@ -10,8 +10,8 @@ __pycache__/
 # Local Stage 4 preparation and Colab setup helpers.
 /code/student_files/stage4_sean/
 /code/student_files/stage4_ruijie/
-/code/student_files/stage_4/preparation_archive.zip
-/code/student_files/stage_4/preparation_archive/
+/code/student_files/stage4/preparation_archive.zip
+/code/student_files/stage4/preparation_archive/
 
 # Local raw recordings and regenerable annotation previews, excluded from submission.
 /data/stage4_sean/

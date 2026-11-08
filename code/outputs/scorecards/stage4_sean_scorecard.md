@@ -16,4 +16,4 @@
 
 **Uncertainty**: All settings and seed 0 were transferred without personal-clip tuning. Dimensions and event ranges are approximate. Manual corners behind occluders are uncertain. Tracker jitter uses sparse GT motion interpolation. Rendered placement uses SIFT re-localisation and differs from saved-corner error. No full board exit/re-entry occurs, so re-entry recovery is not assessed.
 
-Evidence and monitor: [source/overlay/failure](../../student_files/stage_4/stage4_sean_classical_evidence.png), [timeline](../../student_files/stage_4/stage4_sean_classical_timeline.png).
+Evidence and monitor: [source/overlay/failure](../../student_files/stage4/stage4_sean_classical_evidence.png), [timeline](../../student_files/stage4/stage4_sean_classical_timeline.png).

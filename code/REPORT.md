@@ -587,7 +587,7 @@ Every finite saved-corner estimate in Table 4.2 is within tolerance, so unavaila
 | Ruijie / independent | n/a / n/a | 0 / 3 / 0 | 0.00% | n/a (0 frames) | 37.02 |
 | Ruijie / flow assisted | n/a / n/a | 0 / 3 / 0 | 0.00% | n/a (0 frames) | 37.22 |
 
-Sean's mask IoU **0.248** and F1 **0.397** in Table 4.3 come only from frame **300**, while frames 255 and 270 are hidden. Frame 300 leaks onto **62.393%** of the occluder, which falls to a mean of **20.798%** when the two hidden frames are included. Figure 4.1 (upper middle) shows artwork covering much of the purple object. Only **7.313%** of its annotated foreground exceeds the frozen strong difference threshold of 0.30, and the final mask covers **35.528%** of that foreground, as recorded in `student_files/stage_4/classical_summary.json`. Too little of the object is recovered by strong seeds and connected weak differences, which explains why successful localisation still permits incorrect foreground ordering. The approximately 94.7% coverage mean uses frames 226 and 300, with about 90.9% on occluded frame 300 itself.
+Sean's mask IoU **0.248** and F1 **0.397** in Table 4.3 come only from frame **300**, while frames 255 and 270 are hidden. Frame 300 leaks onto **62.393%** of the occluder, which falls to a mean of **20.798%** when the two hidden frames are included. Figure 4.1 (upper middle) shows artwork covering much of the purple object. Only **7.313%** of its annotated foreground exceeds the frozen strong difference threshold of 0.30, and the final mask covers **35.528%** of that foreground, as recorded in `student_files/stage4/classical_summary.json`. Too little of the object is recovered by strong seeds and connected weak differences, which explains why successful localisation still permits incorrect foreground ordering. The approximately 94.7% coverage mean uses frames 226 and 300, with about 90.9% on occluded frame 300 itself.
 
 Ruijie's three occluded audit frames, 345, 360 and 375, are all hidden, and all five mask frames have absent overlays. IoU/F1 and coverage are therefore **unavailable**. Table 4.3's **0% leakage** reflects absent overlays rather than successful separation of the black object.
 
@@ -612,25 +612,25 @@ Figures 4.2 and 4.4 show the frequent HIDE decisions counted in Table 4.2. All a
 
 #### Representative overlays and failure evidence
 
-![Sean classical evidence](student_files/stage_4/stage4_sean_classical_evidence.png)
+![Sean classical evidence](student_files/stage4/stage4_sean_classical_evidence.png)
 
 *Figure 4.1. Sean at native 1280 × 720. The upper row shows source frame 300, its saved flow-assisted overlay, and compensated difference with the predicted mask in cyan. The lower row shows hidden failure frame 270 and up to 30 reference-to-frame ratio matches. The frozen localiser finds only 7 inliers from 35 matches, below the required 12. Green audit outlines are illustration only.*
 
-![Sean monitor timeline](student_files/stage_4/stage4_sean_classical_timeline.png)
+![Sean monitor timeline](student_files/stage4/stage4_sean_classical_timeline.png)
 
 *Figure 4.2. Sean's full-clip inlier counts, finite audit-corner errors and monitor flags for both variants. Dashed horizontal lines show the 12-inlier requirement and 2% audit tolerance. Pale blue marks the approximate occlusion crossing. Grey and purple vertical lines identify the representative and failed evidence frames.*
 
-![Ruijie classical evidence](student_files/stage_4/stage4_ruijie_classical_evidence.png)
+![Ruijie classical evidence](student_files/stage4/stage4_ruijie_classical_evidence.png)
 
 *Figure 4.3. Ruijie at native 1280 × 720. Frame 0 demonstrates a visible overlay. The lower row shows the hidden perspective failure at frame 255, where the fixed localiser finds 4 inliers from 27 matches, below the required 12. The side panel is excluded from the green audit quadrilateral. Difference diagnostics use saved predicted geometry rather than a ground-truth homography.*
 
-![Ruijie monitor timeline](student_files/stage_4/stage4_ruijie_classical_timeline.png)
+![Ruijie monitor timeline](student_files/stage4/stage4_ruijie_classical_timeline.png)
 
 *Figure 4.4. Ruijie's full-clip monitor evidence, with the same conventions as Figure 4.2. The prolonged weak-match interval includes the strongly oblique board view, while the later occlusion also coincides with hidden overlays.*
 
 The two failure examples show rejection of an insufficient correspondence consensus. Occlusion reduces visible texture in Sean's frame 270, and Ruijie's oblique view changes the appearance of patches that are not fully perspective invariant. This is consistent with the observed inlier shortage, but the clips also change scale and contain blur, so these examples do not isolate one cause. Diagnostic homographies used for the visible-frame difference and alpha baseline are reconstructed from saved predicted corners with `dlt_homography`. Audit corners are used only for scoring and the green illustration outlines. No ground-truth fallback enters the pipeline outputs.
 
-Notebook 4's `(Our Code)` classical analysis generates both Scorecards and Figures 4.1–4.4 from the saved frozen runs. Detailed measurements are saved in `student_files/stage_4/classical_summary.json`, while the four finished-video evaluator reports are in `outputs/evaluation/`.
+Notebook 4's `(Our Code)` classical analysis generates both Scorecards and Figures 4.1–4.4 from the saved frozen runs. Detailed measurements are saved in `student_files/stage4/classical_summary.json`, while the four finished-video evaluator reports are in `outputs/evaluation/`.
 
 The following comparison separately evaluates both classical variants on the fixed clean, occluded, strongest-perspective and consecutive-pair indices. These selected-frame scores do not replace the full-audit Scorecards above.
 
@@ -640,13 +640,13 @@ The following comparison separately evaluates both classical variants on the fix
 
 We used the open-weight [Wan2.1-VACE-1.3B](https://huggingface.co/Wan-AI/Wan2.1-VACE-1.3B-diffusers) checkpoint because it fits the available Colab Tesla T4 GPU. [VACE](https://arxiv.org/abs/2503.07598) provides reference-image and masked-video conditioning on the [Wan](https://arxiv.org/abs/2503.20314) model family. Inference generates the edited pixels directly. Preparation resizes the inputs and grey-fills edit regions without pasting the artwork into the output.
 
-Both students used Diffusers **0.36.0**, seed **0**, **20 steps**, guidance **5.0**, conditioning scale **1.0** and an empty negative prompt. Each output has **81 frames at 832 × 480 and 16 fps**. The checkpoint revision, precision settings, library versions and scheduler are preserved in the invocation records and `student_files/stage_4/colab_vace_run.ipynb`.
+Both students used Diffusers **0.36.0**, seed **0**, **20 steps**, guidance **5.0**, conditioning scale **1.0** and an empty negative prompt. Each output has **81 frames at 832 × 480 and 16 fps**. The checkpoint revision, precision settings, library versions and scheduler are preserved in the invocation records and `student_files/stage4/colab_vace_run.ipynb`.
 
 Sean's cut contains source frames **226–376**, while Ruijie's contains **210–360**. Each contains 151 frames at 30 fps and spans five seconds between endpoint timestamps. The model receives the person's artwork and frozen flow-assisted tracker masks, with aligned binary masks and RGB **128** filling after resizing. Audit annotations are excluded. Only **23/81** sampled Sean masks and **25/81** Ruijie masks are nonempty because lost localisation produces an empty edit region.
 
 The reported prompts describe the desired EXPLORE or ORBIT artwork, the scene and the passing object. The exact prompts are recorded with each invocation in `manifests/genai_log.csv`.
 
-All four invocations remain in `manifests/genai_log.csv`. Raw outputs are preserved under `outputs/genai/<clip_id>/invocations/`, with conditions, preflight checks and metadata under `student_files/stage_4/run_records/`. The unpacked model inputs are retained in `outputs/genai/<clip_id>/inputs/`.
+All four invocations remain in `manifests/genai_log.csv`. Raw outputs are preserved under `outputs/genai/<clip_id>/invocations/`, with conditions, preflight checks and metadata under `student_files/stage4/run_records/`. The unpacked model inputs are retained in `outputs/genai/<clip_id>/inputs/`.
 
 #### Identical selected frames and metric denominators
 
@@ -695,11 +695,11 @@ Table 4.5 uses **three annotated placement frames per row**, with unavailable de
 
 Figures 4.5 and 4.6 show the fixed clean, occluded and strongest-perspective frames. Both VACE columns retain the source posters, providing a visual check that neither invocation completed the replacement.
 
-![Sean selected-frame classical and generative comparison](student_files/stage_4/stage4_sean_generative_comparison.png)
+![Sean selected-frame classical and generative comparison](student_files/stage4/stage4_sean_generative_comparison.png)
 
 *Figure 4.5. Sean's fixed selected frames at 1280 × 720 display resolution. Rows are clean 226, occluded 270 and strongest perspective 376. Columns are source, classical flow-assisted output, original VACE and corrected VACE. Green outlines show source audit geometry for illustration only. Both VACE columns are extracted from their unchanged 832 × 480 videos at nominal timestamps.*
 
-![Ruijie selected-frame classical and generative comparison](student_files/stage_4/stage4_ruijie_generative_comparison.png)
+![Ruijie selected-frame classical and generative comparison](student_files/stage4/stage4_ruijie_generative_comparison.png)
 
 *Figure 4.6. Ruijie's fixed selected frames, with the same columns and conventions as Figure 4.5. Rows are clean 210, occluded 360 and strongest perspective 255. All three classical rows are hidden and all three VACE rows lack detected replacement artwork. The source box side is outside the annotated board.*
 
@@ -756,6 +756,6 @@ Both methods fail to replace the board on the selected strongest-perspective fra
 |---|---|---|---|
 | keypoints.py | harris_response, detect_corners, describe_keypoints, match_descriptors | Stage 1 — Code Explanation; Validation choices; Question 1 | Notebook 1 §§3–5 and SIFT cell; ratio_rejections.png; matching_coke_*.png |
 | geometry.py | bilinear_sample, normalise_points, dlt_homography, symmetric_transfer_error, ransac_homography, transfer_points, warp_artwork | Stage 1 — Code Explanation; Coordinate conventions; Estimator comparison; Question 2 | Notebook 1 §§6–8 (sanity checks); Notebook 2 §§4–6.1; native_worst_cases.png; native_ransac_vs_all.png |
-| localisation.py | localise_board, artwork_to_frame, overlay_frame, evaluate_audit_frames | Stage 1 — Code Explanation; Validation choices; Stress table; Questions 1–2 | Notebook 2 §§2–6.1; native_inliers.png; native_viewpoint_overlay.png; outputs/stress_tables.md; Notebook 4 (Our Code) classical analysis, student_files/stage_4/classical_summary.json and stage_4/stage4_*_classical_*.png |
-| temporal.py | lk_flow, track_board, failure_monitor | Stage 2 — Code Explanation, Validation choices, Stress table and Question 3 | Notebook 2 §§2.1, 7–9 and 10.1–10.5, student_files/stage2/validation.json, native_common_tracking.png, native_blur_points.png, native_blur_failure.png, native_exit_monitor.png, native_combined_monitor.png, outputs/stress_tables.md, outputs/videos/common_clip_independent.mp4 and common_clip_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, student_files/stage_4/classical_summary.json and stage_4/stage4_*_classical_*.png |
-| compositing.py | hysteresis, compensated_difference, occlusion_mask, select_difference_thresholds, composite | Stage 3 — Code Explanation, Validation choices, Stress table, Boundary evidence and Question 4 | Notebook 3 §§2–6.2, student_files/stage3/evidence.json, native_boundaries.png, native_viewpoint.png, outputs/stress_tables.md, outputs/videos/common_clip_flow_assisted.mp4 and common_clip_flow_assisted_no_occlusion.mp4, coke_unconstrained_flow_assisted.mp4 and coke_perspective_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, student_files/stage_4/classical_summary.json and stage_4/stage4_*_classical_*.png |
+| localisation.py | localise_board, artwork_to_frame, overlay_frame, evaluate_audit_frames | Stage 1 — Code Explanation; Validation choices; Stress table; Questions 1–2 | Notebook 2 §§2–6.1; native_inliers.png; native_viewpoint_overlay.png; outputs/stress_tables.md; Notebook 4 (Our Code) classical analysis, student_files/stage4/classical_summary.json and stage4/stage4_*_classical_*.png |
+| temporal.py | lk_flow, track_board, failure_monitor | Stage 2 — Code Explanation, Validation choices, Stress table and Question 3 | Notebook 2 §§2.1, 7–9 and 10.1–10.5, student_files/stage2/validation.json, native_common_tracking.png, native_blur_points.png, native_blur_failure.png, native_exit_monitor.png, native_combined_monitor.png, outputs/stress_tables.md, outputs/videos/common_clip_independent.mp4 and common_clip_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, student_files/stage4/classical_summary.json and stage4/stage4_*_classical_*.png |
+| compositing.py | hysteresis, compensated_difference, occlusion_mask, select_difference_thresholds, composite | Stage 3 — Code Explanation, Validation choices, Stress table, Boundary evidence and Question 4 | Notebook 3 §§2–6.2, student_files/stage3/evidence.json, native_boundaries.png, native_viewpoint.png, outputs/stress_tables.md, outputs/videos/common_clip_flow_assisted.mp4 and common_clip_flow_assisted_no_occlusion.mp4, coke_unconstrained_flow_assisted.mp4 and coke_perspective_flow_assisted.mp4; Notebook 4 (Our Code) classical analysis, student_files/stage4/classical_summary.json and stage4/stage4_*_classical_*.png |
