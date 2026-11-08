@@ -7,8 +7,8 @@ modify either prepared video now that annotation is complete.
 
 ## Current files and submission
 
-Only three active helper files are needed: this README, `handoff.py` and
-`colab_vace_run.ipynb`. Keep them while finishing Stage 4. They are not individually
+Four active helper files are needed: this README, `handoff.py`,
+`colab_vace_run.ipynb` and `classical_analysis.py`. Keep them while finishing Stage 4. They are not individually
 named mandatory deliverables, but they reproduce input export and the model run.
 The assignment requests the whole `code/` folder and permits added helper scripts
 under `student_files/`.
@@ -190,9 +190,20 @@ cell separation were checked. A synthetic local harness exercised ZIP upload,
 timestamp sampling, grey filling, a fake model call, invocation logging,
 download/import and original-index extraction. It also checked that a completed
 output cannot be regenerated accidentally. This is not a real GPU run or an
-artwork-quality check. No personal-clip generation has been performed.
+artwork-quality check. These preparation checks did not run personal generation.
 
-The three active handoff files are versioned so both people can run them from
+The active handoff and classical-analysis files are versioned so both people can run them from
 their own checkout. The preparation archive and original recordings remain
 ignored. Actual per-person conditions, required manifests, generation outputs
 and invocation logs are retained.
+
+## Completed classical analysis
+
+Notebook 4 now includes a separate `(Our Code)` classical section for both clips.
+It uses `classical_analysis.py`, saves the two completed Scorecards and four
+evaluator reports, and generates four evidence/timeline figures used in REPORT.md.
+It also prepares both classical variants on the fixed selected indices, with
+separate frames-mode reports for the later generative comparison.
+The starter cells and frozen algorithms remain intact. The supplied placeholder
+Scorecard is overwritten by the measured per-clip Scorecards in the added section.
+Only the classical notebook cells have been executed at this stage.

@@ -1,0 +1,2460 @@
+{
+  "stage4_sean": {
+    "clip_id": "stage4_sean",
+    "processing_resolution": [
+      1280,
+      720
+    ],
+    "audit_frames": [
+      0,
+      60,
+      120,
+      180,
+      226,
+      255,
+      270,
+      300,
+      330,
+      376
+    ],
+    "mask_frames": [
+      226,
+      255,
+      270,
+      300,
+      376
+    ],
+    "initialisation": {
+      "n_keypoints_ref": 988,
+      "n_keypoints_frame": 861,
+      "n_matches": 86,
+      "n_inliers": 40,
+      "inlier_ratio": 0.46511627906976744,
+      "median_residual": 0.7895487860339983
+    },
+    "variants": {
+      "independent": {
+        "tracking": {
+          "n": 10,
+          "median_error": 0.00673738932128258,
+          "p90_error": 0.007173493314252754,
+          "success": 0.4,
+          "failed": 6,
+          "jitter_px": 2.62261029062479,
+          "drift_error": NaN,
+          "drift_frames": 0,
+          "longest_run": 1,
+          "frames_tracked": 115,
+          "frames_total": 450,
+          "localisations": 450,
+          "reinit": 0,
+          "hide": 335,
+          "per_frame": {
+            "0": 0.007254650363669393,
+            "60": 0.005438693214772958,
+            "120": null,
+            "180": null,
+            "226": 0.006490651776951229,
+            "255": null,
+            "270": null,
+            "300": 0.006984126865613931,
+            "330": null,
+            "376": null
+          }
+        },
+        "mask_scores": {
+          "iou": 0.2478396809374923,
+          "f1": 0.397230004340449,
+          "mask_frames_scored": 1,
+          "mask_frames_hidden": [
+            255,
+            270
+          ],
+          "mask_frames_missing": []
+        },
+        "rendered": {
+          "mode": "video",
+          "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/videos/stage4_sean_independent.mp4",
+          "interval": [
+            0,
+            449
+          ],
+          "offset": 0,
+          "output_resolution": [
+            1280,
+            720
+          ],
+          "original_resolution": [
+            1280,
+            720
+          ],
+          "resized": false,
+          "missing_frames": [],
+          "placement": {
+            "n": 10,
+            "median": 0.00634610115191021,
+            "p90": 0.006744175172291411,
+            "success": 0.4,
+            "failed": 6,
+            "detection_rate": 0.4,
+            "threshold": 0.02,
+            "per_frame": {
+              "0": 0.006826724854000983,
+              "60": 0.0050878521004469645,
+              "120": null,
+              "180": null,
+              "226": 0.00614064305551801,
+              "255": null,
+              "270": null,
+              "300": 0.006551559248302411,
+              "330": null,
+              "376": null
+            }
+          },
+          "fidelity": {
+            "ncc": 0.2967846305856674,
+            "ssim": 0.42037548881431797,
+            "mae": 0.27436796873807906,
+            "structure": 0.2096822287348615
+          },
+          "preservation": {
+            "psnr_outside": 36.59140570470616,
+            "ssim_outside": 0.9926589621342379,
+            "mad_outside": 0.010663539450615645,
+            "background_drift_px": 7.734991355666092
+          },
+          "preservation_per_frame": [
+            {
+              "frame": 0,
+              "psnr_outside": 32.89430154579189,
+              "ssim_outside": 0.9897216579321508,
+              "mad_outside": 0.012168584391474724,
+              "background_drift_px": 2.0726215839385986
+            },
+            {
+              "frame": 60,
+              "psnr_outside": 35.94462246833875,
+              "ssim_outside": 0.993922663290004,
+              "mad_outside": 0.01004784181714058,
+              "background_drift_px": 18.180973052978516
+            },
+            {
+              "frame": 120,
+              "psnr_outside": 38.857118672671675,
+              "ssim_outside": 0.9972258344175867,
+              "mad_outside": 0.01029402669519186,
+              "background_drift_px": NaN
+            },
+            {
+              "frame": 180,
+              "psnr_outside": 38.74645724095898,
+              "ssim_outside": 0.9971540605849919,
+              "mad_outside": 0.010427188128232956,
+              "background_drift_px": NaN
+            },
+            {
+              "frame": 226,
+              "psnr_outside": 33.110774821957854,
+              "ssim_outside": 0.9914003219147638,
+              "mad_outside": 0.010719445534050465,
+              "background_drift_px": 5.539058208465576
+            },
+            {
+              "frame": 255,
+              "psnr_outside": 37.737986634817936,
+              "ssim_outside": 0.98878333998728,
+              "mad_outside": 0.010962458327412605,
+              "background_drift_px": 0.10596082359552383
+            },
+            {
+              "frame": 270,
+              "psnr_outside": 38.070994633374575,
+              "ssim_outside": 0.9883580328542458,
+              "mad_outside": 0.010599320754408836,
+              "background_drift_px": 0.21086570620536804
+            },
+            {
+              "frame": 300,
+              "psnr_outside": 33.38983925978809,
+              "ssim_outside": 0.9874083361280814,
+              "mad_outside": 0.010363958775997162,
+              "background_drift_px": 0.24024641513824463
+            },
+            {
+              "frame": 330,
+              "psnr_outside": 38.65138957599374,
+              "ssim_outside": 0.9960059125134887,
+              "mad_outside": 0.010401704348623753,
+              "background_drift_px": 27.79521369934082
+            },
+            {
+              "frame": 376,
+              "psnr_outside": 38.51057219336815,
+              "ssim_outside": 0.9966094617197856,
+              "mad_outside": 0.010650865733623505,
+              "background_drift_px": NaN
+            }
+          ],
+          "temporal": {
+            "stride": 1,
+            "flicker": 0.0741019818931818,
+            "warping_error": 0.05177988270297647,
+            "recovered_corner_jitter_px": 2.656068912411957,
+            "pairs": 10,
+            "pair_frames": [
+              [
+                0,
+                1
+              ],
+              [
+                60,
+                61
+              ],
+              [
+                120,
+                121
+              ],
+              [
+                180,
+                181
+              ],
+              [
+                226,
+                227
+              ],
+              [
+                255,
+                256
+              ],
+              [
+                270,
+                271
+              ],
+              [
+                300,
+                301
+              ],
+              [
+                330,
+                331
+              ],
+              [
+                376,
+                377
+              ]
+            ]
+          },
+          "occlusion": {
+            "leakage": 0.20797600141168168,
+            "psnr_foreground": 28.184454504598122,
+            "coverage_visible": 0.9475305566734443,
+            "false_occlusion": 0.013657980694915306,
+            "mask_frames": 5,
+            "empty_mask_frames": 2,
+            "n_coverage_frames": 2,
+            "n_false_occlusion_frames": 1,
+            "overlay_absent_frames": [
+              255,
+              270,
+              376
+            ],
+            "per_frame": [
+              {
+                "frame": 226,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": false,
+                "coverage_visible": 0.9863420193050847,
+                "false_occlusion": 0.013657980694915306
+              },
+              {
+                "frame": 255,
+                "leakage": 0.0,
+                "psnr_foreground": 36.75112360147554,
+                "mask_empty": false,
+                "foreground_pixels": 69378,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 270,
+                "leakage": 0.0,
+                "psnr_foreground": 37.39478810406892,
+                "mask_empty": false,
+                "foreground_pixels": 47887,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 300,
+                "leakage": 0.623928004235045,
+                "psnr_foreground": 10.4074518082499,
+                "mask_empty": false,
+                "foreground_pixels": 28335,
+                "overlay_absent": false,
+                "coverage_visible": 0.908719094041804,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 376,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              }
+            ]
+          }
+        },
+        "time_s": 659.6359689235687,
+        "tracking_s": 494.49652886390686,
+        "composite_s": 165.13944005966187,
+        "hide_episodes": [
+          [
+            12,
+            19
+          ],
+          [
+            23,
+            43
+          ],
+          [
+            45,
+            56
+          ],
+          [
+            65,
+            66
+          ],
+          [
+            68,
+            69
+          ],
+          [
+            71,
+            78
+          ],
+          [
+            87,
+            87
+          ],
+          [
+            95,
+            99
+          ],
+          [
+            101,
+            110
+          ],
+          [
+            114,
+            114
+          ],
+          [
+            118,
+            118
+          ],
+          [
+            120,
+            193
+          ],
+          [
+            201,
+            205
+          ],
+          [
+            209,
+            214
+          ],
+          [
+            231,
+            231
+          ],
+          [
+            237,
+            270
+          ],
+          [
+            272,
+            280
+          ],
+          [
+            282,
+            282
+          ],
+          [
+            286,
+            286
+          ],
+          [
+            289,
+            291
+          ],
+          [
+            295,
+            297
+          ],
+          [
+            304,
+            304
+          ],
+          [
+            306,
+            308
+          ],
+          [
+            325,
+            325
+          ],
+          [
+            327,
+            338
+          ],
+          [
+            340,
+            449
+          ]
+        ],
+        "triggers": {
+          "none": 115,
+          "no_model": 335
+        },
+        "flow_frames": 0,
+        "comparison_baseline": {
+          "mode": "frames",
+          "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_independent",
+          "frames": {
+            "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_independent/frame_000226.png",
+            "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_independent/frame_000227.png",
+            "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_independent/frame_000270.png",
+            "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_independent/frame_000376.png"
+          },
+          "interval": [
+            226,
+            376
+          ],
+          "offset": 0,
+          "output_resolution": {
+            "226": [
+              1280,
+              720
+            ],
+            "227": [
+              1280,
+              720
+            ],
+            "270": [
+              1280,
+              720
+            ],
+            "376": [
+              1280,
+              720
+            ]
+          },
+          "original_resolution": [
+            1280,
+            720
+          ],
+          "resized": false,
+          "resized_frames": [],
+          "frames_with_corners": [
+            226,
+            270,
+            376
+          ],
+          "frames_with_masks": [
+            226,
+            270,
+            376
+          ],
+          "missing_frames": [],
+          "placement": {
+            "n": 3,
+            "median": 0.00614064305551801,
+            "p90": 0.00614064305551801,
+            "success": 0.3333333333333333,
+            "failed": 2,
+            "detection_rate": 0.3333333333333333,
+            "threshold": 0.02,
+            "per_frame": {
+              "226": 0.00614064305551801,
+              "270": null,
+              "376": null
+            }
+          },
+          "fidelity": {
+            "ncc": 0.2309236207113129,
+            "ssim": 0.41463361959580247,
+            "mae": 0.2927559204399586,
+            "structure": 0.18723278116733955
+          },
+          "preservation": {
+            "psnr_outside": 36.564113882900195,
+            "ssim_outside": 0.9921226054962652,
+            "mad_outside": 0.010656544007360935,
+            "background_drift_px": 2.874961957335472
+          },
+          "preservation_per_frame": [
+            {
+              "frame": 226,
+              "psnr_outside": 33.110774821957854,
+              "ssim_outside": 0.9914003219147638,
+              "mad_outside": 0.010719445534050465,
+              "background_drift_px": 5.539058208465576
+            },
+            {
+              "frame": 270,
+              "psnr_outside": 38.070994633374575,
+              "ssim_outside": 0.9883580328542458,
+              "mad_outside": 0.010599320754408836,
+              "background_drift_px": 0.21086570620536804
+            },
+            {
+              "frame": 376,
+              "psnr_outside": 38.51057219336815,
+              "ssim_outside": 0.9966094617197856,
+              "mad_outside": 0.010650865733623505,
+              "background_drift_px": NaN
+            }
+          ],
+          "temporal": {
+            "stride": 1,
+            "flicker": 0.04656924679875374,
+            "warping_error": 0.0340469591319561,
+            "recovered_corner_jitter_px": 2.7607868905236046,
+            "pairs": 1,
+            "pair_frames": [
+              [
+                226,
+                227
+              ]
+            ]
+          },
+          "occlusion": {
+            "leakage": 0.0,
+            "psnr_foreground": 37.39478810406892,
+            "coverage_visible": 0.9863420193050847,
+            "false_occlusion": 0.013657980694915306,
+            "mask_frames": 3,
+            "empty_mask_frames": 2,
+            "n_coverage_frames": 1,
+            "n_false_occlusion_frames": 1,
+            "overlay_absent_frames": [
+              270,
+              376
+            ],
+            "per_frame": [
+              {
+                "frame": 226,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": false,
+                "coverage_visible": 0.9863420193050847,
+                "false_occlusion": 0.013657980694915306
+              },
+              {
+                "frame": 270,
+                "leakage": 0.0,
+                "psnr_foreground": 37.39478810406892,
+                "mask_empty": false,
+                "foreground_pixels": 47887,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 376,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              }
+            ]
+          }
+        },
+        "direct_alpha_leakage": 0.1932356920181166,
+        "baseline_alpha_leakage": 0.3333333333333333,
+        "alpha_mask_frames": [
+          {
+            "frame": 255,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          },
+          {
+            "frame": 270,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          },
+          {
+            "frame": 300,
+            "hidden": false,
+            "alpha_leakage": 0.5797070760543498,
+            "no_occlusion_alpha_leakage": 1.0
+          }
+        ]
+      },
+      "flow_assisted": {
+        "tracking": {
+          "n": 10,
+          "median_error": 0.006696601455220729,
+          "p90_error": 0.007173493314252754,
+          "success": 0.4,
+          "failed": 6,
+          "jitter_px": 2.4547636633011236,
+          "drift_error": NaN,
+          "drift_frames": 0,
+          "longest_run": 10,
+          "frames_tracked": 120,
+          "frames_total": 450,
+          "localisations": 409,
+          "reinit": 0,
+          "hide": 330,
+          "per_frame": {
+            "0": 0.007254650363669393,
+            "60": 0.005438693214772958,
+            "120": null,
+            "180": null,
+            "226": 0.0064090760448275285,
+            "255": null,
+            "270": null,
+            "300": 0.006984126865613931,
+            "330": null,
+            "376": null
+          }
+        },
+        "mask_scores": {
+          "iou": 0.2478396809374923,
+          "f1": 0.397230004340449,
+          "mask_frames_scored": 1,
+          "mask_frames_hidden": [
+            255,
+            270
+          ],
+          "mask_frames_missing": []
+        },
+        "rendered": {
+          "mode": "video",
+          "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/videos/stage4_sean_flow_assisted.mp4",
+          "interval": [
+            0,
+            449
+          ],
+          "offset": 0,
+          "output_resolution": [
+            1280,
+            720
+          ],
+          "original_resolution": [
+            1280,
+            720
+          ],
+          "resized": false,
+          "missing_frames": [],
+          "placement": {
+            "n": 10,
+            "median": 0.006306312311507462,
+            "p90": 0.006744175172291411,
+            "success": 0.4,
+            "failed": 6,
+            "detection_rate": 0.4,
+            "threshold": 0.02,
+            "per_frame": {
+              "0": 0.006826724854000983,
+              "60": 0.0050878521004469645,
+              "120": null,
+              "180": null,
+              "226": 0.006061065374712512,
+              "255": null,
+              "270": null,
+              "300": 0.006551559248302411,
+              "330": null,
+              "376": null
+            }
+          },
+          "fidelity": {
+            "ncc": 0.29690751305443175,
+            "ssim": 0.42141227611850274,
+            "mae": 0.2743049919605255,
+            "structure": 0.21258533312319483
+          },
+          "preservation": {
+            "psnr_outside": 36.60451894914092,
+            "ssim_outside": 0.9926123292187568,
+            "mad_outside": 0.010661720298230648,
+            "background_drift_px": 7.934243279908385
+          },
+          "preservation_per_frame": [
+            {
+              "frame": 0,
+              "psnr_outside": 32.89430154579189,
+              "ssim_outside": 0.9897216579321508,
+              "mad_outside": 0.012168584391474724,
+              "background_drift_px": 2.0726215839385986
+            },
+            {
+              "frame": 60,
+              "psnr_outside": 35.94462246833875,
+              "ssim_outside": 0.993922663290004,
+              "mad_outside": 0.01004784181714058,
+              "background_drift_px": 18.180973052978516
+            },
+            {
+              "frame": 120,
+              "psnr_outside": 38.857118672671675,
+              "ssim_outside": 0.9972258344175867,
+              "mad_outside": 0.01029402669519186,
+              "background_drift_px": NaN
+            },
+            {
+              "frame": 180,
+              "psnr_outside": 38.74645724095898,
+              "ssim_outside": 0.9971540605849919,
+              "mad_outside": 0.010427188128232956,
+              "background_drift_px": NaN
+            },
+            {
+              "frame": 226,
+              "psnr_outside": 33.24190726630545,
+              "ssim_outside": 0.9909339927599516,
+              "mad_outside": 0.0107012540102005,
+              "background_drift_px": 6.933821678161621
+            },
+            {
+              "frame": 255,
+              "psnr_outside": 37.737986634817936,
+              "ssim_outside": 0.98878333998728,
+              "mad_outside": 0.010962458327412605,
+              "background_drift_px": 0.10596082359552383
+            },
+            {
+              "frame": 270,
+              "psnr_outside": 38.070994633374575,
+              "ssim_outside": 0.9883580328542458,
+              "mad_outside": 0.010599320754408836,
+              "background_drift_px": 0.21086570620536804
+            },
+            {
+              "frame": 300,
+              "psnr_outside": 33.38983925978809,
+              "ssim_outside": 0.9874083361280814,
+              "mad_outside": 0.010363958775997162,
+              "background_drift_px": 0.24024641513824463
+            },
+            {
+              "frame": 330,
+              "psnr_outside": 38.65138957599374,
+              "ssim_outside": 0.9960059125134887,
+              "mad_outside": 0.010401704348623753,
+              "background_drift_px": 27.79521369934082
+            },
+            {
+              "frame": 376,
+              "psnr_outside": 38.51057219336815,
+              "ssim_outside": 0.9966094617197856,
+              "mad_outside": 0.010650865733623505,
+              "background_drift_px": NaN
+            }
+          ],
+          "temporal": {
+            "stride": 1,
+            "flicker": 0.0718489445745945,
+            "warping_error": 0.05082124089822173,
+            "recovered_corner_jitter_px": 2.1195974206029,
+            "pairs": 10,
+            "pair_frames": [
+              [
+                0,
+                1
+              ],
+              [
+                60,
+                61
+              ],
+              [
+                120,
+                121
+              ],
+              [
+                180,
+                181
+              ],
+              [
+                226,
+                227
+              ],
+              [
+                255,
+                256
+              ],
+              [
+                270,
+                271
+              ],
+              [
+                300,
+                301
+              ],
+              [
+                330,
+                331
+              ],
+              [
+                376,
+                377
+              ]
+            ]
+          },
+          "occlusion": {
+            "leakage": 0.20797600141168168,
+            "psnr_foreground": 28.184454504598122,
+            "coverage_visible": 0.9470059006616198,
+            "false_occlusion": 0.014707292718564413,
+            "mask_frames": 5,
+            "empty_mask_frames": 2,
+            "n_coverage_frames": 2,
+            "n_false_occlusion_frames": 1,
+            "overlay_absent_frames": [
+              255,
+              270,
+              376
+            ],
+            "per_frame": [
+              {
+                "frame": 226,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": false,
+                "coverage_visible": 0.9852927072814356,
+                "false_occlusion": 0.014707292718564413
+              },
+              {
+                "frame": 255,
+                "leakage": 0.0,
+                "psnr_foreground": 36.75112360147554,
+                "mask_empty": false,
+                "foreground_pixels": 69378,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 270,
+                "leakage": 0.0,
+                "psnr_foreground": 37.39478810406892,
+                "mask_empty": false,
+                "foreground_pixels": 47887,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 300,
+                "leakage": 0.623928004235045,
+                "psnr_foreground": 10.4074518082499,
+                "mask_empty": false,
+                "foreground_pixels": 28335,
+                "overlay_absent": false,
+                "coverage_visible": 0.908719094041804,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 376,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              }
+            ]
+          }
+        },
+        "time_s": 542.8204462528229,
+        "tracking_s": 401.30004620552063,
+        "composite_s": 141.52040004730225,
+        "hide_episodes": [
+          [
+            13,
+            19
+          ],
+          [
+            23,
+            43
+          ],
+          [
+            46,
+            56
+          ],
+          [
+            66,
+            66
+          ],
+          [
+            68,
+            69
+          ],
+          [
+            71,
+            78
+          ],
+          [
+            96,
+            99
+          ],
+          [
+            101,
+            110
+          ],
+          [
+            114,
+            114
+          ],
+          [
+            118,
+            118
+          ],
+          [
+            120,
+            193
+          ],
+          [
+            201,
+            205
+          ],
+          [
+            209,
+            214
+          ],
+          [
+            231,
+            231
+          ],
+          [
+            237,
+            270
+          ],
+          [
+            272,
+            280
+          ],
+          [
+            282,
+            282
+          ],
+          [
+            286,
+            286
+          ],
+          [
+            289,
+            291
+          ],
+          [
+            295,
+            297
+          ],
+          [
+            304,
+            304
+          ],
+          [
+            306,
+            308
+          ],
+          [
+            325,
+            325
+          ],
+          [
+            327,
+            338
+          ],
+          [
+            340,
+            449
+          ]
+        ],
+        "triggers": {
+          "none": 120,
+          "no_model": 330
+        },
+        "flow_frames": 41,
+        "comparison_baseline": {
+          "mode": "frames",
+          "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_flow_assisted",
+          "frames": {
+            "226": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_flow_assisted/frame_000226.png",
+            "227": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_flow_assisted/frame_000227.png",
+            "270": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_flow_assisted/frame_000270.png",
+            "376": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_sean/classical_flow_assisted/frame_000376.png"
+          },
+          "interval": [
+            226,
+            376
+          ],
+          "offset": 0,
+          "output_resolution": {
+            "226": [
+              1280,
+              720
+            ],
+            "227": [
+              1280,
+              720
+            ],
+            "270": [
+              1280,
+              720
+            ],
+            "376": [
+              1280,
+              720
+            ]
+          },
+          "original_resolution": [
+            1280,
+            720
+          ],
+          "resized": false,
+          "resized_frames": [],
+          "frames_with_corners": [
+            226,
+            270,
+            376
+          ],
+          "frames_with_masks": [
+            226,
+            270,
+            376
+          ],
+          "missing_frames": [],
+          "placement": {
+            "n": 3,
+            "median": 0.006061065374712512,
+            "p90": 0.006061065374712512,
+            "success": 0.3333333333333333,
+            "failed": 2,
+            "detection_rate": 0.3333333333333333,
+            "threshold": 0.02,
+            "per_frame": {
+              "226": 0.006061065374712512,
+              "270": null,
+              "376": null
+            }
+          },
+          "fidelity": {
+            "ncc": 0.2313332289405273,
+            "ssim": 0.4180895772764186,
+            "mae": 0.29254599784811336,
+            "structure": 0.19690979579511728
+          },
+          "preservation": {
+            "psnr_outside": 36.60782469768272,
+            "ssim_outside": 0.9919671624446611,
+            "mad_outside": 0.010650480166077614,
+            "background_drift_px": 3.5723436921834946
+          },
+          "preservation_per_frame": [
+            {
+              "frame": 226,
+              "psnr_outside": 33.24190726630545,
+              "ssim_outside": 0.9909339927599516,
+              "mad_outside": 0.0107012540102005,
+              "background_drift_px": 6.933821678161621
+            },
+            {
+              "frame": 270,
+              "psnr_outside": 38.070994633374575,
+              "ssim_outside": 0.9883580328542458,
+              "mad_outside": 0.010599320754408836,
+              "background_drift_px": 0.21086570620536804
+            },
+            {
+              "frame": 376,
+              "psnr_outside": 38.51057219336815,
+              "ssim_outside": 0.9966094617197856,
+              "mad_outside": 0.010650865733623505,
+              "background_drift_px": NaN
+            }
+          ],
+          "temporal": {
+            "stride": 1,
+            "flicker": 0.028884831815958023,
+            "warping_error": 0.021165756508708,
+            "recovered_corner_jitter_px": 1.0910569609294072,
+            "pairs": 1,
+            "pair_frames": [
+              [
+                226,
+                227
+              ]
+            ]
+          },
+          "occlusion": {
+            "leakage": 0.0,
+            "psnr_foreground": 37.39478810406892,
+            "coverage_visible": 0.9852927072814356,
+            "false_occlusion": 0.014707292718564413,
+            "mask_frames": 3,
+            "empty_mask_frames": 2,
+            "n_coverage_frames": 1,
+            "n_false_occlusion_frames": 1,
+            "overlay_absent_frames": [
+              270,
+              376
+            ],
+            "per_frame": [
+              {
+                "frame": 226,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": false,
+                "coverage_visible": 0.9852927072814356,
+                "false_occlusion": 0.014707292718564413
+              },
+              {
+                "frame": 270,
+                "leakage": 0.0,
+                "psnr_foreground": 37.39478810406892,
+                "mask_empty": false,
+                "foreground_pixels": 47887,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 376,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              }
+            ]
+          }
+        },
+        "direct_alpha_leakage": 0.1932356920181166,
+        "baseline_alpha_leakage": 0.3333333333333333,
+        "alpha_mask_frames": [
+          {
+            "frame": 255,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          },
+          {
+            "frame": 270,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          },
+          {
+            "frame": 300,
+            "hidden": false,
+            "alpha_leakage": 0.5797070760543498,
+            "no_occlusion_alpha_leakage": 1.0
+          }
+        ]
+      }
+    },
+    "capture": {
+      "clip_id": "stage4_sean",
+      "role": "personal",
+      "student_id": "A0282350L",
+      "captured_by": "Sean Tham",
+      "annotated_by": "Sean Tham",
+      "device": "iPhone 16 Pro, main camera 24 mm f/1.78",
+      "resolution": "1280x720",
+      "fps": "30",
+      "duration_s": "15.0",
+      "board_width_m": "0.72",
+      "board_height_m": "0.57",
+      "board_description": "Landscape textured blue and pink poster with outer black frame on a wall",
+      "board_fraction_of_frame": "0.1699",
+      "camera_motion": "Handheld pan and tilt, approach and retreat, change of viewing angle",
+      "difficult_events": "Purple patterned object crosses the board, motion blur, oblique view, partial board clipping near the end",
+      "event_frame_ranges": "{\"pan_and_distance_approx\":[0,225],\"board_occlusion_approx\":[233,313],\"viewing_angle_change_approx\":[330,449],\"board_clipping_near_end_approx\":[378,449]}",
+      "consent_obtained": "n/a (capturer reports no identifiable people)",
+      "metadata_removed": "yes",
+      "notes": "Prepared clip uses the first 15 seconds of the original 1920x1080 30 fps recording. HLG HDR was converted to BT.709 SDR. Audio and source metadata were removed. Board dimensions are approximate iPhone Measure estimates, assuming 72 cm width and 57 cm height. First-frame board fraction is a preparation estimate, not audit ground truth. Event ranges are approximate visual observations. Audit manifests now contain ten corner frames and five mask frames under Sean Tham. Capturer reports no identifiable people appear."
+    },
+    "evidence": {
+      "failure_frame": 270,
+      "representative_frame": 300,
+      "failure_localiser": {
+        "matches": 35,
+        "inliers": 7,
+        "status": false,
+        "median_residual": 1.8261086546397674e-13
+      },
+      "representative_mean_difference_inside_board": 0.21350200474262238,
+      "strong_fraction_of_gt_occluder": 0.07312511028763014,
+      "predicted_fraction_of_gt_occluder": 0.3552849832362802
+    },
+    "first_frame_board_fraction": 0.168037109375
+  },
+  "stage4_ruijie": {
+    "clip_id": "stage4_ruijie",
+    "processing_resolution": [
+      1280,
+      720
+    ],
+    "audit_frames": [
+      0,
+      60,
+      120,
+      210,
+      255,
+      300,
+      345,
+      360,
+      375,
+      449
+    ],
+    "mask_frames": [
+      210,
+      255,
+      345,
+      360,
+      375
+    ],
+    "initialisation": {
+      "n_keypoints_ref": 60,
+      "n_keypoints_frame": 150,
+      "n_matches": 45,
+      "n_inliers": 24,
+      "inlier_ratio": 0.5333333333333333,
+      "median_residual": 0.47920819808177784
+    },
+    "variants": {
+      "independent": {
+        "tracking": {
+          "n": 10,
+          "median_error": 0.003814645419060294,
+          "p90_error": 0.008519373329141107,
+          "success": 0.3,
+          "failed": 7,
+          "jitter_px": 4.968882117246696,
+          "drift_error": NaN,
+          "drift_frames": 0,
+          "longest_run": 1,
+          "frames_tracked": 170,
+          "frames_total": 450,
+          "localisations": 450,
+          "reinit": 0,
+          "hide": 280,
+          "per_frame": {
+            "0": 0.0037302534653153537,
+            "60": null,
+            "120": null,
+            "210": null,
+            "255": null,
+            "300": 0.003814645419060294,
+            "345": null,
+            "360": null,
+            "375": null,
+            "449": 0.009695555306661309
+          }
+        },
+        "mask_scores": {
+          "iou": NaN,
+          "f1": NaN,
+          "mask_frames_scored": 0,
+          "mask_frames_hidden": [
+            345,
+            360,
+            375
+          ],
+          "mask_frames_missing": []
+        },
+        "rendered": {
+          "mode": "video",
+          "video": "outputs/videos/stage4_ruijie_independent.mp4",
+          "interval": [
+            0,
+            449
+          ],
+          "offset": 0,
+          "output_resolution": [
+            1280,
+            720
+          ],
+          "original_resolution": [
+            1280,
+            720
+          ],
+          "resized": false,
+          "missing_frames": [],
+          "placement": {
+            "n": 10,
+            "median": 0.00406921897520761,
+            "p90": 0.0087937663526338,
+            "success": 0.3,
+            "failed": 7,
+            "detection_rate": 0.3,
+            "threshold": 0.02,
+            "per_frame": {
+              "0": 0.00406921897520761,
+              "60": null,
+              "120": null,
+              "210": null,
+              "255": null,
+              "300": 0.004027971860748397,
+              "345": null,
+              "360": null,
+              "375": null,
+              "449": 0.009974903196990348
+            }
+          },
+          "fidelity": {
+            "ncc": 0.3693814585107099,
+            "ssim": 0.3984440275118742,
+            "mae": 0.3580287553369999,
+            "structure": 0.1885026244377762
+          },
+          "preservation": {
+            "psnr_outside": 37.0209842230539,
+            "ssim_outside": 0.9641900585029048,
+            "mad_outside": 0.010956257395446301,
+            "background_drift_px": 0.13932509943842888
+          },
+          "preservation_per_frame": [
+            {
+              "frame": 0,
+              "psnr_outside": 34.882534007532286,
+              "ssim_outside": 0.9445629220744942,
+              "mad_outside": 0.012139645405113697,
+              "background_drift_px": 0.2964680790901184
+            },
+            {
+              "frame": 60,
+              "psnr_outside": 37.96868030162939,
+              "ssim_outside": 0.9578337170778105,
+              "mad_outside": 0.010462967678904533,
+              "background_drift_px": 0.07070591300725937
+            },
+            {
+              "frame": 120,
+              "psnr_outside": 37.691096981953514,
+              "ssim_outside": 0.961558224433209,
+              "mad_outside": 0.010680495761334896,
+              "background_drift_px": 0.06943879276514053
+            },
+            {
+              "frame": 210,
+              "psnr_outside": 37.592419919689355,
+              "ssim_outside": 0.9757283083236158,
+              "mad_outside": 0.010827766731381416,
+              "background_drift_px": 0.15958772599697113
+            },
+            {
+              "frame": 255,
+              "psnr_outside": 37.28037392582428,
+              "ssim_outside": 0.9723635047940586,
+              "mad_outside": 0.011159762740135193,
+              "background_drift_px": 0.11061403900384903
+            },
+            {
+              "frame": 300,
+              "psnr_outside": 37.01354888047621,
+              "ssim_outside": 0.9721423020744989,
+              "mad_outside": 0.0105054946616292,
+              "background_drift_px": 0.09505097568035126
+            },
+            {
+              "frame": 345,
+              "psnr_outside": 37.33995561376455,
+              "ssim_outside": 0.9717212207506654,
+              "mad_outside": 0.011152436025440693,
+              "background_drift_px": 0.17010365426540375
+            },
+            {
+              "frame": 360,
+              "psnr_outside": 37.79631550312797,
+              "ssim_outside": 0.9686239812954123,
+              "mad_outside": 0.010630910284817219,
+              "background_drift_px": 0.08918885886669159
+            },
+            {
+              "frame": 375,
+              "psnr_outside": 37.50517828581791,
+              "ssim_outside": 0.9682904214525418,
+              "mad_outside": 0.01097884215414524,
+              "background_drift_px": 0.1453612893819809
+            },
+            {
+              "frame": 449,
+              "psnr_outside": 35.13973881072357,
+              "ssim_outside": 0.9490759827527424,
+              "mad_outside": 0.011024252511560917,
+              "background_drift_px": 0.18673166632652283
+            }
+          ],
+          "temporal": {
+            "stride": 1,
+            "flicker": 0.03507952247228888,
+            "warping_error": 0.015484983308447732,
+            "recovered_corner_jitter_px": 4.016931145186486,
+            "pairs": 9,
+            "pair_frames": [
+              [
+                0,
+                1
+              ],
+              [
+                60,
+                61
+              ],
+              [
+                120,
+                121
+              ],
+              [
+                210,
+                211
+              ],
+              [
+                255,
+                256
+              ],
+              [
+                300,
+                301
+              ],
+              [
+                345,
+                346
+              ],
+              [
+                360,
+                361
+              ],
+              [
+                375,
+                376
+              ]
+            ]
+          },
+          "occlusion": {
+            "leakage": 0.0,
+            "psnr_foreground": 38.56536659227959,
+            "coverage_visible": NaN,
+            "false_occlusion": NaN,
+            "mask_frames": 5,
+            "empty_mask_frames": 2,
+            "n_coverage_frames": 0,
+            "n_false_occlusion_frames": 0,
+            "overlay_absent_frames": [
+              210,
+              255,
+              345,
+              360,
+              375
+            ],
+            "per_frame": [
+              {
+                "frame": 210,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 255,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 345,
+                "leakage": 0.0,
+                "psnr_foreground": 38.139245453721394,
+                "mask_empty": false,
+                "foreground_pixels": 52146,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 360,
+                "leakage": 0.0,
+                "psnr_foreground": 38.90210188678494,
+                "mask_empty": false,
+                "foreground_pixels": 70610,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 375,
+                "leakage": 0.0,
+                "psnr_foreground": 38.65475243633242,
+                "mask_empty": false,
+                "foreground_pixels": 85541,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              }
+            ]
+          }
+        },
+        "time_s": 129.88333201408386,
+        "tracking_s": 92.53874516487122,
+        "composite_s": 37.34458684921265,
+        "hide_episodes": [
+          [
+            24,
+            24
+          ],
+          [
+            28,
+            29
+          ],
+          [
+            34,
+            40
+          ],
+          [
+            43,
+            44
+          ],
+          [
+            47,
+            50
+          ],
+          [
+            52,
+            54
+          ],
+          [
+            56,
+            71
+          ],
+          [
+            73,
+            78
+          ],
+          [
+            80,
+            154
+          ],
+          [
+            159,
+            159
+          ],
+          [
+            161,
+            161
+          ],
+          [
+            163,
+            173
+          ],
+          [
+            176,
+            177
+          ],
+          [
+            185,
+            185
+          ],
+          [
+            189,
+            192
+          ],
+          [
+            199,
+            199
+          ],
+          [
+            202,
+            204
+          ],
+          [
+            206,
+            287
+          ],
+          [
+            289,
+            290
+          ],
+          [
+            324,
+            324
+          ],
+          [
+            326,
+            327
+          ],
+          [
+            330,
+            330
+          ],
+          [
+            338,
+            339
+          ],
+          [
+            343,
+            346
+          ],
+          [
+            348,
+            387
+          ],
+          [
+            395,
+            395
+          ],
+          [
+            398,
+            398
+          ],
+          [
+            424,
+            424
+          ],
+          [
+            431,
+            431
+          ],
+          [
+            439,
+            439
+          ],
+          [
+            447,
+            447
+          ]
+        ],
+        "triggers": {
+          "none": 170,
+          "no_model": 280
+        },
+        "flow_frames": 0,
+        "comparison_baseline": {
+          "mode": "frames",
+          "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_independent",
+          "frames": {
+            "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_independent/frame_000210.png",
+            "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_independent/frame_000211.png",
+            "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_independent/frame_000255.png",
+            "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_independent/frame_000360.png"
+          },
+          "interval": [
+            210,
+            360
+          ],
+          "offset": 0,
+          "output_resolution": {
+            "210": [
+              1280,
+              720
+            ],
+            "211": [
+              1280,
+              720
+            ],
+            "255": [
+              1280,
+              720
+            ],
+            "360": [
+              1280,
+              720
+            ]
+          },
+          "original_resolution": [
+            1280,
+            720
+          ],
+          "resized": false,
+          "resized_frames": [],
+          "frames_with_corners": [
+            210,
+            255,
+            360
+          ],
+          "frames_with_masks": [
+            210,
+            255,
+            360
+          ],
+          "missing_frames": [],
+          "placement": {
+            "n": 3,
+            "median": NaN,
+            "p90": NaN,
+            "success": 0.0,
+            "failed": 3,
+            "detection_rate": 0.0,
+            "threshold": 0.02,
+            "per_frame": {
+              "210": null,
+              "255": null,
+              "360": null
+            }
+          },
+          "fidelity": {
+            "ncc": 0.144231821690863,
+            "ssim": 0.2536774782236025,
+            "mae": 0.4794576168060303,
+            "structure": -0.010172425414843717
+          },
+          "preservation": {
+            "psnr_outside": 37.55636978288053,
+            "ssim_outside": 0.9722385981376954,
+            "mad_outside": 0.010872813252111277,
+            "background_drift_px": 0.11979687462250392
+          },
+          "preservation_per_frame": [
+            {
+              "frame": 210,
+              "psnr_outside": 37.592419919689355,
+              "ssim_outside": 0.9757283083236158,
+              "mad_outside": 0.010827766731381416,
+              "background_drift_px": 0.15958772599697113
+            },
+            {
+              "frame": 255,
+              "psnr_outside": 37.28037392582428,
+              "ssim_outside": 0.9723635047940586,
+              "mad_outside": 0.011159762740135193,
+              "background_drift_px": 0.11061403900384903
+            },
+            {
+              "frame": 360,
+              "psnr_outside": 37.79631550312797,
+              "ssim_outside": 0.9686239812954123,
+              "mad_outside": 0.010630910284817219,
+              "background_drift_px": 0.08918885886669159
+            }
+          ],
+          "temporal": {
+            "stride": 1,
+            "flicker": 0.06688821315765381,
+            "warping_error": 0.021050414070487022,
+            "recovered_corner_jitter_px": NaN,
+            "pairs": 1,
+            "pair_frames": [
+              [
+                210,
+                211
+              ]
+            ]
+          },
+          "occlusion": {
+            "leakage": 0.0,
+            "psnr_foreground": 38.90210188678494,
+            "coverage_visible": NaN,
+            "false_occlusion": NaN,
+            "mask_frames": 3,
+            "empty_mask_frames": 2,
+            "n_coverage_frames": 0,
+            "n_false_occlusion_frames": 0,
+            "overlay_absent_frames": [
+              210,
+              255,
+              360
+            ],
+            "per_frame": [
+              {
+                "frame": 210,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 255,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 360,
+                "leakage": 0.0,
+                "psnr_foreground": 38.90210188678494,
+                "mask_empty": false,
+                "foreground_pixels": 70610,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              }
+            ]
+          }
+        },
+        "direct_alpha_leakage": 0.0,
+        "baseline_alpha_leakage": 0.0,
+        "alpha_mask_frames": [
+          {
+            "frame": 345,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          },
+          {
+            "frame": 360,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          },
+          {
+            "frame": 375,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          }
+        ]
+      },
+      "flow_assisted": {
+        "tracking": {
+          "n": 10,
+          "median_error": 0.003814645419060294,
+          "p90_error": 0.004078890815458847,
+          "success": 0.3,
+          "failed": 7,
+          "jitter_px": 3.9079573731136823,
+          "drift_error": 0.004144952164558485,
+          "drift_frames": 1,
+          "longest_run": 23,
+          "frames_tracked": 175,
+          "frames_total": 450,
+          "localisations": 377,
+          "reinit": 0,
+          "hide": 275,
+          "per_frame": {
+            "0": 0.0037302534653153537,
+            "60": null,
+            "120": null,
+            "210": null,
+            "255": null,
+            "300": 0.003814645419060294,
+            "345": null,
+            "360": null,
+            "375": null,
+            "449": 0.004144952164558485
+          }
+        },
+        "mask_scores": {
+          "iou": NaN,
+          "f1": NaN,
+          "mask_frames_scored": 0,
+          "mask_frames_hidden": [
+            345,
+            360,
+            375
+          ],
+          "mask_frames_missing": []
+        },
+        "rendered": {
+          "mode": "video",
+          "video": "outputs/videos/stage4_ruijie_flow_assisted.mp4",
+          "interval": [
+            0,
+            449
+          ],
+          "offset": 0,
+          "output_resolution": [
+            1280,
+            720
+          ],
+          "original_resolution": [
+            1280,
+            720
+          ],
+          "resized": false,
+          "missing_frames": [],
+          "placement": {
+            "n": 10,
+            "median": 0.00406921897520761,
+            "p90": 0.00509620527712926,
+            "success": 0.3,
+            "failed": 7,
+            "detection_rate": 0.3,
+            "threshold": 0.02,
+            "per_frame": {
+              "0": 0.00406921897520761,
+              "60": null,
+              "120": null,
+              "210": null,
+              "255": null,
+              "300": 0.004027971860748397,
+              "345": null,
+              "360": null,
+              "375": null,
+              "449": 0.005352951852609672
+            }
+          },
+          "fidelity": {
+            "ncc": 0.37398751999205226,
+            "ssim": 0.4085009921825554,
+            "mae": 0.355770418420434,
+            "structure": 0.20228069905391705
+          },
+          "preservation": {
+            "psnr_outside": 37.21663058491431,
+            "ssim_outside": 0.9643081878214174,
+            "mad_outside": 0.010955984983593226,
+            "background_drift_px": 0.1353075735270977
+          },
+          "preservation_per_frame": [
+            {
+              "frame": 0,
+              "psnr_outside": 34.882534007532286,
+              "ssim_outside": 0.9445629220744942,
+              "mad_outside": 0.012139645405113697,
+              "background_drift_px": 0.2964680790901184
+            },
+            {
+              "frame": 60,
+              "psnr_outside": 37.96868030162939,
+              "ssim_outside": 0.9578337170778105,
+              "mad_outside": 0.010462967678904533,
+              "background_drift_px": 0.07070591300725937
+            },
+            {
+              "frame": 120,
+              "psnr_outside": 37.691096981953514,
+              "ssim_outside": 0.961558224433209,
+              "mad_outside": 0.010680495761334896,
+              "background_drift_px": 0.06943879276514053
+            },
+            {
+              "frame": 210,
+              "psnr_outside": 37.592419919689355,
+              "ssim_outside": 0.9757283083236158,
+              "mad_outside": 0.010827766731381416,
+              "background_drift_px": 0.15958772599697113
+            },
+            {
+              "frame": 255,
+              "psnr_outside": 37.28037392582428,
+              "ssim_outside": 0.9723635047940586,
+              "mad_outside": 0.011159762740135193,
+              "background_drift_px": 0.11061403900384903
+            },
+            {
+              "frame": 300,
+              "psnr_outside": 37.01354888047621,
+              "ssim_outside": 0.9721423020744989,
+              "mad_outside": 0.0105054946616292,
+              "background_drift_px": 0.09505097568035126
+            },
+            {
+              "frame": 345,
+              "psnr_outside": 37.34515046357383,
+              "ssim_outside": 0.9717443836674851,
+              "mad_outside": 0.011146469973027706,
+              "background_drift_px": 0.1841357946395874
+            },
+            {
+              "frame": 360,
+              "psnr_outside": 37.79631550312797,
+              "ssim_outside": 0.9686239812954123,
+              "mad_outside": 0.010630910284817219,
+              "background_drift_px": 0.08918885886669159
+            },
+            {
+              "frame": 375,
+              "psnr_outside": 37.50517828581791,
+              "ssim_outside": 0.9682904214525418,
+              "mad_outside": 0.01097884215414524,
+              "background_drift_px": 0.1453612893819809
+            },
+            {
+              "frame": 449,
+              "psnr_outside": 37.09100757951834,
+              "ssim_outside": 0.9502341130210479,
+              "mad_outside": 0.011027494445443153,
+              "background_drift_px": 0.1325242668390274
+            }
+          ],
+          "temporal": {
+            "stride": 1,
+            "flicker": 0.03697725488907761,
+            "warping_error": 0.015567590275572406,
+            "recovered_corner_jitter_px": 4.802551366070736,
+            "pairs": 9,
+            "pair_frames": [
+              [
+                0,
+                1
+              ],
+              [
+                60,
+                61
+              ],
+              [
+                120,
+                121
+              ],
+              [
+                210,
+                211
+              ],
+              [
+                255,
+                256
+              ],
+              [
+                300,
+                301
+              ],
+              [
+                345,
+                346
+              ],
+              [
+                360,
+                361
+              ],
+              [
+                375,
+                376
+              ]
+            ]
+          },
+          "occlusion": {
+            "leakage": 0.0,
+            "psnr_foreground": 38.58706670129723,
+            "coverage_visible": NaN,
+            "false_occlusion": NaN,
+            "mask_frames": 5,
+            "empty_mask_frames": 2,
+            "n_coverage_frames": 0,
+            "n_false_occlusion_frames": 0,
+            "overlay_absent_frames": [
+              210,
+              255,
+              345,
+              360,
+              375
+            ],
+            "per_frame": [
+              {
+                "frame": 210,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 255,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 345,
+                "leakage": 0.0,
+                "psnr_foreground": 38.20434578077435,
+                "mask_empty": false,
+                "foreground_pixels": 52146,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 360,
+                "leakage": 0.0,
+                "psnr_foreground": 38.90210188678494,
+                "mask_empty": false,
+                "foreground_pixels": 70610,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 375,
+                "leakage": 0.0,
+                "psnr_foreground": 38.65475243633242,
+                "mask_empty": false,
+                "foreground_pixels": 85541,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              }
+            ]
+          }
+        },
+        "time_s": 129.94504404067993,
+        "tracking_s": 84.40486311912537,
+        "composite_s": 45.540180921554565,
+        "hide_episodes": [
+          [
+            24,
+            24
+          ],
+          [
+            28,
+            29
+          ],
+          [
+            34,
+            40
+          ],
+          [
+            43,
+            44
+          ],
+          [
+            47,
+            50
+          ],
+          [
+            52,
+            54
+          ],
+          [
+            56,
+            71
+          ],
+          [
+            73,
+            78
+          ],
+          [
+            80,
+            154
+          ],
+          [
+            159,
+            159
+          ],
+          [
+            163,
+            173
+          ],
+          [
+            176,
+            177
+          ],
+          [
+            185,
+            185
+          ],
+          [
+            189,
+            192
+          ],
+          [
+            199,
+            199
+          ],
+          [
+            202,
+            204
+          ],
+          [
+            206,
+            287
+          ],
+          [
+            289,
+            290
+          ],
+          [
+            324,
+            324
+          ],
+          [
+            326,
+            327
+          ],
+          [
+            330,
+            330
+          ],
+          [
+            338,
+            339
+          ],
+          [
+            344,
+            346
+          ],
+          [
+            348,
+            387
+          ],
+          [
+            395,
+            395
+          ],
+          [
+            398,
+            398
+          ],
+          [
+            424,
+            424
+          ]
+        ],
+        "triggers": {
+          "none": 175,
+          "no_model": 275
+        },
+        "flow_frames": 73,
+        "comparison_baseline": {
+          "mode": "frames",
+          "video": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_flow_assisted",
+          "frames": {
+            "210": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_flow_assisted/frame_000210.png",
+            "211": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_flow_assisted/frame_000211.png",
+            "255": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_flow_assisted/frame_000255.png",
+            "360": "/Users/seantham/Documents/NUS Y4/CS4243/Lab Assignments/Lab 2/code/outputs/genai/stage4_ruijie/classical_flow_assisted/frame_000360.png"
+          },
+          "interval": [
+            210,
+            360
+          ],
+          "offset": 0,
+          "output_resolution": {
+            "210": [
+              1280,
+              720
+            ],
+            "211": [
+              1280,
+              720
+            ],
+            "255": [
+              1280,
+              720
+            ],
+            "360": [
+              1280,
+              720
+            ]
+          },
+          "original_resolution": [
+            1280,
+            720
+          ],
+          "resized": false,
+          "resized_frames": [],
+          "frames_with_corners": [
+            210,
+            255,
+            360
+          ],
+          "frames_with_masks": [
+            210,
+            255,
+            360
+          ],
+          "missing_frames": [],
+          "placement": {
+            "n": 3,
+            "median": NaN,
+            "p90": NaN,
+            "success": 0.0,
+            "failed": 3,
+            "detection_rate": 0.0,
+            "threshold": 0.02,
+            "per_frame": {
+              "210": null,
+              "255": null,
+              "360": null
+            }
+          },
+          "fidelity": {
+            "ncc": 0.144231821690863,
+            "ssim": 0.2536774782236025,
+            "mae": 0.4794576168060303,
+            "structure": -0.010172425414843717
+          },
+          "preservation": {
+            "psnr_outside": 37.55636978288053,
+            "ssim_outside": 0.9722385981376954,
+            "mad_outside": 0.010872813252111277,
+            "background_drift_px": 0.11979687462250392
+          },
+          "preservation_per_frame": [
+            {
+              "frame": 210,
+              "psnr_outside": 37.592419919689355,
+              "ssim_outside": 0.9757283083236158,
+              "mad_outside": 0.010827766731381416,
+              "background_drift_px": 0.15958772599697113
+            },
+            {
+              "frame": 255,
+              "psnr_outside": 37.28037392582428,
+              "ssim_outside": 0.9723635047940586,
+              "mad_outside": 0.011159762740135193,
+              "background_drift_px": 0.11061403900384903
+            },
+            {
+              "frame": 360,
+              "psnr_outside": 37.79631550312797,
+              "ssim_outside": 0.9686239812954123,
+              "mad_outside": 0.010630910284817219,
+              "background_drift_px": 0.08918885886669159
+            }
+          ],
+          "temporal": {
+            "stride": 1,
+            "flicker": 0.06688821315765381,
+            "warping_error": 0.021050414070487022,
+            "recovered_corner_jitter_px": NaN,
+            "pairs": 1,
+            "pair_frames": [
+              [
+                210,
+                211
+              ]
+            ]
+          },
+          "occlusion": {
+            "leakage": 0.0,
+            "psnr_foreground": 38.90210188678494,
+            "coverage_visible": NaN,
+            "false_occlusion": NaN,
+            "mask_frames": 3,
+            "empty_mask_frames": 2,
+            "n_coverage_frames": 0,
+            "n_false_occlusion_frames": 0,
+            "overlay_absent_frames": [
+              210,
+              255,
+              360
+            ],
+            "per_frame": [
+              {
+                "frame": 210,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 255,
+                "leakage": NaN,
+                "psnr_foreground": NaN,
+                "mask_empty": true,
+                "foreground_pixels": 0,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              },
+              {
+                "frame": 360,
+                "leakage": 0.0,
+                "psnr_foreground": 38.90210188678494,
+                "mask_empty": false,
+                "foreground_pixels": 70610,
+                "overlay_absent": true,
+                "coverage_visible": NaN,
+                "false_occlusion": NaN
+              }
+            ]
+          }
+        },
+        "direct_alpha_leakage": 0.0,
+        "baseline_alpha_leakage": 0.0,
+        "alpha_mask_frames": [
+          {
+            "frame": 345,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          },
+          {
+            "frame": 360,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          },
+          {
+            "frame": 375,
+            "hidden": true,
+            "alpha_leakage": 0.0,
+            "no_occlusion_alpha_leakage": 0.0
+          }
+        ]
+      }
+    },
+    "capture": {
+      "clip_id": "stage4_ruijie",
+      "role": "personal",
+      "student_id": "A0272335H",
+      "captured_by": "Wang Ruijie",
+      "annotated_by": "Wang Ruijie",
+      "device": "Samsung Galaxy S23+, Full HD H.264, no video stabilisation, auto fps disabled",
+      "resolution": "1280x720",
+      "fps": "30",
+      "duration_s": "15.0",
+      "board_width_m": "0.26",
+      "board_height_m": "0.19",
+      "board_description": "Printed grey abstract artwork on the flat rectangular front face of a box, including its outer white border and excluding the side panel",
+      "board_fraction_of_frame": "0.4378",
+      "camera_motion": "Handheld pan, approach and retreat, and changes of viewing angle",
+      "difficult_events": "Strong side perspective and in-plane camera rotation, black padded object crosses the board",
+      "event_frame_ranges": "{\"first_viewing_angle_change_approx\":[90,150],\"strongest_side_view_approx\":[225,285],\"occlusion_crossing_approx\":[340,395]}",
+      "consent_obtained": "n/a (capturer reports no real person, arm or body part)",
+      "metadata_removed": "yes",
+      "notes": "Prepared source interval is 2 to 17 seconds. Source is 1920x1080 H.264 BT.709 SDR with one startup timestamp gap. Converted to constant 30 fps without spatial cropping. Audio and source metadata removed. Front-face dimensions were supplied as approximately 26 cm by 19 cm. Event ranges are approximate and use prepared clip indices. Audit manifests contain ten corner frames and five masks under Wang Ruijie, using the local tool on Sean's laptop. Annotation check passed. First-frame board area is an approximate preparation estimate, not audit ground truth."
+    },
+    "evidence": {
+      "failure_frame": 255,
+      "representative_frame": 0,
+      "failure_localiser": {
+        "matches": 27,
+        "inliers": 4,
+        "status": false,
+        "median_residual": 1.4208011121978558e-13
+      },
+      "representative_mean_difference_inside_board": 0.2966306805610657,
+      "strong_fraction_of_gt_occluder": null,
+      "predicted_fraction_of_gt_occluder": null
+    },
+    "first_frame_board_fraction": 0.4415576171875
+  }
+}
