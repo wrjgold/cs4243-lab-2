@@ -127,7 +127,7 @@
           "inlier_ratio"
         ]
       },
-      "track_seconds": 67.14158716698876
+      "track_seconds": 65.70209033298306
     },
     {
       "min_inlier_ratio": 0.4,
@@ -233,7 +233,7 @@
           "inlier_ratio"
         ]
       },
-      "track_seconds": 57.108616499986965
+      "track_seconds": 56.806568457977846
     },
     {
       "min_inlier_ratio": 0.3,
@@ -339,7 +339,7 @@
           "inlier_ratio"
         ]
       },
-      "track_seconds": 65.97268366703065
+      "track_seconds": 68.4297817919869
     },
     {
       "min_inlier_ratio": 0.3,
@@ -445,7 +445,7 @@
           "inlier_ratio"
         ]
       },
-      "track_seconds": 56.11367099999916
+      "track_seconds": 58.86327475000871
     },
     {
       "min_inlier_ratio": 0.2,
@@ -551,7 +551,7 @@
           "brightness_change"
         ]
       },
-      "track_seconds": 84.82189895800548
+      "track_seconds": 66.13315708300797
     },
     {
       "min_inlier_ratio": 0.2,
@@ -657,7 +657,7 @@
           "none"
         ]
       },
-      "track_seconds": 65.3124030000181
+      "track_seconds": 56.0877774169785
     }
   ],
   "frozen_config": {
