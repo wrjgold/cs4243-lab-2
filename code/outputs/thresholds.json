@@ -47,11 +47,11 @@
     },
     "monitor": {
       "min_inlier_count": 12,
-      "min_inlier_ratio": 0.4,
+      "min_inlier_ratio": 0.2,
       "max_median_residual": 3.0,
       "max_corner_displacement": 60.0,
       "max_mean_flow": 25.0,
-      "max_brightness_change": 0.15,
+      "max_brightness_change": 0.2,
       "hide_after_consecutive": 2
     },
     "reinit_every": 60,
@@ -60,7 +60,7 @@
   },
   "occlusion": {
     "mode": "difference",
-    "strong": 0.25,
+    "strong": 0.3,
     "weak": 0.12,
     "min_area": 150,
     "open_radius": 2,
